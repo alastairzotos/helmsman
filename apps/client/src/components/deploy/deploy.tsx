@@ -90,7 +90,7 @@ export const Deploy: React.FC<Props> = ({ project }) => {
   return (
     <Space direction="vertical">
       <ConnStatus status={connStatus} />
-      
+
       <Card style={{ width: 600, overflowY: 'scroll', maxHeight: 300 }}>
         {content.map((message, index) => (
           <div key={index}>
@@ -104,7 +104,7 @@ export const Deploy: React.FC<Props> = ({ project }) => {
 
       <Button
         onClick={handleDeployClick}
-        disabled={deployStatus === 'fetching' || !connId}
+        disabled={deployStatus === 'fetching' || connStatus !== 'connected'}
       >
         Deploy
       </Button>
