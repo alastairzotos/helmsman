@@ -13,7 +13,7 @@ export const DeployMessage: React.FC<Props> = ({ message }) => {
     case 'phase':
       return (
         <Alert
-          style={{ marginTop: 20 }}
+          style={{ marginTop: 10, marginBottom: 10 }}
           message={deployPhaseTitles[message.phase!]}
           type={message.phase === "finished" ? "success" : "info"}
         />
@@ -31,6 +31,4 @@ export const DeployMessage: React.FC<Props> = ({ message }) => {
 
       return <Text style={{ marginLeft: 10 }}>{message.gitMessage?.phase}</Text>;
   }
-
-  return null;
 }

@@ -62,7 +62,6 @@ export const Deploy: React.FC<Props> = ({ project }) => {
         {content.map((message, index) => (
           <div key={index}>
             <DeployMessage message={message} />
-            <br />
           </div>
         ))}
 
