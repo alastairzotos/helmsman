@@ -1,10 +1,7 @@
-import { Button, Form, Typography } from "antd";
+import { Button } from "antd";
 import React from "react";
-import { SubmitHandler, useForm, FieldValues, Resolver, DeepPartial, FieldError, FieldErrors, Control, UseFormGetValues, UseFormSetValue } from "react-hook-form";
-import { FetchStatus } from "@bitmetro/create-query";
+import { useForm, FieldValues, Resolver, DeepPartial, FieldErrors, Control, UseFormGetValues, UseFormSetValue } from "react-hook-form";
 import { FormBase, FormBaseProps } from "@/components/_core/form-base";
-
-const { Title } = Typography;
 
 interface ChildrenProps<T extends FieldValues> {
   errors: FieldErrors<T>;
@@ -16,6 +13,7 @@ interface ChildrenProps<T extends FieldValues> {
 export interface ResourceFormProps<T extends FieldValues> extends FormBaseProps<T> {
   resource: DeepPartial<T>;
   resolver?: Resolver<T>;
+  savePrompt?: string;
   children: (props: ChildrenProps<T>) => React.ReactNode;
 }
 
@@ -24,6 +22,7 @@ export function ResourceForm<T extends FieldValues>(props: ResourceFormProps<T>)
     resource,
     resolver,
     onSave,
+    savePrompt = 'Save',
     children,
   } = props;
 
@@ -32,7 +31,7 @@ export function ResourceForm<T extends FieldValues>(props: ResourceFormProps<T>)
     handleSubmit,
     getValues,
     setValue,
-    formState: { errors }
+    formState: { errors, isValid }
   } = useForm<T>({ defaultValues: resource, resolver });
 
   return (
@@ -42,7 +41,13 @@ export function ResourceForm<T extends FieldValues>(props: ResourceFormProps<T>)
     >
       {children({ errors, control, getValues, setValue })}
 
-      <Button type="primary" htmlType="submit">Save</Button>
+      <Button
+        type="primary"
+        htmlType="submit"
+        disabled={!isValid}
+      >
+        {savePrompt}
+      </Button>
     </FormBase>
   )
 }

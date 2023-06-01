@@ -6,6 +6,8 @@ interface Urls {
 
 export const urls = {
   home: () => '/',
+  register: () => '/register',
+  login: () => '/login',
   config: {
     home: () => '/config',
   },

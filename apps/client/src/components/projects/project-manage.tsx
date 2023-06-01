@@ -1,9 +1,9 @@
 import { Form, Input } from "antd";
 import { IProject, ProjectSchema } from "models";
 import React from "react";
-import { useForm, Controller, SubmitHandler } from "react-hook-form";
+import { Controller, SubmitHandler } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { ResourceForm, ResourceFormProps } from "@/components/_core/resource-form";
+import { ResourceForm } from "@/components/_core/resource-form";
 import { FetchStatus } from "@bitmetro/create-query";
 
 interface Props {
