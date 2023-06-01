@@ -21,17 +21,15 @@ export const Deploy: React.FC<Props> = ({ project }) => {
   const [connId, connStatus] = useWebSockets<IDeployMessageDto>(getEnv().apiUrl, (message) => {
     setContent((curContent) => {
       const lastMessage = curContent.at(-1);
-      
-      if (lastMessage) {
-        if (lastMessage.type === message.type) {
-          switch (message.type) {
-            case 'git':
-              if (message.gitMessage?.phase === lastMessage.gitMessage?.phase) {
-                return withValue(curContent, -1, message);
-              }
 
-              return [...curContent, message];
-          }
+      if (lastMessage && lastMessage.type === message.type) {
+        switch (message.type) {
+          case 'git':
+            if (message.gitMessage?.phase === lastMessage.gitMessage?.phase) {
+              return withValue(curContent, -1, message);
+            }
+
+            return [...curContent, message];
         }
       }
 
