@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useCallback, useState } from "react";
 import { Button, Card, Space } from "antd";
 import { getEnv } from "@/utils/env";
 import { useDeploy } from "@/state/deploy.state";
@@ -18,7 +18,7 @@ export const Deploy: React.FC<Props> = ({ project }) => {
 
   const [content, setContent] = useState<IDeployMessageDto[]>([]);
 
-  const handleReceiveMessage = React.useCallback((message: IDeployMessageDto) => {
+  const handleReceiveMessage = useCallback((message: IDeployMessageDto) => {
     setContent((curContent) => {
       const lastMessage = curContent.at(-1);
 
