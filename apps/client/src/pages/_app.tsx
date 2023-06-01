@@ -2,21 +2,19 @@ import "@/styles/globals.css";
 
 import type { AppProps } from "next/app";
 import { Wrapper } from "@/components/_core/wrapper"
-import { AuthProvider, useAccessToken } from "@/plugins/user";
+import { AuthProvider, useCheckAuthState } from "@/plugins/user";
 import { getEnv } from "@/utils/env";
-import { useEffect } from "react";
 import { useRouter } from "next/router";
 import { urls } from "@/urls";
 
 const Inner = ({ Component, pageProps }: AppProps) => {
   const router = useRouter();
-  const accessToken = useAccessToken();
 
-  useEffect(() => {
+  useCheckAuthState(({ accessToken }) => {
     if (!accessToken) {
       router.push(urls.login());
     }
-  }, [accessToken]);
+  }, [router.pathname])
 
   return <Component {...pageProps} />;
 }

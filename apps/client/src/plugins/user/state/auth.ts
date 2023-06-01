@@ -1,9 +1,9 @@
 import { create } from 'zustand';
 import * as jwt from 'jsonwebtoken';
 import { IUser } from 'user-shared';
-import { useAuthContext } from '@/plugins/user/contexts/auth.context';
 
-interface IAuthStateValues {
+export interface IAuthStateValues {
+  initialised: boolean;
   accessToken?: string;
   loggedInUser?: IUser;
 }
@@ -17,6 +17,7 @@ interface IAuthStateActions {
 type IAuthState = IAuthStateValues & IAuthStateActions;
 
 export const useAuthState = create<IAuthState>((set) => ({
+  initialised: false,
   accessToken: undefined,
 
   init(localStorageKey: string) {
@@ -24,9 +25,12 @@ export const useAuthState = create<IAuthState>((set) => ({
 
     if (accessToken) {
       set({
+        initialised: true,
         accessToken,
         loggedInUser: jwt.decode(accessToken) as IUser
       });
+    } else {
+      set({ initialised: true });
     }
   },
 

@@ -1,7 +1,8 @@
 import { useAuthContext } from "@/plugins/user/contexts/auth.context";
-import { useAuthState } from "@/plugins/user/state/auth";
+import { IAuthStateValues, useAuthState } from "@/plugins/user/state/auth";
 import { useLoginUser, useRegisterUser } from "@/plugins/user/state/user";
 import { FetchStatus } from "@bitmetro/create-query";
+import { DependencyList, useEffect, useState } from "react";
 
 type LoginFn = (email: string, password: string) => Promise<void>;
 type RegisterFn = (email: string, password: string) => Promise<void>;
@@ -37,4 +38,17 @@ export const useLoggedInUser = () => {
 
 export const useAccessToken = () => {
   return useAuthState(s => s.accessToken);
+}
+
+
+
+export const useCheckAuthState = (cb: (state: IAuthStateValues) => Promise<void> | void, deps: DependencyList) => {
+  const values = useAuthState();
+  const { initialised, accessToken } = values;
+
+  useEffect(() => {
+    if (initialised) {
+      cb(values);
+    }
+  }, [initialised, accessToken, ...deps])
 }
