@@ -4,12 +4,15 @@ import { v4 as uuidv4 } from 'uuid';
 export class WebSocketHandler {
   private connections: Record<string, WebSocket> = {};
 
-  connect(id: string, conn: WebSocket) {
-    this.connections[id] = conn;
+  connect(conn: WebSocket) {
+    const connId = uuidv4();
+    this.connections[connId] = conn;
+
+    return connId;
   }
 
-  disconnect(id: string) {
-    delete this.connections[id];
+  disconnect(connId: string) {
+    delete this.connections[connId];
 
     return Object.keys(this.connections).length === 0;
   }
@@ -27,15 +30,14 @@ export class WebSocketManager {
     this.wss = new WebSocketServer({ port });
 
     this.wss.on('connection', (conn, req) => {
-      const id = uuidv4();
       const handle = new URLSearchParams(req.url.substring(2)).get('handle')
 
       const handler = this.getHandler(handle);
 
-      handler.connect(id, conn);
+      const connId = handler.connect(conn);
 
       conn.on('close', () => {
-        if (handler.disconnect(id)) {
+        if (handler.disconnect(connId)) {
           delete this.wsConnections[handle];
         }
       })
