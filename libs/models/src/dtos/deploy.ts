@@ -29,3 +29,18 @@ export interface IDeployMessageDto {
   phase?: IDeployMessagePhase;
   gitMessage?: IDeployMessageGitDto;
 }
+
+export const deployMessage = {
+  phase: (phase: IDeployMessagePhase) => ({
+    type: 'phase',
+    phase,
+  }),
+
+  git: (phase: string, progress?: number) => ({
+    type: 'git',
+    gitMessage: {
+      phase,
+      progress
+    }
+  }),
+} satisfies Record<IDeployMessageType, (...args: any[]) => IDeployMessageDto>
