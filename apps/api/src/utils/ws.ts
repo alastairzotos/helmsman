@@ -50,16 +50,7 @@ export class WebSocketManager<T extends Object> {
     });
   }
 
-  getHandler(handle: string): WebSocketHandler<T> | null {
-    const found = this.wsConnections[handle];
-
-    if (found) {
-      return found;
-    }
-
-    const handler = new WebSocketHandler<T>();
-    this.wsConnections[handle] = handler;
-
-    return handler;
+  getHandler(handle: string) {
+    return this.wsConnections[handle] = this.wsConnections[handle] || new WebSocketHandler<T>();
   }
 }
