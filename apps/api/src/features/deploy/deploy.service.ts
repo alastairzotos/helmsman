@@ -18,7 +18,7 @@ export class DeployService {
     const project = await this.projectsService.getById(projectId);
 
     if (!project) {
-      return null;
+      return false;
     }
     
     this.wsManager.sendMessage(conn, deployMessage.phase("pulling-project-repo"))
