@@ -18,7 +18,7 @@ export const Deploy: React.FC<Props> = ({ project }) => {
 
   const [content, setContent] = useState<IDeployMessageDto[]>([]);
 
-  const [connId, connStatus] = useWebSockets<IDeployMessageDto>(getEnv().apiUrl, (message) => {
+  const handleReceiveMessage = React.useCallback((message: IDeployMessageDto) => {
     setContent((curContent) => {
       const lastMessage = curContent.at(-1);
 
@@ -35,7 +35,9 @@ export const Deploy: React.FC<Props> = ({ project }) => {
 
       return [...curContent, message];
     })
-  })
+  }, []);
+
+  const [connId, connStatus] = useWebSockets(getEnv().apiUrl, handleReceiveMessage);
 
   const handleDeployClick = () => {
     if (connStatus === 'connected') {
