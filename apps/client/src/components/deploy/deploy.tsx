@@ -1,50 +1,66 @@
 import React, { useCallback, useEffect, useState } from "react";
-import { Button, Card, Space } from "antd";
+import { Button, Card, Space, Typography } from "antd";
 import { getEnv } from "@/utils/env";
 import { useDeploy } from "@/state/deploy.state";
-import { IDeployMessageDto, IProject, WithId } from "models";
-import { DeployMessage } from "@/components/deploy/deploy-message";
+import { IDeployMessageDto, IDeployMessageStatus, IProject, WithId, deployStatusText } from "models";
 import { ConnStatus } from "@/components/deploy/conn-status";
 import { useWebSockets } from "@/hooks/ws";
 import { ScrollToBottom } from "@/components/_core/scroll-to-bottom";
 import { replaceIndex } from "@/utils/misc";
+import { DeployLogsSection, IDeployLogsSection } from "@/components/deploy/deploy-logs-section";
+
+const { Text } = Typography;
 
 interface Props {
   project: WithId<IProject>;
 }
 
 export const Deploy: React.FC<Props> = ({ project }) => {
-  const [deployStatus, deploy] = useDeploy(s => [s.status, s.request]);
+  const deploy = useDeploy(s => s.request);
 
-  const [content, setContent] = useState<IDeployMessageDto[]>([]);
+  const [status, setStatus] = useState<IDeployMessageStatus | null>(null);
+  const [sections, setSections] = useState<IDeployLogsSection[]>([]);
 
   const handleReceiveMessage = useCallback((message: IDeployMessageDto) => {
-    setContent((curContent) => {
-      const lastMessage = curContent.at(-1);
+    switch (message.type) {
+      case "status":
+        setStatus(message.status!);
+        break;
 
-      if (lastMessage && lastMessage.type === message.type) {
-        switch (message.type) {
-          case 'git':
-            if (message.gitMessage?.phase === lastMessage.gitMessage?.phase) {
-              return replaceIndex(curContent, -1, message);
-            }
+      case "phase":
+        setSections((curSections) => [
+          ...curSections,
+          {
+            phase: message.phase!,
+            logs: [],
+          }
+        ])
+        break;
 
-            return [...curContent, message];
-        }
-      }
+      default:
+        setSections((curSections) => {
+          let logs: IDeployMessageDto[];
 
-      return [...curContent, message];
-    })
+          if (message.replaceLast) {
+            logs = replaceIndex(curSections.at(-1)?.logs!, -1, message);
+          } else {
+            logs = [...curSections.at(-1)?.logs!, message];
+          }
+
+          return replaceIndex(curSections, -1, { ...curSections.at(-1)!, logs });
+        })
+    }
   }, []);
 
   const [connStatus, reconnect] = useWebSockets(project._id, getEnv().apiUrl, 3004, handleReceiveMessage);
 
   useEffect(() => {
-    setContent([]);
+    setSections([]);
   }, [project._id]);
 
   const handleDeployClick = () => {
     if (connStatus === 'connected') {
+      setSections([]);
       deploy(project._id);
     }
   }
@@ -62,20 +78,27 @@ export const Deploy: React.FC<Props> = ({ project }) => {
         }}
       >
         <ScrollToBottom>
-          {content.map((message, index) => (
-            <div key={index}>
-              <DeployMessage message={message} />
-            </div>
-          ))}
+          <Space direction="vertical" style={{ width: '100%' }}>
+            {sections.map((section, index) => (
+              <DeployLogsSection key={index} section={section} />
+            ))}
+          </Space>
         </ScrollToBottom>
       </Card>
 
-      <Button
-        onClick={handleDeployClick}
-        disabled={deployStatus === 'fetching' || connStatus !== 'connected'}
-      >
-        Deploy
-      </Button>
+      <Space>
+        <Button
+          type="primary"
+          onClick={handleDeployClick}
+          disabled={status === "started" || connStatus !== 'connected'}
+        >
+          Deploy
+        </Button>
+
+        {!!status && (
+          <Text style={{ margin: 10 }}>{deployStatusText[status]}</Text>
+        )}
+      </Space>
     </Space>
   )
 }

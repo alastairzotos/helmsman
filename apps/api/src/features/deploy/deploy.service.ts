@@ -1,10 +1,10 @@
 import { Injectable } from "@nestjs/common";
 import { ProjectsService } from "features/projects/projects.service";
 import { GitService } from "integrations/git/git.service";
-import { IDeployMessageDto, deployMessage } from "models";
-import { WebSocketManager } from "utils/ws";
+import { IProject, deployMessage } from "models";
+import { WebSocketHandler, WebSocketManager } from "utils/ws";
 
-const { phase, git } = deployMessage;
+const { status, phase, text, progress } = deployMessage;
 
 @Injectable()
 export class DeployService {
@@ -22,20 +22,41 @@ export class DeployService {
     if (!project) {
       return false;
     }
-    
-    handler.sendMessage(phase("pulling-project-repo"))
 
-    const projName = await this.gitService.clone(
-      project.githubUrl,
-      (phase, progress) => handler.sendMessage(git(phase, progress)),
-    );
+    handler.sendMessage(status("started"));
 
-    handler.sendMessage(phase("cleaning-up"));
+    const projName = await this.pullProjectRepo(handler, project);
+    await this.cleanup(handler, projName);
 
-    await this.gitService.clearClonedDir(projName);
-
-    handler.sendMessage(phase("finished"));
+    handler.sendMessage(status("finished"));
 
     return true;
+  }
+
+  async pullProjectRepo(handler: WebSocketHandler, project: IProject) {
+    handler.sendMessage(phase("pulling-project-repo"))
+
+    let lastPhase = '';
+    const projName = await this.gitService.clone(
+      project.githubUrl,
+      (phase, percent) => {
+        if (percent !== undefined) {
+          handler.sendMessage(progress(phase, percent, phase === lastPhase));
+        } else {
+          handler.sendMessage(text(phase, lastPhase === phase));
+        }
+
+        lastPhase = phase;
+      },
+    );
+
+    return projName;
+  }
+
+  async cleanup(handler: WebSocketHandler, projName: string) {
+    handler.sendMessage(phase("cleaning-up"));
+
+    handler.sendMessage(text("Cleaning project repo"));
+    await this.gitService.clearClonedDir(projName);
   }
 }
