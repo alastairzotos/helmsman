@@ -1,19 +1,18 @@
-import React, { useEffect, useRef, useState } from "react";
+import React, { useState } from "react";
 import { Button, Card, Space } from "antd";
 import { getEnv } from "@/utils/env";
 import { useDeploy } from "@/state/deploy.state";
-import {  IDeployMessageDto, IProject, WithId } from "models";
+import { IDeployMessageDto, IProject, WithId } from "models";
 import { DeployMessage } from "@/components/deploy/deploy-message";
 import { ConnStatus } from "@/components/deploy/conn-status";
 import { useWebSockets } from "@/hooks/ws";
+import { ScrollToBottom } from "@/components/_core/scroll-to-bottom";
 
 interface Props {
   project: WithId<IProject>;
 }
 
 export const Deploy: React.FC<Props> = ({ project }) => {
-  const endRef = useRef<HTMLDivElement>(null);
-
   const [deployStatus, deploy] = useDeploy(s => [s.status, s.request]);
 
   const [content, setContent] = useState<IDeployMessageDto[]>([]);
@@ -41,12 +40,6 @@ export const Deploy: React.FC<Props> = ({ project }) => {
       return [...curContent, message];
     })
   })
-  
-  useEffect(() => {
-    if (endRef.current) {
-      endRef.current.scrollIntoView({ behavior: "smooth" });
-    }
-  }, [content.length]);
 
   const handleDeployClick = () => {
     if (connStatus === 'connected') {
@@ -66,13 +59,13 @@ export const Deploy: React.FC<Props> = ({ project }) => {
           backgroundColor: '#101010'
         }}
       >
-        {content.map((message, index) => (
-          <div key={index}>
-            <DeployMessage message={message} />
-          </div>
-        ))}
-
-        <div ref={endRef} />
+        <ScrollToBottom>
+          {content.map((message, index) => (
+            <div key={index}>
+              <DeployMessage message={message} />
+            </div>
+          ))}
+        </ScrollToBottom>
       </Card>
 
       <Button
