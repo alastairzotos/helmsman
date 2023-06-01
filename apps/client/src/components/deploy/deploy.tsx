@@ -5,6 +5,7 @@ import { v4 } from 'uuid';
 import { useDeploy } from "@/state/deploy.state";
 import {  IDeployMessageDto, IProject, WithId } from "models";
 import { DeployMessage } from "@/components/deploy/deploy-message";
+import { ConnStatus, IConnStatus } from "@/components/deploy/conn-status";
 
 const getWsUrl = () => {
   const url = new URL(getEnv().apiUrl);
@@ -26,6 +27,7 @@ export const Deploy: React.FC<Props> = ({ project }) => {
 
   const [deployStatus, deploy] = useDeploy(s => [s.status, s.request]);
 
+  const [connStatus, setConnStatus] = useState<IConnStatus>(null);
   const [content, setContent] = useState<IDeployMessageDto[]>([]);
 
   const receiveMessage = (message: IDeployMessageDto) => {
@@ -60,12 +62,13 @@ export const Deploy: React.FC<Props> = ({ project }) => {
       setConnId(id);
       ws.send(id);
 
-      console.log('Connected'); // TODO:
+      setConnStatus('connected');
     };
 
-    ws.onerror = () => console.log('There was an error'); // TODO:
+    ws.onerror = () => setConnStatus('error');
+
     ws.onclose = () => {
-      console.log('Connection closed'); // TODO:
+      setConnStatus('disconnected');
       setConnId(null);
     }
 
@@ -86,6 +89,8 @@ export const Deploy: React.FC<Props> = ({ project }) => {
 
   return (
     <Space direction="vertical">
+      <ConnStatus status={connStatus} />
+      
       <Card style={{ width: 600, overflowY: 'scroll', maxHeight: 300 }}>
         {content.map((message, index) => (
           <div key={index}>
