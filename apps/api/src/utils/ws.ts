@@ -1,26 +1,21 @@
 import { WebSocketServer, WebSocket } from 'ws';
 import { v4 as uuidv4 } from 'uuid';
 
-interface IConnectionProps {
-  id: string;
-  conn: WebSocket;
-}
-
 export class WebSocketHandler {
-  private connections: IConnectionProps[] = [];
+  private connections: Record<string, WebSocket> = {};
 
   connect(id: string, conn: WebSocket) {
-    this.connections.push({ id, conn });
+    this.connections[id] = conn;
   }
 
   disconnect(id: string) {
-    this.connections = this.connections.filter(conn => conn.id !== id);
+    delete this.connections[id];
 
-    return this.connections.length === 0;
+    return Object.keys(this.connections).length === 0;
   }
 
   sendMessage(message: Object) {
-    this.connections.forEach(conn => conn.conn.send(JSON.stringify(message)));
+    Object.values(this.connections).forEach(conn => conn.send(JSON.stringify(message)));
   }
 }
 
@@ -32,9 +27,8 @@ export class WebSocketManager {
     this.wss = new WebSocketServer({ port });
 
     this.wss.on('connection', (conn, req) => {
-      const params = new URLSearchParams(req.url.substring(2));
       const id = uuidv4();
-      const handle = params.get('handle')
+      const handle = new URLSearchParams(req.url.substring(2)).get('handle')
 
       const handler = this.getHandler(handle);
 
