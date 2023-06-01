@@ -31,4 +31,3 @@ export const deleteProject = async (id: string) => {
   await httpClient.delete(`/projects/${id}`);
 };
 
-

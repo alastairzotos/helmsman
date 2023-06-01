@@ -1,4 +1,5 @@
 import { StatusSwitch } from "@/components/_core/status-switch";
+import { Deploy } from "@/components/deploy/deploy";
 import { ProjectManage } from "@/components/projects/project-manage";
 import { SecretsEdit } from "@/components/projects/secrets-edit";
 import { useGetProjectById, useUpdateProject } from "@/state/projects.state";
@@ -30,12 +31,12 @@ export const ProjectView: React.FC<Props> = ({ id }) => {
     <StatusSwitch status={getProjectStatus}>
       {project && (
         <Tabs
-          defaultActiveKey="project"
+          defaultActiveKey="deploy"
           items={[
             {
-              key: "project",
-              label: "Project",
-              children: <p>{project.name}</p>
+              key: "deploy",
+              label: "Deploy",
+              children: <Deploy project={project} />
             },
             {
               key: "edit",
