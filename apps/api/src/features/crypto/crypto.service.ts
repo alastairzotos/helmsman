@@ -1,5 +1,6 @@
 import { Injectable } from "@nestjs/common";
 import * as aes from 'aes-js';
+import * as bcrypt from 'bcrypt';
 import { EnvironmentService } from "environment/environment.service";
 
 @Injectable()
@@ -32,6 +33,14 @@ export class CryptoService {
     const decryptedText = aes.utils.utf8.fromBytes(decryptedBytes);
 
     return decryptedText;
+  }
+
+  async hashPassword(password: string) {
+    return await bcrypt.hash(password, 10);
+  }
+
+  async comparePasswords(password: string, hashedPassword: string) {
+    return await bcrypt.compare(password, hashedPassword);
   }
 
   private getEncryptionKey() {

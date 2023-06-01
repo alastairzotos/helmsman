@@ -1,8 +1,12 @@
-import { Controller, Post, Get, Patch, Delete, Param, Body } from "@nestjs/common";
+import { Controller, Post, Get, Patch, Delete, Param, Body, UseGuards } from "@nestjs/common";
 import { ProjectsService } from "features/projects/projects.service";
-import { IProject, UpdateProps } from "models";
+import { IProject, UpdateProps, WithId } from "models";
+import { Principal } from "plugins/user/decorators/principal.decorator";
+import { AuthGuard } from "plugins/user/guards/auth.guard";
+import { IUser } from "user-shared";
 
 @Controller('projects')
+@UseGuards(AuthGuard)
 export class ProjectsController {
   constructor(
     private readonly projectsService: ProjectsService,
@@ -10,14 +14,17 @@ export class ProjectsController {
 
   @Post()
   async create(
+    @Principal() user: WithId<IUser>,
     @Body() project: IProject
   ) {
-    return await this.projectsService.create(project);
+    return await this.projectsService.create(user, project);
   }
 
   @Get()
-  async getAll() {
-    return await this.projectsService.getAll();
+  async getAll(
+    @Principal() user: WithId<IUser>,
+  ) {
+    return await this.projectsService.getAll(user);
   }
 
   @Get(':id')

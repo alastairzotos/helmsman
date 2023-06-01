@@ -4,6 +4,9 @@ import { IProject } from 'models';
 @Schema({ collection: 'projects' })
 export class Project implements IProject {
   @Prop()
+  ownerId: string;
+  
+  @Prop()
   name: string;
 
   @Prop()

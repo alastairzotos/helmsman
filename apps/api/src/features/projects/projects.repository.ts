@@ -14,8 +14,8 @@ export class ProjectsRepository {
     return await this.projectsModel.create(project);
   }
 
-  async getAll() {
-    return await this.projectsModel.find();
+  async getAll(ownerId: string) {
+    return await this.projectsModel.find({ ownerId });
   }
 
   async getById(id: string) {

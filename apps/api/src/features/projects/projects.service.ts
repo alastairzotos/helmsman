@@ -1,7 +1,8 @@
 import { Injectable } from "@nestjs/common";
 import { CryptoService } from "features/crypto/crypto.service";
 import { ProjectsRepository } from "features/projects/projects.repository";
-import { IProject } from "models";
+import { IProject, WithId } from "models";
+import { IUser } from "user-shared";
 
 @Injectable()
 export class ProjectsService {
@@ -10,12 +11,15 @@ export class ProjectsService {
     private readonly projectsRepo: ProjectsRepository,
   ) {}
 
-  async create(project: IProject) {
-    return await this.projectsRepo.create(project);
+  async create(user: WithId<IUser>, project: IProject) {
+    return await this.projectsRepo.create({
+      ...project,
+      ownerId: user._id,
+    });
   }
 
-  async getAll() {
-    return await this.projectsRepo.getAll();
+  async getAll(user: WithId<IUser>) {
+    return await this.projectsRepo.getAll(user._id);
   }
 
   async getById(id: string): Promise<IProject> {
