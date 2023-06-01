@@ -39,15 +39,16 @@ export const Deploy: React.FC<Props> = ({ project }) => {
 
       default:
         setSections((curSections) => {
-          let logs: IDeployMessageDto[];
-
-          if (message.replaceLast) {
-            logs = replaceIndex(curSections.at(-1)?.logs!, -1, message);
-          } else {
-            logs = [...curSections.at(-1)?.logs!, message];
-          }
-
-          return replaceIndex(curSections, -1, { ...curSections.at(-1)!, logs });
+          return replaceIndex(
+            curSections,
+            -1,
+            {
+              ...curSections.at(-1)!,
+              logs: message.replaceLast
+                ? replaceIndex(curSections.at(-1)?.logs!, -1, message)
+                : [...curSections.at(-1)?.logs!, message]
+            }
+          );
         })
     }
   }, []);
