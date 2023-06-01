@@ -1,0 +1,68 @@
+import { StatusSwitch } from "@/components/_core/status-switch";
+import { ProjectManage } from "@/components/projects/project-manage";
+import { SecretsEdit } from "@/components/projects/secrets-edit";
+import { useGetProjectById, useUpdateProject } from "@/state/projects.state";
+import { Tabs } from "antd";
+import { IProject } from "models";
+import React, { useEffect } from "react";
+import { SubmitHandler } from "react-hook-form";
+
+interface Props {
+  id: string;
+}
+
+export const ProjectView: React.FC<Props> = ({ id }) => {
+  const [getProjectStatus, getProject, project] = useGetProjectById(s => [s.status, s.request, s.value]);
+
+  const [updateStatus, updateProject] = useUpdateProject(s => [s.status, s.request]);
+
+  useEffect(() => {
+    if (!!id) {
+      getProject(id);
+    }
+  }, [id]);
+
+  const onSubmit: SubmitHandler<IProject> = async (data) => {
+    await updateProject(project!._id, data);
+  }
+
+  return (
+    <StatusSwitch status={getProjectStatus}>
+      {project && (
+        <Tabs
+          defaultActiveKey="project"
+          items={[
+            {
+              key: "project",
+              label: "Project",
+              children: <p>{project.name}</p>
+            },
+            {
+              key: "edit",
+              label: "Edit",
+              children: (
+                <ProjectManage
+                  title="Edit project"
+                  project={project}
+                  saveStatus={updateStatus}
+                  onSave={onSubmit}
+                />
+              )
+            },
+            {
+              key: "secrets",
+              label: "Secrets",
+              children: (
+                <SecretsEdit
+                  project={project}
+                  saveStatus={updateStatus}
+                  onSave={onSubmit}
+                />
+              )
+            }
+          ]}
+        />
+      )}
+    </StatusSwitch>
+  )
+}
