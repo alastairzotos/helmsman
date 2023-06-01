@@ -37,7 +37,7 @@ export const Deploy: React.FC<Props> = ({ project }) => {
     })
   }, []);
 
-  const [connId, connStatus] = useWebSockets(getEnv().apiUrl, 3004, handleReceiveMessage);
+  const [connId, connStatus, reconnect] = useWebSockets(getEnv().apiUrl, 3004, handleReceiveMessage);
 
   useEffect(() => {
     setContent([]);
@@ -51,7 +51,7 @@ export const Deploy: React.FC<Props> = ({ project }) => {
 
   return (
     <Space direction="vertical">
-      <ConnStatus status={connStatus} />
+      <ConnStatus status={connStatus} onReconnect={reconnect} />
 
       <Card
         style={{

@@ -1,5 +1,5 @@
 import { IConnStatus } from "@/hooks/ws";
-import { Space, Typography } from "antd";
+import { Button, Space, Typography } from "antd";
 import React from "react";
 import styled from 'styled-components';
 
@@ -7,6 +7,7 @@ const { Text } = Typography;
 
 interface Props {
   status: IConnStatus;
+  onReconnect: () => void;
 }
 
 const Dot = styled.div<{ colour: string }>(({ colour }) => (`
@@ -17,10 +18,18 @@ const Dot = styled.div<{ colour: string }>(({ colour }) => (`
   display: inline-block;
 `))
 
-export const ConnStatus: React.FC<Props> = ({ status }) => {
+export const ConnStatus: React.FC<Props> = ({ status, onReconnect }) => {
   switch (status) {
     case null:
       return null;
+
+    case 'connecting':
+      return (
+        <Space>
+          <Dot colour="#bbb" />
+          <Text>Connecting...</Text>
+        </Space>
+      )
 
     case 'connected':
       return (
@@ -35,6 +44,7 @@ export const ConnStatus: React.FC<Props> = ({ status }) => {
         <Space>
           <Dot colour="#bbb" />
           <Text>Disconnected</Text>
+          <Button onClick={onReconnect}>Reconnect</Button>
         </Space>
       )
 
