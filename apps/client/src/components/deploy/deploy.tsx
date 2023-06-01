@@ -52,8 +52,6 @@ export const Deploy: React.FC<Props> = ({ project }) => {
     })
   }
 
-  console.log(content);
-
   useEffect(() => {
     const ws = new WebSocket(getWsUrl());
 
