@@ -24,13 +24,13 @@ export const AppBar: React.FC = () => {
       <Row>
         <Col span={18} style={{ display: 'flex' }}>
           <Image
-            src="/bm-logo-black.svg"
+            src="/bm-logo.png"
             width={50}
             height={50}
             alt="BitMetro Logo"
             style={{ paddingTop: 10 }}
           />
-          <Title level={5} style={{ marginTop: 20, fontSize: '1.4em' }}>
+          <Title level={5} style={{ marginTop: 20, marginLeft: 10, fontSize: '1.4em' }}>
             Mission Control
           </Title>
         </Col>
