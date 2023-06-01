@@ -1,4 +1,4 @@
-import React, { useCallback, useState } from "react";
+import React, { useCallback, useEffect, useState } from "react";
 import { Button, Card, Space } from "antd";
 import { getEnv } from "@/utils/env";
 import { useDeploy } from "@/state/deploy.state";
@@ -38,6 +38,10 @@ export const Deploy: React.FC<Props> = ({ project }) => {
   }, []);
 
   const [connId, connStatus] = useWebSockets(getEnv().apiUrl, handleReceiveMessage);
+
+  useEffect(() => {
+    setContent([]);
+  }, [project._id]);
 
   const handleDeployClick = () => {
     if (connStatus === 'connected') {
