@@ -49,7 +49,7 @@ export const Deploy: React.FC<Props> = ({ project }) => {
   }, [content.length]);
 
   const handleDeployClick = () => {
-    if (connId) {
+    if (connStatus === 'connected') {
       deploy(project._id, connId);
     }
   }
