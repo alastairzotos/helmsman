@@ -56,7 +56,7 @@ export class DeployService {
   async cleanup(ws: WebSocketHandler, projName: string) {
     ws.sendMessage(phase("cleaning-up"));
 
-    ws.sendMessage(text("Cleaning project repo"));
+    ws.sendMessage(text("Removing project repository"));
     await this.gitService.clearClonedDir(projName);
   }
 }
