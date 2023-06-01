@@ -1,4 +1,4 @@
-export const withValue = <T>(array: T[], index: number, value: T) => {
+export const replaceIndex = <T>(array: T[], index: number, value: T) => {
   const copy = [...array];
 
   if (index >= 0) {

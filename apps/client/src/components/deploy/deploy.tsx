@@ -7,7 +7,7 @@ import { DeployMessage } from "@/components/deploy/deploy-message";
 import { ConnStatus } from "@/components/deploy/conn-status";
 import { useWebSockets } from "@/hooks/ws";
 import { ScrollToBottom } from "@/components/_core/scroll-to-bottom";
-import { withValue } from "@/utils/misc";
+import { replaceIndex } from "@/utils/misc";
 
 interface Props {
   project: WithId<IProject>;
@@ -26,7 +26,7 @@ export const Deploy: React.FC<Props> = ({ project }) => {
         switch (message.type) {
           case 'git':
             if (message.gitMessage?.phase === lastMessage.gitMessage?.phase) {
-              return withValue(curContent, -1, message);
+              return replaceIndex(curContent, -1, message);
             }
 
             return [...curContent, message];
