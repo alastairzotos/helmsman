@@ -1,35 +1,24 @@
-import React, { useEffect, useId, useRef, useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import { Button, Card, Space } from "antd";
 import { getEnv } from "@/utils/env";
 import { useDeploy } from "@/state/deploy.state";
 import {  IDeployMessageDto, IProject, WithId } from "models";
 import { DeployMessage } from "@/components/deploy/deploy-message";
-import { ConnStatus, IConnStatus } from "@/components/deploy/conn-status";
-
-const getWsUrl = () => {
-  const url = new URL(getEnv().apiUrl);
-  let host = url.host;
-  if (host.includes(':')) {
-    host = host.split(':')[0];
-  }
-
-  return `ws://${host}:3004`;
-}
+import { ConnStatus } from "@/components/deploy/conn-status";
+import { useWebSockets } from "@/hooks/ws";
 
 interface Props {
   project: WithId<IProject>;
 }
 
 export const Deploy: React.FC<Props> = ({ project }) => {
-  const connId = useId();
   const endRef = useRef<HTMLDivElement>(null);
 
   const [deployStatus, deploy] = useDeploy(s => [s.status, s.request]);
 
-  const [connStatus, setConnStatus] = useState<IConnStatus>(null);
   const [content, setContent] = useState<IDeployMessageDto[]>([]);
 
-  const receiveMessage = (message: IDeployMessageDto) => {
+  const [connId, connStatus] = useWebSockets<IDeployMessageDto>(getEnv().apiUrl, (message) => {
     setContent((curContent) => {
       const lastMessage = curContent.at(-1);
       if (!lastMessage) {
@@ -51,17 +40,8 @@ export const Deploy: React.FC<Props> = ({ project }) => {
 
       return [...curContent, message];
     })
-  }
-
-  useEffect(() => {
-    const ws = new WebSocket(getWsUrl() + `?id=${connId}`);
-
-    ws.onopen = () => setConnStatus('connected');
-    ws.onerror = () => setConnStatus('error');
-    ws.onclose = () => setConnStatus('disconnected');
-    ws.onmessage = (e) => receiveMessage(JSON.parse(e.data));
-  }, []);
-
+  })
+  
   useEffect(() => {
     if (endRef.current) {
       endRef.current.scrollIntoView({ behavior: "smooth" });

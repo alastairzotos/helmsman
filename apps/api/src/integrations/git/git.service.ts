@@ -16,7 +16,7 @@ export class GitService {
       http,
       url,
       dir: path.resolve(this.getRootPath(), projectName),
-      onProgress: (e) => onProgress(e.phase, (e.loaded / e.total) * 100)
+      onProgress: (e) => onProgress(e.phase, (e.loaded / e.total) * 100),
     })
 
     return projectName;

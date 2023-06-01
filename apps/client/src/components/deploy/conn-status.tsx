@@ -1,10 +1,9 @@
+import { IConnStatus } from "@/hooks/ws";
 import { Space, Typography } from "antd";
 import React from "react";
 import styled from 'styled-components';
 
 const { Text } = Typography;
-
-export type IConnStatus = 'connected' | 'disconnected' | 'error' | null;
 
 interface Props {
   status: IConnStatus;
