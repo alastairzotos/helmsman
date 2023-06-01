@@ -9,8 +9,6 @@ interface IConnectionProps {
 export class WebSocketHandler<T extends Object> {
   private connections: IConnectionProps[] = [];
 
-  constructor() {}
-
   connect(id: string, conn: WebSocket) {
     this.connections.push({ id, conn });
   }
