@@ -37,7 +37,7 @@ export const Deploy: React.FC<Props> = ({ project }) => {
     })
   }, []);
 
-  const [connId, connStatus] = useWebSockets(getEnv().apiUrl, handleReceiveMessage);
+  const [connId, connStatus] = useWebSockets(getEnv().apiUrl, 3004, handleReceiveMessage);
 
   useEffect(() => {
     setContent([]);
