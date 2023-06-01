@@ -16,34 +16,34 @@ export class DeployService {
   ) { }
 
   async deployProject(projectId: string) {
-    const handler = this.wsManager.getHandler(projectId);
+    const ws = this.wsManager.getHandler(projectId);
     const project = await this.projectsService.getById(projectId);
 
     if (!project) {
       return false;
     }
 
-    handler.sendMessage(status("started"));
+    ws.sendMessage(status("started"));
 
-    const projName = await this.pullProjectRepo(handler, project);
-    await this.cleanup(handler, projName);
+    const projName = await this.pullProjectRepo(ws, project);
+    await this.cleanup(ws, projName);
 
-    handler.sendMessage(status("finished"));
+    ws.sendMessage(status("finished"));
 
     return true;
   }
 
-  async pullProjectRepo(handler: WebSocketHandler, project: IProject) {
-    handler.sendMessage(phase("pulling-project-repo"))
+  async pullProjectRepo(ws: WebSocketHandler, project: IProject) {
+    ws.sendMessage(phase("pulling-project-repo"))
 
     let lastPhase = '';
     const projName = await this.gitService.clone(
       project.githubUrl,
       (phase, percent) => {
         if (percent !== undefined) {
-          handler.sendMessage(progress(phase, percent, phase === lastPhase));
+          ws.sendMessage(progress(phase, percent, phase === lastPhase));
         } else {
-          handler.sendMessage(text(phase, lastPhase === phase));
+          ws.sendMessage(text(phase, lastPhase === phase));
         }
 
         lastPhase = phase;
@@ -53,10 +53,10 @@ export class DeployService {
     return projName;
   }
 
-  async cleanup(handler: WebSocketHandler, projName: string) {
-    handler.sendMessage(phase("cleaning-up"));
+  async cleanup(ws: WebSocketHandler, projName: string) {
+    ws.sendMessage(phase("cleaning-up"));
 
-    handler.sendMessage(text("Cleaning project repo"));
+    ws.sendMessage(text("Cleaning project repo"));
     await this.gitService.clearClonedDir(projName);
   }
 }
