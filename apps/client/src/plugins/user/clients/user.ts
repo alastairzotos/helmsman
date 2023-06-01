@@ -1,14 +1,31 @@
-import { httpClient } from "@/clients/http.client"
-import { IAccessTokenDto, ILoginDto, IRegisterDto } from "models"
+import { IAccessTokenDto, ILoginDto, IRegisterDto } from "user-shared";
 
-export const registerUser = async (email: string, password: string) => {
-  const { data } = await httpClient.post<IRegisterDto, { data: IAccessTokenDto }>('/users/register', { email, password })
+export const registerUser = async (url: string, email: string, password: string) => {
+  const res = await fetch(url + '/users/register', {
+    method: 'POST',
+    headers: {
+      'Accept': 'application/json',
+      'Content-Type': 'application/json'
+    },
+    body: JSON.stringify({ email, password } as IRegisterDto)
+  })
 
-  return data.accessToken;
+  const { accessToken } = await res.json() as IAccessTokenDto;
+
+  return accessToken;
 }
 
-export const loginUser = async (email: string, password: string) => {
-  const { data } = await httpClient.post<ILoginDto, { data: IAccessTokenDto }>('/users/login', { email, password })
+export const loginUser = async (url: string, email: string, password: string) => {
+  const res = await fetch(url + '/users/login', {
+    method: 'POST',
+    headers: {
+      'Accept': 'application/json',
+      'Content-Type': 'application/json'
+    },
+    body: JSON.stringify({ email, password } as ILoginDto),
+  })
 
-  return data.accessToken;
+  const { accessToken } = await res.json() as IAccessTokenDto;
+
+  return accessToken;
 }

@@ -2,20 +2,35 @@ import "@/styles/globals.css";
 
 import type { AppProps } from "next/app";
 import { Wrapper } from "@/components/_core/wrapper"
+import { AuthProvider, useAccessToken } from "@/plugins/user";
+import { getEnv } from "@/utils/env";
 import { useEffect } from "react";
-import { useAuthState } from "@/plugins/user/state/auth";
+import { useRouter } from "next/router";
+import { urls } from "@/urls";
 
-const AppPage = ({ Component, pageProps }: AppProps) => {
-  const { init } = useAuthState();
+const Inner = ({ Component, pageProps }: AppProps) => {
+  const router = useRouter();
+  const accessToken = useAccessToken();
 
   useEffect(() => {
-    init();
-  }, []);
+    if (!accessToken) {
+      router.push(urls.login());
+    }
+  }, [accessToken]);
 
+  return <Component {...pageProps} />;
+}
+
+const AppPage = (props: AppProps) => {
   return (
-    <Wrapper>
-      <Component {...pageProps} />
-    </Wrapper>
+    <AuthProvider
+      localStorageKey="@mission-control:access-token"
+      apiUrl={getEnv().apiUrl + '/api/v1'}
+    >
+      <Wrapper>
+        <Inner {...props} />
+      </Wrapper>
+    </AuthProvider>
   )
 }
 

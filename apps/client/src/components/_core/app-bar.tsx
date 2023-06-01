@@ -1,6 +1,6 @@
 import { HEADER_HEIGHT } from "@/components/_core/sizes";
-import { useAuthState } from "@/plugins/user/state/auth";
-import { Col, Layout, Row, Typography } from "antd";
+import { useLoggedInUser, useLogout } from "@/plugins/user";
+import { Button, Col, Layout, Row, Space, Typography } from "antd";
 import Image from "next/image";
 import React from "react";
 
@@ -15,13 +15,14 @@ const headerStyle: React.CSSProperties = {
   boxShadow: '0 1px 2px 0 rgba(0, 0, 0, 0.1)'
 };
 
-export const AppBar: React.FC<React.PropsWithChildren> = ({ children }) => {
-  const loggedInUser = useAuthState(s => s.loggedInUser);
+export const AppBar: React.FC = () => {
+  const handleLogout = useLogout();
+  const loggedInUser = useLoggedInUser();
 
   return (
     <Header style={headerStyle}>
       <Row>
-        <Col span={20} style={{ display: 'flex' }}>
+        <Col span={18} style={{ display: 'flex' }}>
           <Image
             src="/bm-logo-black.svg"
             width={50}
@@ -33,8 +34,16 @@ export const AppBar: React.FC<React.PropsWithChildren> = ({ children }) => {
             Mission Control
           </Title>
         </Col>
-        <Col span={4}>
-          {loggedInUser && <Text>Logged in as {loggedInUser.email}</Text>}
+
+        <Col span={6}>
+          {loggedInUser && (
+            <div style={{ display: 'flex' }}>
+              <Space>
+                <Text>Logged in as {loggedInUser.email}</Text>
+                <Button onClick={handleLogout}>Logout</Button>
+              </Space>
+            </div>
+          )}
         </Col>
       </Row>
     </Header>

@@ -1,4 +1,4 @@
-import { RegisterForm } from "@/plugins/user/components/register";
+import { RegisterForm } from "@/components/auth/register";
 import { NextPage } from "next";
 
 const RegisterPage: NextPage = () => {

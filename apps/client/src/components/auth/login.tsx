@@ -5,46 +5,40 @@ import { Controller } from 'react-hook-form';
 import { zodResolver } from "@hookform/resolvers/zod";
 import { z } from 'zod';
 import { useRouter } from 'next/router';
-import { useRegisterUser } from '@/plugins/user/state/user';
 import { urls } from '@/urls';
+import { useLogin } from '@/plugins/user';
 
-const RegisterSchema =
+const LoginSchema =
   z.object({
     email: z.string(),
     password: z.string().min(8),
-    repeatPassword: z.string().min(8),
   })
-  .refine(({ password, repeatPassword }) => password === repeatPassword, {
-    message: "Passwords must match",
-    path: ["repeatPassword"]
-  });
 
-type IRegisterProps = z.infer<typeof RegisterSchema>;
+type ILoginProps = z.infer<typeof LoginSchema>;
 
-export const RegisterForm: React.FC = () => {
+export const LoginForm: React.FC = () => {
   const router = useRouter();
-  const [registerStatus, registerUser] = useRegisterUser(s => [s.status, s.request]);
+  const [loginStatus, loginUser] = useLogin();
 
-  const handleRegisterClick = async ({ email, password }: IRegisterProps) => {
-    await registerUser(email, password);
-    router.push(urls.login());
+  const handleLoginClick = async ({ email, password }: ILoginProps) => {
+    await loginUser(email, password);
+    router.push(urls.projects.home());
   }
 
   return (
     <ResourceForm
-      title='Register'
+      title='Login'
 
       resource={{
         email: '',
         password: '',
-        repeatPassword: '',
-      } as IRegisterProps}
+      } as ILoginProps}
 
-      resolver={zodResolver(RegisterSchema)}
+      resolver={zodResolver(LoginSchema)}
 
-      saveStatus={registerStatus}
-      onSave={handleRegisterClick}
-      savePrompt="Register"
+      saveStatus={loginStatus}
+      onSave={handleLoginClick}
+      savePrompt="Login"
     >
       {({ errors, control }) => (
         <>
@@ -67,18 +61,6 @@ export const RegisterForm: React.FC = () => {
           >
             <Controller
               name="password"
-              control={control}
-              render={({ field }) => <Input type="password" {...field} />}
-            />
-          </Form.Item>
-
-          <Form.Item
-            label="Repeat password"
-            validateStatus={errors.repeatPassword && "error"}
-            help={errors.repeatPassword && errors.repeatPassword.message}
-          >
-            <Controller
-              name="repeatPassword"
               control={control}
               render={({ field }) => <Input type="password" {...field} />}
             />

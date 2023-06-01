@@ -1,26 +1,26 @@
 import { create } from 'zustand';
 import * as jwt from 'jsonwebtoken';
-import { IUser } from 'models';
+import { IUser } from 'user-shared';
+import { useAuthContext } from '@/plugins/user/contexts/auth.context';
 
-export interface IAuthStateValues {
+interface IAuthStateValues {
   accessToken?: string;
   loggedInUser?: IUser;
 }
 
-export interface IAuthStateActions {
-  init(): void;
-  setAccessToken(accessToken: string): void;
+interface IAuthStateActions {
+  init(localStorageKey: string): void;
+  setAccessToken(localStorageKey: string, accessToken: string): void;
+  logout: (localStorageKey: string) => void;
 }
 
-export type IAuthState = IAuthStateValues & IAuthStateActions;
-
-const ACCESS_TOKEN_LOCAL_STORAGE_KEY = '@mission-control:access-token';
+type IAuthState = IAuthStateValues & IAuthStateActions;
 
 export const useAuthState = create<IAuthState>((set) => ({
   accessToken: undefined,
 
-  init() {
-    const accessToken = localStorage.getItem(ACCESS_TOKEN_LOCAL_STORAGE_KEY);
+  init(localStorageKey: string) {
+    const accessToken = localStorage.getItem(localStorageKey);
 
     if (accessToken) {
       set({
@@ -30,8 +30,17 @@ export const useAuthState = create<IAuthState>((set) => ({
     }
   },
 
-  setAccessToken(accessToken: string) {
-    localStorage.setItem(ACCESS_TOKEN_LOCAL_STORAGE_KEY, accessToken);
-    set({ accessToken });
-  }
+  setAccessToken(localStorageKey: string, accessToken: string) {
+    localStorage.setItem(localStorageKey, accessToken);
+    set({
+      accessToken,
+      loggedInUser: jwt.decode(accessToken) as IUser
+    });
+  },
+
+  logout(localStorageKey: string) {
+    set({ accessToken: undefined, loggedInUser: undefined });
+    localStorage.removeItem(localStorageKey);
+  },
 }))
+
