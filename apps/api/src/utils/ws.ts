@@ -6,7 +6,7 @@ interface IConnectionProps {
   conn: WebSocket;
 }
 
-export class WebSocketHandler<T extends Object> {
+export class WebSocketHandler {
   private connections: IConnectionProps[] = [];
 
   connect(id: string, conn: WebSocket) {
@@ -19,14 +19,14 @@ export class WebSocketHandler<T extends Object> {
     return this.connections.length === 0;
   }
 
-  sendMessage(message: T) {
+  sendMessage(message: Object) {
     this.connections.forEach(conn => conn.conn.send(JSON.stringify(message)));
   }
 }
 
-export class WebSocketManager<T extends Object> {
+export class WebSocketManager {
   private wss: WebSocketServer;
-  private wsConnections: Record<string, WebSocketHandler<T>> = {};
+  private wsConnections: Record<string, WebSocketHandler> = {};
 
   constructor(port: number) {
     this.wss = new WebSocketServer({ port });
@@ -49,6 +49,6 @@ export class WebSocketManager<T extends Object> {
   }
 
   getHandler(handle: string) {
-    return this.wsConnections[handle] = this.wsConnections[handle] || new WebSocketHandler<T>();
+    return this.wsConnections[handle] = this.wsConnections[handle] || new WebSocketHandler();
   }
 }

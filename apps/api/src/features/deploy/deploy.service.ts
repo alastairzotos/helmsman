@@ -8,7 +8,7 @@ const { phase, git } = deployMessage;
 
 @Injectable()
 export class DeployService {
-  private wsManager = new WebSocketManager<IDeployMessageDto>(3004);
+  private wsManager = new WebSocketManager(3004);
 
   constructor(
     private readonly projectsService: ProjectsService,
