@@ -58,7 +58,14 @@ export const Deploy: React.FC<Props> = ({ project }) => {
     <Space direction="vertical">
       <ConnStatus status={connStatus} />
 
-      <Card style={{ width: 600, overflowY: 'scroll', maxHeight: 300 }}>
+      <Card
+        style={{
+          width: 600,
+          overflowY: 'scroll',
+          maxHeight: 300,
+          backgroundColor: '#101010'
+        }}
+      >
         {content.map((message, index) => (
           <div key={index}>
             <DeployMessage message={message} />
