@@ -1,7 +1,6 @@
 
 export interface IDeployDto {
   projectId: string;
-  connId: string;
 }
 
 export type IDeployMessageType = "phase" | "git";

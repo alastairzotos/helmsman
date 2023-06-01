@@ -13,28 +13,28 @@ export class DeployService {
     private readonly gitService: GitService,
   ) { }
 
-  async deployProject(projectId: string, connId: string) {
-    const conn = this.wsManager.getConnectionById(connId);
+  async deployProject(projectId: string) {
+    const handler = this.wsManager.getHandler(projectId);
     const project = await this.projectsService.getById(projectId);
 
     if (!project) {
       return false;
     }
     
-    this.wsManager.sendMessage(conn, deployMessage.phase("pulling-project-repo"))
+    handler.sendMessage(deployMessage.phase("pulling-project-repo"))
 
     const projName = await this.gitService.clone(
       project.githubUrl,
       (phase, progress) => {
-        this.wsManager.sendMessage(conn, deployMessage.git(phase, isNaN(progress) ? undefined : progress));
+        handler.sendMessage(deployMessage.git(phase, isNaN(progress) ? undefined : progress));
       }
     );
 
-    this.wsManager.sendMessage(conn, deployMessage.phase("cleaning-up"));
+    handler.sendMessage(deployMessage.phase("cleaning-up"));
 
     await this.gitService.clearClonedDir(projName);
 
-    this.wsManager.sendMessage(conn, deployMessage.phase("finished"));
+    handler.sendMessage(deployMessage.phase("finished"));
 
     return true;
   }

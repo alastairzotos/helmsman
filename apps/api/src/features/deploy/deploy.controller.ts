@@ -12,9 +12,9 @@ export class DeployController {
 
   @Post()
   async deploy(
-    @Body() { projectId, connId }: IDeployDto
+    @Body() { projectId }: IDeployDto
   ) {
-    const result = await this.deployService.deployProject(projectId, connId);
+    const result = await this.deployService.deployProject(projectId);
 
     if (!result) {
       throw new NotFoundException();

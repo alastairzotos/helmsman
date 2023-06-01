@@ -1,29 +1,65 @@
 import { WebSocketServer, WebSocket } from 'ws';
+import { v4 as uuidv4 } from 'uuid';
+
+interface IConnectionProps {
+  id: string;
+  conn: WebSocket;
+}
+
+export class WebSocketHandler<T extends Object> {
+  private connections: IConnectionProps[] = [];
+
+  constructor() {}
+
+  connect(id: string, conn: WebSocket) {
+    this.connections.push({ id, conn });
+  }
+
+  disconnect(id: string) {
+    this.connections = this.connections.filter(conn => conn.id !== id);
+
+    return this.connections.length === 0;
+  }
+
+  sendMessage(message: T) {
+    this.connections.forEach(conn => conn.conn.send(JSON.stringify(message)));
+  }
+}
 
 export class WebSocketManager<T extends Object> {
   private wss: WebSocketServer;
-  private wsConnections: Record<string, WebSocket> = {};
+  private wsConnections: Record<string, WebSocketHandler<T>> = {};
 
   constructor(port: number) {
     this.wss = new WebSocketServer({ port });
 
     this.wss.on('connection', (conn, req) => {
       const params = new URLSearchParams(req.url.substring(2));
-      const id = params.get('id')
+      const id = uuidv4();
+      const handle = params.get('handle')
 
-      this.wsConnections[id] = conn;
+      const handler = this.getHandler(handle);
+
+      handler.connect(id, conn);
 
       conn.on('close', () => {
-        delete this.wsConnections[id];
+        if (handler.disconnect(id)) {
+          delete this.wsConnections[handle];
+        }
       })
     });
   }
 
-  sendMessage(conn: WebSocket, message: T) {
-    conn.send(JSON.stringify(message));
-  }
+  getHandler(handle: string): WebSocketHandler<T> | null {
+    const found = this.wsConnections[handle];
 
-  getConnectionById(id: string) {
-    return this.wsConnections[id];
+    if (found) {
+      return found;
+    }
+
+    const handler = new WebSocketHandler<T>();
+    this.wsConnections[handle] = handler;
+
+    return handler;
   }
 }
