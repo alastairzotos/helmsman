@@ -27,9 +27,7 @@ export class DeployService {
 
     const projName = await this.gitService.clone(
       project.githubUrl,
-      (phase, progress) => {
-        handler.sendMessage(git(phase, isNaN(progress) ? undefined : progress));
-      }
+      (phase, progress) => handler.sendMessage(git(phase, progress)),
     );
 
     handler.sendMessage(phase("cleaning-up"));
