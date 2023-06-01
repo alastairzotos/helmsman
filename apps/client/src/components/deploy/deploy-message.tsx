@@ -24,7 +24,7 @@ export const DeployMessage: React.FC<Props> = ({ message }) => {
         return (
           <Space style={{ marginLeft: 10 }}>
             <Text>{message.gitMessage?.phase}</Text>
-            <Progress size={14} type="circle" percent={message.gitMessage?.progress} />
+            <Progress size={14} type="circle" strokeWidth={10} percent={message.gitMessage?.progress} />
           </Space>
         )
       }

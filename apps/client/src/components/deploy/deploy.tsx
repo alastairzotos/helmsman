@@ -1,7 +1,6 @@
-import React, { useEffect, useRef, useState } from "react";
+import React, { useEffect, useId, useRef, useState } from "react";
 import { Button, Card, Space } from "antd";
 import { getEnv } from "@/utils/env";
-import { v4 } from 'uuid';
 import { useDeploy } from "@/state/deploy.state";
 import {  IDeployMessageDto, IProject, WithId } from "models";
 import { DeployMessage } from "@/components/deploy/deploy-message";
@@ -22,8 +21,8 @@ interface Props {
 }
 
 export const Deploy: React.FC<Props> = ({ project }) => {
+  const connId = useId();
   const endRef = useRef<HTMLDivElement>(null);
-  const [connId, setConnId] = useState<string | null>();
 
   const [deployStatus, deploy] = useDeploy(s => [s.status, s.request]);
 
@@ -55,23 +54,11 @@ export const Deploy: React.FC<Props> = ({ project }) => {
   }
 
   useEffect(() => {
-    const ws = new WebSocket(getWsUrl());
+    const ws = new WebSocket(getWsUrl() + `?id=${connId}`);
 
-    ws.onopen = () => {
-      const id = v4();
-      setConnId(id);
-      ws.send(id);
-
-      setConnStatus('connected');
-    };
-
+    ws.onopen = () => setConnStatus('connected');
     ws.onerror = () => setConnStatus('error');
-
-    ws.onclose = () => {
-      setConnStatus('disconnected');
-      setConnId(null);
-    }
-
+    ws.onclose = () => setConnStatus('disconnected');
     ws.onmessage = (e) => receiveMessage(JSON.parse(e.data));
   }, []);
 

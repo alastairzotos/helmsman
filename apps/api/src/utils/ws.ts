@@ -1,28 +1,17 @@
 import { WebSocketServer, WebSocket } from 'ws';
-import { uuid } from 'uuidv4';
-
-interface ConnectionProps {
-  id?: string;
-  ws: WebSocket;
-}
 
 export class WebSocketManager<T extends Object> {
   private wss: WebSocketServer;
-  private wsConnections: Record<string, ConnectionProps> = {};
+  private wsConnections: Record<string, WebSocket> = {};
 
   constructor(port: number) {
     this.wss = new WebSocketServer({ port });
 
-    this.wss.on('connection', conn => {
-      const id = uuid();
+    this.wss.on('connection', (conn, req) => {
+      const params = new URLSearchParams(req.url.substring(2));
+      const id = params.get('id')
 
-      this.wsConnections[id] = {
-        ws: conn
-      };
-
-      conn.on('message', (data) => {
-        this.wsConnections[id].id = data.toString();
-      })
+      this.wsConnections[id] = conn;
 
       conn.on('close', () => {
         delete this.wsConnections[id];
@@ -35,6 +24,6 @@ export class WebSocketManager<T extends Object> {
   }
 
   getConnectionById(id: string) {
-    return Object.entries(this.wsConnections).find(([, value]) => value.id === id)?.[1].ws;
+    return this.wsConnections[id];
   }
 }
