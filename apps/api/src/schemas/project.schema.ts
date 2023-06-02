@@ -13,6 +13,9 @@ export class Project implements IProject {
   namespace: string;
 
   @Prop()
+  helmRepoUrl: string;
+
+  @Prop()
   helmRelease: string;
 
   @Prop()
@@ -22,7 +25,7 @@ export class Project implements IProject {
   valuesPath: string;
 
   @Prop()
-  githubUrl: string;
+  repoUrl: string;
 
   @Prop({ type: Object })
   secrets: Record<string, string>;

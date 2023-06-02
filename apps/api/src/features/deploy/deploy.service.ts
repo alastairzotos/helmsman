@@ -25,20 +25,33 @@ export class DeployService {
 
     ws.sendMessage(status("started"));
 
-    const projName = await this.pullProjectRepo(ws, project);
-    await this.cleanup(ws, projName);
+    const tag = await this.getTag(ws, project);
+    const helmRepo = await this.pullHelmRepo(ws, project);
+    await this.cleanup(ws, helmRepo);
 
     ws.sendMessage(status("finished"));
 
     return true;
   }
 
-  async pullProjectRepo(ws: WebSocketHandler, project: IProject) {
-    ws.sendMessage(phase("pulling-project-repo"))
+  async getTag(ws: WebSocketHandler, project: IProject) {
+    ws.sendMessage(phase("getting-tag"));
+
+    const gitInfo = await this.gitService.getRemoteInfo(project.repoUrl);
+    const tags = Object.keys(gitInfo.refs.tags);
+    const latestTag = tags[tags.length - 1];
+
+    ws.sendMessage(text(`Aquired tag ${latestTag}`));
+
+    return latestTag;
+  }
+
+  async pullHelmRepo(ws: WebSocketHandler, project: IProject) {
+    ws.sendMessage(phase("pulling-helm-repo"))
 
     let lastPhase = '';
     const projName = await this.gitService.clone(
-      project.githubUrl,
+      project.repoUrl,
       (phase, percent) => {
         if (percent !== undefined) {
           ws.sendMessage(progress(phase, percent, phase === lastPhase));
@@ -53,10 +66,10 @@ export class DeployService {
     return projName;
   }
 
-  async cleanup(ws: WebSocketHandler, projName: string) {
+  async cleanup(ws: WebSocketHandler, helmRepo: string) {
     ws.sendMessage(phase("cleaning-up"));
 
-    ws.sendMessage(text("Removing project repository"));
-    await this.gitService.clearClonedDir(projName);
+    ws.sendMessage(text("Removing helm repository"));
+    await this.gitService.clearClonedDir(helmRepo);
   }
 }

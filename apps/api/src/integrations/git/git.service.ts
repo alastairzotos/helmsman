@@ -1,5 +1,5 @@
 import { Injectable } from "@nestjs/common";
-import { clone } from 'isomorphic-git';
+import { clone, getRemoteInfo } from 'isomorphic-git';
 import http from "isomorphic-git/http/node";
 import * as fs from 'fs';
 import * as path from 'path';
@@ -8,6 +8,13 @@ import { rimraf } from 'rimraf';
 
 @Injectable()
 export class GitService {
+  async getRemoteInfo(url: string) {
+    return await getRemoteInfo({
+      url,
+      http
+    })
+  }
+  
   async clone(url: string, onProgress: (phrase: string, progress: number) => void) {
     const projectName = uuid();
 

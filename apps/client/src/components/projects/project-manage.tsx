@@ -49,6 +49,18 @@ export const ProjectManage: React.FC<Props> = ({ title, project, saveStatus, onS
           </Form.Item>
 
           <Form.Item
+            label="Helm repo URL"
+            validateStatus={errors.helmRepoUrl && "error"}
+            help={errors.helmRepoUrl && errors.helmRepoUrl.message}
+          >
+            <Controller
+              name="helmRepoUrl"
+              control={control}
+              render={({ field }) => <Input {...field} />}
+            />
+          </Form.Item>
+
+          <Form.Item
             label="Helm Release"
             validateStatus={errors.helmRelease && "error"}
             help={errors.helmRelease && errors.helmRelease.message}
@@ -85,12 +97,12 @@ export const ProjectManage: React.FC<Props> = ({ title, project, saveStatus, onS
           </Form.Item>
 
           <Form.Item
-            label="GitHub URL"
-            validateStatus={errors.githubUrl && "error"}
-            help={errors.githubUrl && errors.githubUrl.message}
+            label="Repo URL"
+            validateStatus={errors.repoUrl && "error"}
+            help={errors.repoUrl && errors.repoUrl.message}
           >
             <Controller
-              name="githubUrl"
+              name="repoUrl"
               control={control}
               render={({ field }) => <Input {...field} />}
             />
