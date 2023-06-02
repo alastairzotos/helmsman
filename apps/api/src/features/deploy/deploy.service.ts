@@ -35,7 +35,6 @@ export class DeployService {
 
       await this.deploy(ws, project, helmRepo, tag);
     } catch {
-
       await this.cleanup(ws, helmRepo);
     }
 
