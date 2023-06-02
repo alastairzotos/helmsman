@@ -9,6 +9,7 @@ import { DeployModule } from 'features/deploy/deploy.module';
 import { HealthModule } from 'features/health/health.module';
 import { ProjectsModule } from 'features/projects/projects.module';
 import { GitModule } from 'integrations/git/git.module';
+import { HelmModule } from 'integrations/helm/helm.module';
 import { UsersModule } from 'plugins/user/features/users/users.module';
 import { AuthModule } from 'plugins/user/guards/auth.module';
 
@@ -23,6 +24,7 @@ import { AuthModule } from 'plugins/user/guards/auth.module';
     AuthModule,
     DeployModule,
     GitModule,
+    HelmModule,
     MongooseModule.forRootAsync({
       imports: [EnvironmentModule],
       inject: [EnvironmentService],

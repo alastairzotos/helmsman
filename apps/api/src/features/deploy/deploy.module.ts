@@ -4,6 +4,7 @@ import { DeployController } from "features/deploy/deploy.controller";
 import { DeployService } from "features/deploy/deploy.service";
 import { ProjectsModule } from "features/projects/projects.module";
 import { GitModule } from "integrations/git/git.module";
+import { HelmModule } from "integrations/helm/helm.module";
 import { UsersModule } from "plugins/user/features/users/users.module";
 
 @Module({
@@ -12,6 +13,7 @@ import { UsersModule } from "plugins/user/features/users/users.module";
     ProjectsModule,
     UsersModule,
     GitModule,
+    HelmModule,
   ],
   controllers: [DeployController],
   exports: [DeployService],
