@@ -3,6 +3,8 @@ import { ProjectsService } from "features/projects/projects.service";
 import { GitService } from "integrations/git/git.service";
 import { IProject, deployMessage } from "models";
 import { WebSocketHandler, WebSocketManager } from "utils/ws";
+import * as path from 'path';
+import * as cp from 'child_process';
 
 const { status, phase, text, progress } = deployMessage;
 
@@ -27,11 +29,31 @@ export class DeployService {
 
     const tag = await this.getTag(ws, project);
     const helmRepo = await this.pullHelmRepo(ws, project);
+
+    await this.deploy(ws, project, helmRepo, tag);
+
     await this.cleanup(ws, helmRepo);
 
     ws.sendMessage(status("finished"));
 
     return true;
+  }
+
+  async deploy(ws: WebSocketHandler, project: IProject, helmRepo: string, tag: string) {
+    return new Promise<void>((resolve) => {
+      ws.sendMessage(phase("deploying"))
+      const cmd = this.generateHelmCommand(project, helmRepo, tag);
+
+      const proc = cp.spawn(cmd[0], cmd[1]);
+
+      proc.stdout.on('data', data => ws.sendMessage(text(data.toString())));
+      proc.stderr.on('data', data => ws.sendMessage(text(data.toString())));
+
+      proc.on('close', () => {
+        ws.sendMessage(text('Deployed'));
+        resolve();
+      });
+    })
   }
 
   async getTag(ws: WebSocketHandler, project: IProject) {
@@ -51,7 +73,7 @@ export class DeployService {
 
     let lastPhase = '';
     const projName = await this.gitService.clone(
-      project.repoUrl,
+      project.helmRepoUrl,
       (phase, percent) => {
         if (percent !== undefined) {
           ws.sendMessage(progress(phase, percent, phase === lastPhase));
@@ -71,5 +93,33 @@ export class DeployService {
 
     ws.sendMessage(text("Removing helm repository"));
     await this.gitService.clearClonedDir(helmRepo);
+  }
+
+  private generateHelmCommand(project: IProject, helmRepo: string, tag: string): [string, string[]] {
+    const rootPath = this.gitService.getRootPath();
+
+    return [
+      'helm',
+      [
+        'upgrade',
+        project.helmRelease,
+        path.resolve(rootPath, helmRepo, project.path),
+        '--values', path.resolve(rootPath, helmRepo, project.valuesPath),
+        '--install',
+        '--namespace', project.namespace,
+        '--create-namespace',
+        '--set', `image.tag=${tag}`,
+        ...this.generateHelmSecrets(project),
+      ]
+    ]
+  }
+
+  private generateHelmSecrets(project: IProject) {
+    return Object.keys(project.secrets)
+      .reduce<string[]>((acc, cur) => [
+        ...acc,
+        '--set',
+        `env.${cur}="${project.secrets[cur]}"`
+      ], [])
   }
 }

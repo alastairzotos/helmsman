@@ -15,11 +15,13 @@ export const deployStatusText: Record<IDeployMessageStatus, string> = {
 export type IDeployMessagePhase =
   "getting-tag"
   | "pulling-helm-repo"
+  | "deploying"
   | "cleaning-up";
 
 export const deployPhaseTitles: Record<IDeployMessagePhase, string> = {
   "getting-tag": "Getting last project tag",
   "pulling-helm-repo": "Pulling Helm repository",
+  "deploying": "Deploying",
   "cleaning-up": "Cleaning up",
 }
 

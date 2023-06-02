@@ -36,7 +36,7 @@ export class GitService {
     await rimraf(path.resolve(this.getRootPath(), projectName));
   }
 
-  private getRootPath() {
+  getRootPath() {
     const rootPath = path.resolve(path.dirname(require.main.filename), 'repos');
     if (!fs.existsSync(rootPath)) {
       fs.mkdirSync(rootPath);
