@@ -8,9 +8,6 @@ export const urls = {
   home: () => '/',
   register: () => '/register',
   login: () => '/login',
-  config: {
-    home: () => '/config',
-  },
   projects: {
     home: () => '/projects',
     create: () => '/projects/create',
