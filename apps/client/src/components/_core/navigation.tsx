@@ -28,16 +28,10 @@ function getItem(
 }
 
 const items: MenuProps['items'] = [
-  getItem("Config", "config", <SettingOutlined />),
-  getItem("Projects", "projects", <AppstoreOutlined />),
-  getItem("API Keys", "apiKeys", <KeyOutlined />),
+  getItem("Config", urls.config.home(), <SettingOutlined />),
+  getItem("Projects", urls.projects.home(), <AppstoreOutlined />),
+  getItem("API Keys", urls.apiKeys.home(), <KeyOutlined />),
 ]
-
-const urlMappings: Record<string, string> = {
-  config: urls.config.home(),
-  projects: urls.projects.home(),
-  apiKeys: urls.apiKeys.home(),
-}
 
 export const Navigation: React.FC = () => {
   const {
@@ -47,7 +41,7 @@ export const Navigation: React.FC = () => {
   const router = useRouter();
 
   const onClick: MenuProps['onClick'] = (e) =>
-    router.push(urlMappings[e.key]);
+    router.push(e.key);
 
   return (
     <Sider
@@ -61,8 +55,7 @@ export const Navigation: React.FC = () => {
       <Menu
         onClick={onClick}
         style={{ width: NAVIGATION_WIDTH, height: `calc(100vh - ${HEADER_HEIGHT}px)` }}
-        defaultSelectedKeys={['1']}
-        defaultOpenKeys={['sub1']}
+        selectedKeys={[router.pathname]}
         mode="inline"
         items={items}
       />
