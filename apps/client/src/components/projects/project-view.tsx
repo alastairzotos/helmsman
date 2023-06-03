@@ -52,9 +52,7 @@ export const ProjectView: React.FC<Props> = ({ id }) => {
             {
               key: "secrets",
               label: "Secrets",
-              children: (
-                <SecretsManage project={project} />
-              )
+              children: <SecretsManage project={project} />
             }
           ]}
         />

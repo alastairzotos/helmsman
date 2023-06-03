@@ -3,7 +3,7 @@ import { StatusSwitch } from "@/components/_core/status-switch";
 import { SecretsEdit } from "@/components/projects/secrets-edit";
 import { useGetSecrets, useUpdateSecrets } from "@/state/projects.state";
 import { IProject, IUpdateSecretsDto, WithId } from "models";
-import React from "react";
+import React, { useEffect } from "react";
 import { SubmitHandler } from "react-hook-form";
 
 interface Props {
@@ -16,8 +16,13 @@ export const SecretsManage: React.FC<Props> = ({ project }) => {
   const {
     status: getSecretsStatus,
     request: getSecrets,
-    value: secrets
+    value: secrets,
+    clear: clearSecretsState,
   } = getSecretsState;
+
+  useEffect(() => {
+    clearSecretsState();
+  }, [project._id]);
 
   const handleUpdateSecrets: SubmitHandler<IUpdateSecretsDto> = (data) => {
     updateSecrets(project._id, { secrets: data.secrets });
@@ -26,6 +31,7 @@ export const SecretsManage: React.FC<Props> = ({ project }) => {
   if (!secrets) {
     return (
       <PasswordReveal
+        key={project._id}
         resourceName="secrets"
         state={getSecretsState}
         handleRequest={(password) => getSecrets(project._id, password)}
