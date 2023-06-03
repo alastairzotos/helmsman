@@ -11,7 +11,7 @@ interface Props {
 export const DeployLogsItem: React.FC<Props> = ({ log }) => {
   switch (log.type) {
     case "text":
-      return <Text style={{ marginLeft: 10 }}>{log.textMessage}</Text>;
+      return <Text>{log.textMessage}</Text>;
     
     case "array":
       return (
@@ -26,7 +26,7 @@ export const DeployLogsItem: React.FC<Props> = ({ log }) => {
 
     case "progress":
       return (
-        <Space style={{ marginLeft: 10 }}>
+        <Space>
           <Text>{log.progressMessage?.phase}</Text>
           <Progress size={14} type="circle" strokeWidth={10} percent={log.progressMessage?.progress} />
         </Space>

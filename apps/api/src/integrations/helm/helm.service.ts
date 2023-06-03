@@ -17,6 +17,7 @@ export class HelmService {
       const proc = cp.spawn(cmd[0], cmd[1]);
 
       proc.stdout.on('data', data => onMessage(data.toString()));
+
       proc.stderr.on('data', data => {
         reject(data.toString());
       });
@@ -50,17 +51,36 @@ export class HelmService {
         '--create-namespace',
         '--set',
         `image.tag=${tag}`,
-        ...this.generateHelmSecrets(secrets),
+        ...this.generateHelmSecrets(secrets).flat(2),
       ]
     ]
   }
 
-  private generateHelmSecrets(secrets: Record<string, string>) {
+  generateHelmArgs(
+    project: IProject,
+    helmRepo: string,
+    tag: string,
+    secrets: IProject['secrets'],
+  ): string[][] {
+    const rootPath = this.gitService.getRootPath();
+
+    return [
+      ['upgrade', project.helmRelease],
+      [path.resolve(rootPath, helmRepo, project.path)],
+      ['--values', path.resolve(rootPath, helmRepo, project.valuesPath)],
+      ['--install'],
+      ['--namespace', project.namespace],
+      ['--create-namespace'],
+      ['--set', `image.tag=${tag}`],
+      [...this.generateHelmSecrets(secrets).flat(1)],
+    ]
+  }
+
+  private generateHelmSecrets(secrets: IProject['secrets']) {
     return Object.keys(secrets)
-      .reduce<string[]>((acc, cur) => [
+      .reduce<string[][]>((acc, cur) => [
         ...acc,
-        '--set',
-        `env.${cur}="${secrets[cur]}"`,
+        ['--set', `env.${cur}=${secrets[cur]}`],
       ], [])
   }
 }

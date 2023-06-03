@@ -68,14 +68,14 @@ export class DeployService {
     const hiddenSecrets = Object.keys(project.secrets)
       .reduce((acc, cur) => ({ ...acc, [cur]: '****' }), {} as Record<string, string>);
 
-    const [cmd, args] = this.helmService.generateHelmCommand(
+    const args = this.helmService.generateHelmArgs(
       project,
       helmRepo,
       tag,
       hiddenSecrets
     );
 
-    ws.sendMessage(array([cmd, ...args]));
+    ws.sendMessage(array(['helm', ...args.map(arg => arg.join(' '))]));
     await this.helmService.deploy(project, secrets, helmRepo, tag, message => ws.sendMessage(text(message)));
   }
 
