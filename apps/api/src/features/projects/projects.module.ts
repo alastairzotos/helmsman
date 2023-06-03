@@ -1,6 +1,8 @@
 import { Module } from "@nestjs/common";
 import { MongooseModule } from '@nestjs/mongoose';
 import { EnvironmentModule } from "environment/environment.module";
+import { ApiKeysModule } from "features/api-keys/api-keys.module";
+import { CustomAuthModule } from "features/auth/custom-auth.module";
 import { CryptoModule } from "features/crypto/crypto.module";
 
 import { ProjectsController } from "features/projects/projects.controller";
@@ -14,6 +16,8 @@ import { Project, ProjectSchema } from "schemas/project.schema";
     EnvironmentModule,
     CryptoModule,
     UsersModule,
+    CustomAuthModule,
+    ApiKeysModule,
     MongooseModule.forFeature([
       { name: Project.name, schema: ProjectSchema },
     ]),

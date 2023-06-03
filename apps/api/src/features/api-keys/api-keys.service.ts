@@ -15,8 +15,8 @@ export class ApiKeysService {
     return await this.apiKeysRepo.getForOwner(ownerId);
   }
 
-  async getForOwnerWithHashedKey(ownerId: string) {
-    return await this.apiKeysRepo.getForOwnerWithHashedKey(ownerId);
+  async getAllWithHashedKey() {
+    return await this.apiKeysRepo.getAllWithHashedKey();
   }
 
   async create(ownerId: string, name: string): Promise<ICreatedApiKeyDto> {

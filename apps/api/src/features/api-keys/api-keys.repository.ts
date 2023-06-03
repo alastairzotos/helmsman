@@ -13,8 +13,8 @@ export class ApiKeysRepository {
     return await this.apiKeyModel.find({ ownerId });
   }
 
-  async getForOwnerWithHashedKey(ownerId: string) {
-    return await this.apiKeyModel.find({ ownerId }).select("+hashedKey");
+  async getAllWithHashedKey() {
+    return await this.apiKeyModel.find().select("+hashedKey");
   }
 
   async create(ownerId: string, name: string, hashedKey: string) {

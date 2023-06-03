@@ -1,12 +1,12 @@
 import { Body, Controller, Delete, Get, Param, Post, UseGuards } from "@nestjs/common";
 import { ApiKeysService } from "features/api-keys/api-keys.service";
+import { CustomAuthGuard } from "features/auth/custom-auth.guard";
 import { ICreateApiKeyDto } from "models";
 import { Principal } from "plugins/user/decorators/principal.decorator";
-import { AuthGuard } from "plugins/user/guards/auth.guard";
 import { User } from "plugins/user/schemas/user.schema";
 
 @Controller('api-keys')
-@UseGuards(AuthGuard)
+@UseGuards(CustomAuthGuard)
 export class ApiKeysController {
   constructor(
     private readonly apiKeysService: ApiKeysService,

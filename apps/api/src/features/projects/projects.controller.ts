@@ -1,13 +1,13 @@
 import { Controller, Post, Get, Patch, Delete, Param, Body, UseGuards, ForbiddenException } from "@nestjs/common";
+import { CustomAuthGuard } from "features/auth/custom-auth.guard";
 import { ProjectsService } from "features/projects/projects.service";
 import { IGetSecretsDto, IProject, IUpdateSecretsDto, UpdateProps, WithId } from "models";
 import { Principal } from "plugins/user/decorators/principal.decorator";
-import { AuthGuard } from "plugins/user/guards/auth.guard";
 import { User } from "plugins/user/schemas/user.schema";
 import { IUser } from "user-shared";
 
 @Controller('projects')
-@UseGuards(AuthGuard)
+@UseGuards(CustomAuthGuard)
 export class ProjectsController {
   constructor(
     private readonly projectsService: ProjectsService,

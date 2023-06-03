@@ -7,33 +7,54 @@ import { UsersService } from 'plugins/user/features/users/users.service';
 
 @Injectable()
 export class AuthGuard implements CanActivate {
+  private request: any;
+
   constructor(
     private reflector: Reflector,
     private readonly userService: UsersService,
     private readonly envService: EnvironmentService,
   ) {}
 
-  async canActivate(context: ExecutionContext): Promise<boolean> {
-    const roles = this.reflector.get<string[]>('roles', context.getHandler());
-    if (roles && roles.includes('all')) {
-      return true;
-    }
+  getRoles(context: ExecutionContext) {
+    return this.reflector.get<string[]>('roles', context.getHandler());
+  }
 
-    const request = context.switchToHttp().getRequest();
-    const headers = request.headers;
+  getRequest() {
+    return this.request;
+  }
+
+  getBearerToken(): string | null {
+    const headers = this.request.headers;
 
     if (!headers) {
-      return false;
+      return null;
     }
 
     const auth = headers.authentication || headers.authorization;
     if (!auth) {
-      return false;
+      return null;
     }
 
     const [key, token] = auth.split(' ');
 
     if (key !== 'Bearer' || !token || token === 'null') {
+      return null;
+    }
+
+    return token;
+  }
+
+  async canActivate(context: ExecutionContext): Promise<boolean> {
+    this.request = context.switchToHttp().getRequest();
+
+    const roles = this.getRoles(context);
+    if (roles && roles.includes('all')) {
+      return true;
+    }
+
+    const token = this.getBearerToken();
+
+    if (!token) {
       return false;
     }
 
@@ -52,7 +73,7 @@ export class AuthGuard implements CanActivate {
         return false;
       }
       
-      request.principal = user;
+      this.request.principal = user;
 
       return true;
     } catch {

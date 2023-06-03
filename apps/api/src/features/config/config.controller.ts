@@ -1,12 +1,12 @@
-import { Body, Controller, ForbiddenException, Get, Patch, Post, UseGuards } from "@nestjs/common";
+import { Body, Controller, ForbiddenException, Patch, Post, UseGuards } from "@nestjs/common";
+import { CustomAuthGuard } from "features/auth/custom-auth.guard";
 import { ConfigService } from "features/config/config.service";
 import { IConfig, IGetConfigDto } from "models";
 import { Principal } from "plugins/user/decorators/principal.decorator";
-import { AuthGuard } from "plugins/user/guards/auth.guard";
 import { User } from "plugins/user/schemas/user.schema";
 
 @Controller('config')
-@UseGuards(AuthGuard)
+@UseGuards(CustomAuthGuard)
 export class ConfigController {
   constructor(
     private readonly configService: ConfigService,

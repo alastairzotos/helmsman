@@ -6,6 +6,7 @@ import { CryptoModule } from "features/crypto/crypto.module";
 import { UsersController } from "plugins/user/features/users/users.controller";
 import { UsersRepository } from "plugins/user/features/users/users.repository";
 import { UsersService } from "plugins/user/features/users/users.service";
+import { AuthGuard } from "plugins/user/guards/auth.guard";
 import { User, UserSchema } from "plugins/user/schemas/user.schema";
 
 @Module({
@@ -17,7 +18,7 @@ import { User, UserSchema } from "plugins/user/schemas/user.schema";
     ]),
   ],
   controllers: [UsersController],
-  exports: [UsersService],
-  providers: [UsersService, UsersRepository],
+  exports: [UsersService, AuthGuard],
+  providers: [UsersService, UsersRepository, AuthGuard],
 })
 export class UsersModule { }
