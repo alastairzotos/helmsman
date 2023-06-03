@@ -12,6 +12,17 @@ export const DeployLogsItem: React.FC<Props> = ({ log }) => {
   switch (log.type) {
     case "text":
       return <Text style={{ marginLeft: 10 }}>{log.textMessage}</Text>;
+    
+    case "array":
+      return (
+        <>
+          {log.arrayMessage?.map((line, index) => (
+            <div key={index}>
+              <Text>{line}</Text>
+            </div>
+          ))}
+        </>
+      );
 
     case "progress":
       return (

@@ -1,5 +1,5 @@
 import React, { useCallback, useEffect, useState } from "react";
-import { Button, Card, Space, Typography } from "antd";
+import { Alert, Button, Card, Space, Typography } from "antd";
 import { getEnv } from "@/utils/env";
 import { useDeploy } from "@/state/deploy.state";
 import { IDeployMessageDto, IDeployMessageStatus, IProject, WithId, deployStatusText } from "models";
@@ -25,6 +25,16 @@ export const Deploy: React.FC<Props> = ({ project }) => {
     switch (message.type) {
       case "status":
         setStatus(message.status!);
+
+        if (message.status === "error") {
+          setSections((curSections) =>
+            replaceIndex(curSections, -1, (section) => ({
+              ...section!,
+              error: true,
+            }))
+          );
+        }
+
         break;
 
       case "phase":
@@ -33,23 +43,24 @@ export const Deploy: React.FC<Props> = ({ project }) => {
           {
             phase: message.phase!,
             logs: [],
+            error: false,
           }
         ])
         break;
 
       default:
-        setSections((curSections) => {
-          return replaceIndex(
+        setSections((curSections) =>
+          replaceIndex(
             curSections,
             -1,
-            {
-              ...curSections.at(-1)!,
+            (section) => ({
+              ...section!,
               logs: message.replaceLast
-                ? replaceIndex(curSections.at(-1)?.logs!, -1, message)
-                : [...curSections.at(-1)?.logs!, message]
-            }
-          );
-        })
+                ? replaceIndex(section?.logs!, -1, message)
+                : [...section?.logs!, message]
+            })
+          )
+        );
     }
   }, []);
 
@@ -72,16 +83,20 @@ export const Deploy: React.FC<Props> = ({ project }) => {
 
       <Card
         style={{
-          width: 600,
+          width: 1000,
           overflowY: 'scroll',
-          maxHeight: 300,
+          maxHeight: 500,
           backgroundColor: '#101010'
         }}
       >
         <ScrollToBottom>
           <Space direction="vertical" style={{ width: '100%' }}>
             {sections.map((section, index) => (
-              <DeployLogsSection key={index} section={section} />
+              <DeployLogsSection
+                key={index}
+                section={section}
+                isActive={status === "started" && index === sections.length - 1}
+              />
             ))}
           </Space>
         </ScrollToBottom>
@@ -97,7 +112,18 @@ export const Deploy: React.FC<Props> = ({ project }) => {
         </Button>
 
         {!!status && (
-          <Text style={{ margin: 10 }}>{deployStatusText[status]}</Text>
+          // <Text style={{ margin: 10 }}>{deployStatusText[status]}</Text>
+          <Alert
+            message={deployStatusText[status]}
+            showIcon
+            type={
+              status === "started"
+                ? "info"
+                : status === "finished"
+                  ? "success"
+                  : "error"
+            }
+          />
         )}
       </Space>
     </Space>

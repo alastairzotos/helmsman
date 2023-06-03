@@ -11,13 +11,15 @@ export class HelmService {
   ) { }
 
   async deploy(project: IProject, helmRepo: string, tag: string, onMessage: (message: string) => void) {
-    return new Promise<void>((resolve) => {
-      const cmd = this.generateHelmCommand(project, helmRepo, tag);
+    return new Promise<void>((resolve, reject) => {
+      const cmd = this.generateHelmCommand(project, helmRepo, tag, project.secrets);
 
       const proc = cp.spawn(cmd[0], cmd[1]);
 
       proc.stdout.on('data', data => onMessage(data.toString()));
-      proc.stderr.on('data', data => onMessage(data.toString()));
+      proc.stderr.on('data', data => {
+        reject(data.toString());
+      });
 
       proc.on('close', () => {
         onMessage('Deployed');
@@ -26,7 +28,12 @@ export class HelmService {
     })
   }
 
-  private generateHelmCommand(project: IProject, helmRepo: string, tag: string): [string, string[]] {
+  generateHelmCommand(
+    project: IProject,
+    helmRepo: string,
+    tag: string,
+    secrets: Record<string, string>,
+  ): [string, string[]] {
     const rootPath = this.gitService.getRootPath();
 
     return [
@@ -35,22 +42,25 @@ export class HelmService {
         'upgrade',
         project.helmRelease,
         path.resolve(rootPath, helmRepo, project.path),
-        '--values', path.resolve(rootPath, helmRepo, project.valuesPath),
+        '--values',
+        path.resolve(rootPath, helmRepo, project.valuesPath),
         '--install',
-        '--namespace', project.namespace,
+        '--namespace',
+        project.namespace,
         '--create-namespace',
-        '--set', `image.tag=${tag}`,
-        ...this.generateHelmSecrets(project),
+        '--set',
+        `image.tag=${tag}`,
+        ...this.generateHelmSecrets(secrets),
       ]
     ]
   }
 
-  private generateHelmSecrets(project: IProject) {
-    return Object.keys(project.secrets)
+  private generateHelmSecrets(secrets: Record<string, string>) {
+    return Object.keys(secrets)
       .reduce<string[]>((acc, cur) => [
         ...acc,
         '--set',
-        `env.${cur}="${project.secrets[cur]}"`
+        `env.${cur}="${secrets[cur]}"`,
       ], [])
   }
 }

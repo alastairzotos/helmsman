@@ -6,7 +6,7 @@ import { HelmService } from "integrations/helm/helm.service";
 import { IConfig, IProject, deployMessage } from "models";
 import { WebSocketHandler, WebSocketManager } from "utils/ws";
 
-const { status, phase, text, progress } = deployMessage;
+const { status, phase, text, array, progress } = deployMessage;
 
 @Injectable()
 export class DeployService {
@@ -44,7 +44,7 @@ export class DeployService {
         await this.deploy(ws, project, helmRepo, tag);
         ws.sendMessage(status("finished"));
       } catch (e) {
-        ws.sendMessage(text(e.message));
+        ws.sendMessage(text(e?.message || e));
         ws.sendMessage(status("error"));
       }
 
@@ -59,6 +59,18 @@ export class DeployService {
 
   async deploy(ws: WebSocketHandler, project: IProject, helmRepo: string, tag: string) {
     ws.sendMessage(phase("deploying"))
+
+    const hiddenSecrets = Object.keys(project.secrets)
+      .reduce((acc, cur) => ({ ...acc, [cur]: '****' }), {} as Record<string, string>);
+
+    const [cmd, args] = this.helmService.generateHelmCommand(
+      project,
+      helmRepo,
+      tag,
+      hiddenSecrets
+    );
+
+    ws.sendMessage(array([cmd, ...args]));
     await this.helmService.deploy(project, helmRepo, tag, message => ws.sendMessage(text(message)));
   }
 

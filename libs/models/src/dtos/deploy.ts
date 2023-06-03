@@ -1,4 +1,4 @@
-export type IDeployMessageType = "status" | "phase" | "text" | "progress";
+export type IDeployMessageType = "status" | "phase" | "text" | "array" | "progress";
 
 export type IDeployMessageStatus = "started" | "finished" | "error";
 
@@ -33,6 +33,7 @@ export interface IDeployMessageDto {
   phase?: IDeployMessagePhase;
   progressMessage?: IDeployMessageProgressDto;
   textMessage?: string;
+  arrayMessage?: string[];
 }
 
 export const deployMessage = {
@@ -50,6 +51,12 @@ export const deployMessage = {
     replaceLast,
     type: "text",
     textMessage,
+  }),
+
+  array: (arrayMessage: string[], replaceLast: boolean = false) => ({
+    replaceLast,
+    type: "array",
+    arrayMessage,
   }),
 
   progress: (phase: string, progress: number, replaceLast: boolean = false) => ({
