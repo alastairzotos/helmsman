@@ -17,7 +17,6 @@ interface Props {
 export const DeployLogs: React.FC<Props> = ({ project }) => {
   const {
     token: {
-      // colorBgElevated: bgColour
       colorBgMask: bgColour
     },
   } = theme.useToken();
@@ -30,7 +29,9 @@ export const DeployLogs: React.FC<Props> = ({ project }) => {
       case "status":
         setStatus(message.status!);
 
-        if (message.status === "error") {
+        if (message.status === "started") {
+          setSections([]);
+        } else if (message.status === "error") {
           setSections((curSections) =>
             replaceIndex(curSections, -1, (section) => ({
               ...section!,
