@@ -12,7 +12,10 @@ const { darkAlgorithm } = theme;
 export const Wrapper: React.FC<React.PropsWithChildren> = ({ children }) => {
   return (
     <ConfigProvider theme={{
-      algorithm: darkAlgorithm
+      algorithm: darkAlgorithm,
+      token: {
+        colorPrimary: "#a55eff"
+      }
     }}>
       <Head>
         <title>BitMetro | Mission Control</title>
