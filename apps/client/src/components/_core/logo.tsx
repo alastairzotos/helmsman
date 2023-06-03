@@ -18,7 +18,7 @@ export const Logo: React.FC = () => {
           alt="BitMetro Logo"
           style={{ paddingTop: 7 }}
         />
-        <Title level={4} style={{ marginTop: 20, marginLeft: 10, fontSize: '1.4em' }}>
+        <Title level={4} style={{ marginTop: 20, marginLeft: 4, fontSize: '1.4em' }}>
           Mission Control
         </Title>
       </Space>
