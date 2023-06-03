@@ -9,10 +9,11 @@ import { ProjectManage } from "@/components/projects/project-manage";
 const defaultValues: IProject = {
   name: '',
   namespace: '',
-  githubUrl: '',
+  helmRepoUrl: '',
   helmRelease: '',
   path: '',
   valuesPath: '',
+  repoUrl: '',
 }
 
 export const ProjectCreate: React.FC = () => {
