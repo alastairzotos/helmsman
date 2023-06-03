@@ -1,5 +1,6 @@
 import React, { useCallback, useEffect, useState } from "react";
 import { Alert, Button, Card, Space, Typography } from "antd";
+import { CloudUploadOutlined } from '@ant-design/icons';
 import { getEnv } from "@/utils/env";
 import { useDeploy } from "@/state/deploy.state";
 import { IDeployMessageDto, IDeployMessageStatus, IProject, WithId, deployStatusText } from "models";
@@ -89,6 +90,8 @@ export const Deploy: React.FC<Props> = ({ project }) => {
           backgroundColor: '#101010'
         }}
       >
+        {!status && <Text type="secondary">Waiting for deployment</Text>}
+
         <ScrollToBottom>
           <Space direction="vertical" style={{ width: '100%' }}>
             {sections.map((section, index) => (
@@ -107,12 +110,13 @@ export const Deploy: React.FC<Props> = ({ project }) => {
           type="primary"
           onClick={handleDeployClick}
           disabled={status === "started" || connStatus !== 'connected'}
+          block
+          icon={<CloudUploadOutlined />}
         >
           Deploy
         </Button>
 
         {!!status && (
-          // <Text style={{ margin: 10 }}>{deployStatusText[status]}</Text>
           <Alert
             message={deployStatusText[status]}
             showIcon
