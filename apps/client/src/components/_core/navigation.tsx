@@ -55,7 +55,7 @@ export const Navigation: React.FC = () => {
       <Menu
         onClick={onClick}
         style={{ width: NAVIGATION_WIDTH, height: `calc(100vh - ${HEADER_HEIGHT}px)` }}
-        selectedKeys={[router.pathname]}
+        selectedKeys={['/' + router.pathname.split('/')[1]]}
         mode="inline"
         items={items}
       />
