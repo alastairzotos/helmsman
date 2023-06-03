@@ -9,7 +9,7 @@ export type IDeployMessagePhase =
   | "cleaning-up";
 
 export const deployPhaseTitles: Record<IDeployMessagePhase, string> = {
-  "getting-tag": "Getting last project tag",
+  "getting-tag": "Getting latest project tag",
   "pulling-helm-repo": "Pulling Helm repository",
   "deploying": "Deploying",
   "cleaning-up": "Cleaning up",
