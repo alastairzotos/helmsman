@@ -76,7 +76,7 @@ export class DeployService {
 
     const args = this.helmService.generateHelmArgs(
       project,
-      helmRepo,
+      "<ROOT_PATH>",
       tag,
       hiddenSecrets
     );

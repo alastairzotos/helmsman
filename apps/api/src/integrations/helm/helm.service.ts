@@ -36,38 +36,24 @@ export class HelmService {
     secrets: IProject['secrets'],
   ): [string, string[]] {
     const rootPath = this.gitService.getRootPath();
+    const repoPath = path.resolve(rootPath, helmRepo);
 
     return [
       'helm',
-      [
-        'upgrade',
-        project.helmRelease,
-        path.resolve(rootPath, helmRepo, project.path),
-        '--values',
-        path.resolve(rootPath, helmRepo, project.valuesPath),
-        '--install',
-        '--namespace',
-        project.namespace,
-        '--create-namespace',
-        '--set',
-        `image.tag=${tag}`,
-        ...this.generateHelmSecrets(secrets).flat(2),
-      ]
+      this.generateHelmArgs(project, repoPath, tag, secrets).flat(1),
     ]
   }
 
   generateHelmArgs(
     project: IProject,
-    helmRepo: string,
+    repoPath: string,
     tag: string,
     secrets: IProject['secrets'],
   ): string[][] {
-    const rootPath = this.gitService.getRootPath();
-
     return [
       ['upgrade', project.helmRelease],
-      [path.resolve(rootPath, helmRepo, project.path)],
-      ['--values', path.resolve(rootPath, helmRepo, project.valuesPath)],
+      [path.join(repoPath, project.path)],
+      ['--values', path.join(repoPath, project.valuesPath)],
       ['--install'],
       ['--namespace', project.namespace],
       ['--create-namespace'],
