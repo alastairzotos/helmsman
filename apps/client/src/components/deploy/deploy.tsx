@@ -5,6 +5,7 @@ import { useDeploy } from "@/state/deploy.state";
 import { IProject, WithId } from "models";
 import { DeployLogs } from "@/components/deploy/deploy-logs";
 import { FetchStatus } from "@bitmetro/create-query";
+import { useRefreshToken } from "@/hooks/refresh";
 
 interface Props {
   project: WithId<IProject>;
@@ -24,11 +25,11 @@ const deployStatusAlertType: Record<FetchStatus, AlertProps['type']> = {
 
 export const Deploy: React.FC<Props> = ({ project }) => {
   const [deployStatus, deploy] = useDeploy(s => [s.status, s.request]);
-  const [deployCount, setDeployCount] = useState(0);
+  const [deployToken, refreshDeployToken] = useRefreshToken();
 
   const handleDeployClick = () => {
     deploy(project.name);
-    setDeployCount(c => c + 1);
+    refreshDeployToken();
   }
 
   return (
@@ -53,7 +54,7 @@ export const Deploy: React.FC<Props> = ({ project }) => {
         )}
       </Space>
 
-      <DeployLogs key={deployCount} project={project} />
+      <DeployLogs key={deployToken} project={project} />
     </Space>
   )
 }
