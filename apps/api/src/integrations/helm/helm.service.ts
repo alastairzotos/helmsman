@@ -10,9 +10,9 @@ export class HelmService {
     private gitService: GitService,
   ) { }
 
-  async deploy(project: IProject, helmRepo: string, tag: string, onMessage: (message: string) => void) {
+  async deploy(project: IProject, secrets: IProject['secrets'], helmRepo: string, tag: string, onMessage: (message: string) => void) {
     return new Promise<void>((resolve, reject) => {
-      const cmd = this.generateHelmCommand(project, helmRepo, tag, project.secrets);
+      const cmd = this.generateHelmCommand(project, helmRepo, tag, secrets);
 
       const proc = cp.spawn(cmd[0], cmd[1]);
 
@@ -32,7 +32,7 @@ export class HelmService {
     project: IProject,
     helmRepo: string,
     tag: string,
-    secrets: Record<string, string>,
+    secrets: IProject['secrets'],
   ): [string, string[]] {
     const rootPath = this.gitService.getRootPath();
 

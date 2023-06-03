@@ -5,6 +5,7 @@ import { IProjectDto, IProject, WithId, IGetSecretsDto, ISecretsDto } from "mode
 import { UsersService } from "plugins/user/features/users/users.service";
 import { User } from "plugins/user/schemas/user.schema";
 import { IUser } from "user-shared";
+import { modifyRecord } from "utils";
 
 @Injectable()
 export class ProjectsService {
@@ -57,22 +58,10 @@ export class ProjectsService {
       return false;
     }
 
-    return this.modifySecrets(project.secrets, secret => this.cryptoService.decrypt(secret));
+    return modifyRecord(project.secrets, secret => this.cryptoService.decrypt(secret));
   }
 
   async updateSecrets(id: string, secrets: ISecretsDto) {
-    await this.projectsRepo.updateSecrets(id, this.modifySecrets(secrets, secret => this.cryptoService.encrypt(secret)));
-  }
-
-  private modifySecrets(secrets: Record<string, string>, modifier: (value: string) => string): Record<string, string> {
-    return Object.entries(secrets || {})
-      .map(([key, value]) => ({
-        key,
-        value: modifier(value),
-      }))
-      .reduce((acc, { key, value }) => ({
-        ...acc,
-        [key]: value
-      }), {} as Record<string, string>)
+    await this.projectsRepo.updateSecrets(id, modifyRecord(secrets, secret => this.cryptoService.encrypt(secret)));
   }
 }

@@ -1,9 +1,11 @@
 import { Injectable } from "@nestjs/common";
 import { ConfigService } from "features/config/config.service";
+import { CryptoService } from "features/crypto/crypto.service";
 import { ProjectsService } from "features/projects/projects.service";
 import { GitService } from "integrations/git/git.service";
 import { HelmService } from "integrations/helm/helm.service";
 import { IConfig, IProject, deployMessage } from "models";
+import { modifyRecord } from "utils";
 import { WebSocketHandler, WebSocketManager } from "utils/ws";
 
 const { status, phase, text, array, progress } = deployMessage;
@@ -17,6 +19,7 @@ export class DeployService {
     private readonly gitService: GitService,
     private readonly helmService: HelmService,
     private readonly configService: ConfigService,
+    private readonly cryptoService: CryptoService,
   ) { }
 
   async deployProject(ownerId: string, projectName: string) {
@@ -60,6 +63,8 @@ export class DeployService {
   async deploy(ws: WebSocketHandler, project: IProject, helmRepo: string, tag: string) {
     ws.sendMessage(phase("deploying"))
 
+    const secrets = modifyRecord(project.secrets, secret => this.cryptoService.decrypt(secret));
+
     const hiddenSecrets = Object.keys(project.secrets)
       .reduce((acc, cur) => ({ ...acc, [cur]: '****' }), {} as Record<string, string>);
 
@@ -71,7 +76,7 @@ export class DeployService {
     );
 
     ws.sendMessage(array([cmd, ...args]));
-    await this.helmService.deploy(project, helmRepo, tag, message => ws.sendMessage(text(message)));
+    await this.helmService.deploy(project, secrets, helmRepo, tag, message => ws.sendMessage(text(message)));
   }
 
   async getTag(ws: WebSocketHandler, project: IProject) {
@@ -115,3 +120,5 @@ export class DeployService {
     await this.gitService.clearClonedDir(helmRepo);
   }
 }
+
+
