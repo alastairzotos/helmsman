@@ -4,7 +4,7 @@ import { DeployLogsSection, IDeployLogsSection } from "@/components/deploy/deplo
 import { useWebSockets } from "@/hooks/ws";
 import { getEnv } from "@/utils/env";
 import { replaceIndex } from "@/utils/misc";
-import { Card, Space, Typography } from "antd";
+import { Card, Space, Typography, theme } from "antd";
 import { IDeployMessageDto, IDeployMessageStatus, IProject, WithId } from "models";
 import React, { useCallback, useEffect, useState } from "react";
 
@@ -15,6 +15,13 @@ interface Props {
 }
 
 export const DeployLogs: React.FC<Props> = ({ project }) => {
+  const {
+    token: {
+      // colorBgElevated: bgColour
+      colorBgMask: bgColour
+    },
+  } = theme.useToken();
+
   const [status, setStatus] = useState<IDeployMessageStatus | null>(null);
   const [sections, setSections] = useState<IDeployLogsSection[]>([]);
 
@@ -76,7 +83,8 @@ export const DeployLogs: React.FC<Props> = ({ project }) => {
           width: 1000,
           overflowY: 'scroll',
           maxHeight: 500,
-          backgroundColor: '#101010'
+          // backgroundColor: '#101010'
+          backgroundColor: bgColour,
         }}
       >
         {!status && <Text type="secondary">Waiting for deployment</Text>}

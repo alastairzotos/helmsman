@@ -20,18 +20,16 @@ export const AppBar: React.FC = () => {
   const loggedInUser = useLoggedInUser();
 
   const {
-    token: { colorBgContainer, colorBorderSecondary },
+    token: { colorBorderSecondary },
   } = theme.useToken();
 
   return (
     <Header style={{ ...headerStyle, borderBottom: `1px solid ${colorBorderSecondary}` }}>
       {loggedInUser && (
-        <div style={{ display: 'flex' }}>
-          <Space>
-            <Text>Logged in as {loggedInUser.email}</Text>
-            <Button onClick={handleLogout}>Logout</Button>
-          </Space>
-        </div>
+        <Space>
+          <Text>Logged in as {loggedInUser.email}</Text>
+          <Button onClick={handleLogout}>Logout</Button>
+        </Space>
       )}
     </Header>
   )
