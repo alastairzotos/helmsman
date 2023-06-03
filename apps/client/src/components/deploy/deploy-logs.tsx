@@ -76,8 +76,6 @@ export const DeployLogs: React.FC<Props> = ({ project }) => {
 
   return (
     <Space direction="vertical">
-      <ConnStatus status={connStatus} onReconnect={reconnect} />
-
       <Card
         style={{
           width: 1000,
@@ -101,6 +99,8 @@ export const DeployLogs: React.FC<Props> = ({ project }) => {
           </Space>
         </ScrollToBottom>
       </Card>
+
+      <ConnStatus status={connStatus} onReconnect={reconnect} />
     </Space>
   )
 }

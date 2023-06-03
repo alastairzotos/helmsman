@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 import { Alert, AlertProps, Button, Space } from "antd";
 import { CloudUploadOutlined } from '@ant-design/icons';
 import { useDeploy } from "@/state/deploy.state";
@@ -24,15 +24,19 @@ const deployStatusAlertType: Record<FetchStatus, AlertProps['type']> = {
 
 export const Deploy: React.FC<Props> = ({ project }) => {
   const [deployStatus, deploy] = useDeploy(s => [s.status, s.request]);
+  const [deployCount, setDeployCount] = useState(0);
+
+  const handleDeployClick = () => {
+    deploy(project.name);
+    setDeployCount(c => c + 1);
+  }
 
   return (
     <Space direction="vertical">
-      <DeployLogs project={project} />
-
       <Space>
         <Button
           type="primary"
-          onClick={() => deploy(project.name)}
+          onClick={handleDeployClick}
           disabled={deployStatus === "fetching"}
           block
           icon={<CloudUploadOutlined />}
@@ -48,6 +52,8 @@ export const Deploy: React.FC<Props> = ({ project }) => {
           />
         )}
       </Space>
+
+      <DeployLogs key={deployCount} project={project} />
     </Space>
   )
 }
