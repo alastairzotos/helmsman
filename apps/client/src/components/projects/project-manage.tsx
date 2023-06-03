@@ -1,5 +1,5 @@
 import { Form, Input } from "antd";
-import { IProject, ProjectSchema } from "models";
+import { IProjectDto, ProjectSchema } from "models";
 import React from "react";
 import { Controller, SubmitHandler } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
@@ -8,16 +8,16 @@ import { FetchStatus } from "@bitmetro/create-query";
 
 interface Props {
   title: string;
-  project: IProject;
+  project: IProjectDto;
   saveStatus: FetchStatus | undefined;
-  onSave: SubmitHandler<IProject>;
+  onSave: SubmitHandler<IProjectDto>;
 }
 
 export const ProjectManage: React.FC<Props> = ({ title, project, saveStatus, onSave }) => {
   return (
     <ResourceForm
       title={title}
-      resolver={zodResolver(ProjectSchema)}
+      resolver={zodResolver(ProjectSchema.omit({ secrets: true }))}
       resource={project}
       saveStatus={saveStatus}
       onSave={onSave}

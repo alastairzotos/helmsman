@@ -2,36 +2,33 @@ import { FormBase } from "@/components/_core/form-base";
 import { MinusCircleOutlined, PlusOutlined } from '@ant-design/icons';
 import { FetchStatus } from "@bitmetro/create-query";
 import { Button, Form, Input, Space } from "antd";
-import { IProject } from "models";
+import { ISecretsDto, IUpdateSecretsDto } from "models";
 import React from "react";
 import { SubmitHandler } from "react-hook-form";
 
 interface Props {
-  project: IProject;
+  secrets: ISecretsDto;
   saveStatus: FetchStatus | undefined;
-  onSave: SubmitHandler<IProject>;
+  onSave: SubmitHandler<IUpdateSecretsDto>;
 }
 
-interface Secret {
+interface ISecret {
   key: string;
   value: string;
 }
 
-export const SecretsEdit: React.FC<Props> = ({ project, saveStatus, onSave }) => {
+export const SecretsEdit: React.FC<Props> = ({ secrets, saveStatus, onSave }) => {
   return (
-    <FormBase<[string, string][]>
+    <FormBase
       title="Edit secrets"
-      onSave={(data: { secrets: Secret[] }) => {
+      onSave={(data: { secrets: ISecret[] }) => {
         const secrets = data.secrets
           .reduce((acc, cur) => ({
             ...acc,
             [cur.key]: cur.value
           }), {} as Record<string, string>);
 
-        onSave({
-          ...project,
-          secrets,
-        })
+        onSave({ secrets })
       }}
       saveStatus={saveStatus}
       fixColumns={false}
@@ -39,7 +36,7 @@ export const SecretsEdit: React.FC<Props> = ({ project, saveStatus, onSave }) =>
       <Form.List
         name="secrets"
         initialValue={
-          Object.entries(project.secrets || { key1: 'test', key2: 'foobar' })
+          Object.entries(secrets || { })
             .map(entry => ({ key: entry[0], value: entry[1] }))
         }
       >

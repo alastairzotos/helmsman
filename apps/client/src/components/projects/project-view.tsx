@@ -2,6 +2,7 @@ import { StatusSwitch } from "@/components/_core/status-switch";
 import { Deploy } from "@/components/deploy/deploy";
 import { ProjectManage } from "@/components/projects/project-manage";
 import { SecretsEdit } from "@/components/projects/secrets-edit";
+import { SecretsManage } from "@/components/projects/secrets-manage";
 import { useGetProjectById, useUpdateProject } from "@/state/projects.state";
 import { Tabs } from "antd";
 import { IProject } from "models";
@@ -54,11 +55,7 @@ export const ProjectView: React.FC<Props> = ({ id }) => {
               key: "secrets",
               label: "Secrets",
               children: (
-                <SecretsEdit
-                  project={project}
-                  saveStatus={updateStatus}
-                  onSave={onSubmit}
-                />
+                <SecretsManage project={project} />
               )
             }
           ]}

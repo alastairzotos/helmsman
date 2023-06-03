@@ -1,6 +1,6 @@
 import { Injectable } from "@nestjs/common";
 import { InjectModel } from "@nestjs/mongoose";
-import { IProject } from "models";
+import { IProject, ISecretsDto } from "models";
 import { Model } from "mongoose";
 import { Project } from "schemas/project.schema";
 
@@ -22,12 +22,20 @@ export class ProjectsRepository {
     return await this.projectsModel.findById(id);
   }
 
+  async getByIdWithSecrets(id: string) {
+    return await this.projectsModel.findById(id).select("+secrets");
+  }
+
   async getByName(name: string) {
     return await this.projectsModel.findOne({ name });
   }
 
   async update(id: string, project: Partial<IProject>) {
     await this.projectsModel.findOneAndUpdate({ _id: id }, project);
+  }
+
+  async updateSecrets(id: string, secrets: ISecretsDto) {
+    await this.projectsModel.findOneAndUpdate({ _id: id }, { secrets });
   }
 
   async delete(id: string) {

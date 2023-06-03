@@ -27,7 +27,7 @@ export class Project implements IProject {
   @Prop()
   repoUrl: string;
   
-  @Prop({ type: Object })
+  @Prop({ type: Object, select: false })
   secrets: Record<string, string>;
 }
 

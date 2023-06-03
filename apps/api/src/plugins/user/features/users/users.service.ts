@@ -42,6 +42,11 @@ export class UsersService {
     };
   }
 
+  async isValidUserPassowrd(userId: string, password: string) {
+    const user = await this.usersRepository.getUserByIdWithPassword(userId);
+    return await this.cryptoService.comparePasswords(password, user.hashedPassword);
+  }
+
   async getUserById(id: string) {
     return await this.usersRepository.getUserById(id);
   }

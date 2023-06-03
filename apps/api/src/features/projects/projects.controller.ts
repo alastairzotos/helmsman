@@ -1,8 +1,9 @@
-import { Controller, Post, Get, Patch, Delete, Param, Body, UseGuards } from "@nestjs/common";
+import { Controller, Post, Get, Patch, Delete, Param, Body, UseGuards, ForbiddenException } from "@nestjs/common";
 import { ProjectsService } from "features/projects/projects.service";
-import { IProject, UpdateProps, WithId } from "models";
+import { IGetSecretsDto, IProject, IUpdateSecretsDto, UpdateProps, WithId } from "models";
 import { Principal } from "plugins/user/decorators/principal.decorator";
 import { AuthGuard } from "plugins/user/guards/auth.guard";
+import { User } from "plugins/user/schemas/user.schema";
 import { IUser } from "user-shared";
 
 @Controller('projects')
@@ -53,5 +54,26 @@ export class ProjectsController {
     @Param('id') id: string
   ) {
     await this.projectsService.delete(id);
+  }
+
+  @Post('get-secrets')
+  async getSecrets(
+    @Principal() user: User,
+    @Body() { id, password }: IGetSecretsDto
+  ) {
+    const secrets = await this.projectsService.getSecrets(user, id, password);
+
+    if (!secrets) {
+      throw new ForbiddenException();
+    }
+
+    return secrets;
+  }
+
+  @Patch('update-secrets')
+  async updateSecrets(
+    @Body() { id, values: { secrets }}: UpdateProps<IUpdateSecretsDto>
+  ) {
+    await this.projectsService.updateSecrets(id, secrets);
   }
 }

@@ -17,6 +17,10 @@ export class UsersRepository {
     return await this.usersModel.findById(id);
   }
 
+  async getUserByIdWithPassword(id: string) {
+    return await this.usersModel.findById(id).select('+hashedPassword');
+  }
+
   async getUserByEmail(email: string) {
     return await this.usersModel.findOne({ email });
   }
