@@ -44,7 +44,7 @@ export const DeployLogsSection: React.FC<Props> = ({ section, isActive }) => {
         }
         key="1"
       >
-        <Space direction="vertical">
+        <Space direction="vertical" style={{ overflowX: 'scroll', whiteSpace: 'nowrap', width: '100%' }}>
           {section.logs.map((log, index) => (
             <DeployLogsItem key={index} log={log} />
           ))}
