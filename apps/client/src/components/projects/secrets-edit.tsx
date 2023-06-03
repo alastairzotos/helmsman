@@ -20,7 +20,6 @@ interface ISecret {
 export const SecretsEdit: React.FC<Props> = ({ secrets, saveStatus, onSave }) => {
   return (
     <FormBase
-      title="Edit secrets"
       onSave={(data: { secrets: ISecret[] }) => {
         const secrets = data.secrets
           .reduce((acc, cur) => ({
