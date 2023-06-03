@@ -15,5 +15,8 @@ export const urls = {
     home: () => '/projects',
     create: () => '/projects/create',
     project: (id: string) => `/projects/${id}`,
-  }
+  },
+  apiKeys: {
+    home: () => '/api-keys',
+  },
 } satisfies Urls;

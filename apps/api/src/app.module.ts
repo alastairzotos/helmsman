@@ -3,6 +3,7 @@ import { ConfigModule as NestConfigModule } from '@nestjs/config';
 import { MongooseModule } from '@nestjs/mongoose';
 import { EnvironmentModule } from 'environment/environment.module';
 import { EnvironmentService } from 'environment/environment.service';
+import { ApiKeysModule } from 'features/api-keys/api-keys.module';
 import { ConfigModule } from 'features/config/config.module';
 import { CryptoModule } from 'features/crypto/crypto.module';
 import { DeployModule } from 'features/deploy/deploy.module';
@@ -27,6 +28,7 @@ import { AuthModule } from 'plugins/user/guards/auth.module';
     GitModule,
     HelmModule,
     ConfigModule,
+    ApiKeysModule,
     MongooseModule.forRootAsync({
       imports: [EnvironmentModule],
       inject: [EnvironmentService],

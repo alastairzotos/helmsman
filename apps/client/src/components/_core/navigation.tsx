@@ -1,5 +1,5 @@
 import React from 'react';
-import { AppstoreOutlined, SettingOutlined } from '@ant-design/icons';
+import { AppstoreOutlined, SettingOutlined, KeyOutlined } from '@ant-design/icons';
 import { MenuProps } from 'antd';
 import { Menu } from 'antd';
 import { HEADER_HEIGHT, NAVIGATION_WIDTH } from '@/components/_core/sizes';
@@ -27,11 +27,13 @@ function getItem(
 const items: MenuProps['items'] = [
   getItem("Config", "config", <SettingOutlined />),
   getItem("Projects", "projects", <AppstoreOutlined />),
+  getItem("API Keys", "apiKeys", <KeyOutlined />),
 ]
 
 const urlMappings: Record<string, string> = {
   config: urls.config.home(),
   projects: urls.projects.home(),
+  apiKeys: urls.apiKeys.home(),
 }
 
 export const Navigation: React.FC = () => {

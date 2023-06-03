@@ -17,7 +17,7 @@ export class ProjectsService {
   async create(user: WithId<IUser>, project: IProject) {
     return await this.projectsRepo.create({
       ...project,
-      ownerId: user._id,
+      ownerId: user._id ,
     });
   }
 
