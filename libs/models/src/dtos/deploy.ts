@@ -2,12 +2,6 @@ export type IDeployMessageType = "status" | "phase" | "text" | "array" | "progre
 
 export type IDeployMessageStatus = "started" | "finished" | "error";
 
-export const deployStatusText: Record<IDeployMessageStatus, string> = {
-  "started": "Started",
-  "error": "Error",
-  "finished": "Finished",
-}
-
 export type IDeployMessagePhase =
   "getting-tag"
   | "pulling-helm-repo"
