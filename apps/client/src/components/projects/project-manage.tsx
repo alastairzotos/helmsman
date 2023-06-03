@@ -7,16 +7,14 @@ import { ResourceForm } from "@/components/_core/resource-form";
 import { FetchStatus } from "@bitmetro/create-query";
 
 interface Props {
-  title: string;
   project: IProjectDto;
   saveStatus: FetchStatus | undefined;
   onSave: SubmitHandler<IProjectDto>;
 }
 
-export const ProjectManage: React.FC<Props> = ({ title, project, saveStatus, onSave }) => {
+export const ProjectManage: React.FC<Props> = ({ project, saveStatus, onSave }) => {
   return (
     <ResourceForm
-      title={title}
       resolver={zodResolver(ProjectSchema.omit({ secrets: true }))}
       resource={project}
       saveStatus={saveStatus}

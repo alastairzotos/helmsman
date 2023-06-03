@@ -29,7 +29,6 @@ export const ProjectCreate: React.FC = () => {
 
   return (
     <ProjectManage
-      title="Create project"
       project={defaultValues}
       saveStatus={createStatus}
       onSave={onSubmit}
