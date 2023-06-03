@@ -31,7 +31,6 @@ export const SecretsManage: React.FC<Props> = ({ project }) => {
   if (!secrets) {
     return (
       <PasswordReveal
-        key={project._id}
         resourceName="secrets"
         state={getSecretsState}
         handleRequest={(password) => getSecrets(project._id, password)}
