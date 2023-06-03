@@ -1,10 +1,11 @@
 import { AppBar } from "@/components/_core/app-bar";
 import { Navigation } from "@/components/_core/navigation";
 import { NAVIGATION_WIDTH } from "@/components/_core/sizes";
-import { Layout } from "antd";
+import { Layout, Space } from "antd";
 import React from "react";
 import { ConfigProvider, theme, Card } from "antd";
 import Head from "next/head";
+import { AutoBreadcrumbs } from "@/components/_core/auto-breadcrumbs";
 
 const { Sider, Content } = Layout;
 const { darkAlgorithm } = theme;
@@ -28,9 +29,13 @@ export const Wrapper: React.FC<React.PropsWithChildren> = ({ children }) => {
             <Navigation />
           </Sider>
           <Content style={contentStyle}>
-            <Card>
-              {children}
-            </Card>
+            <Space direction="vertical" style={{ width: '100%' }}>
+              <AutoBreadcrumbs />
+
+              <Card>
+                {children}
+              </Card>
+            </Space>
           </Content>
         </Layout>
       </Layout>
