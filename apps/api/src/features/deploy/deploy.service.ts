@@ -1,8 +1,9 @@
 import { Injectable } from "@nestjs/common";
+import { ConfigService } from "features/config/config.service";
 import { ProjectsService } from "features/projects/projects.service";
 import { GitService } from "integrations/git/git.service";
 import { HelmService } from "integrations/helm/helm.service";
-import { IProject, deployMessage } from "models";
+import { IConfig, IProject, deployMessage } from "models";
 import { WebSocketHandler, WebSocketManager } from "utils/ws";
 
 const { status, phase, text, progress } = deployMessage;
@@ -15,9 +16,15 @@ export class DeployService {
     private readonly projectsService: ProjectsService,
     private readonly gitService: GitService,
     private readonly helmService: HelmService,
+    private readonly configService: ConfigService,
   ) { }
 
-  async deployProject(projectId: string) {
+  async deployProject(ownerId: string, projectId: string) {
+    const config = await this.configService.get(ownerId);
+    if (!config) {
+      return false;
+    }
+
     const ws = this.wsManager.getHandler(projectId);
     const project = await this.projectsService.getById(projectId);
 
@@ -29,16 +36,18 @@ export class DeployService {
 
     let helmRepo: string;
 
-    try {
-      const tag = await this.getTag(ws, project);
-      helmRepo = await this.pullHelmRepo(ws, project);
+    const tag = await this.getTag(ws, project);
+    helmRepo = await this.pullHelmRepo(ws, config, project);
 
+    if (helmRepo) {
       await this.deploy(ws, project, helmRepo, tag);
-    } catch {
       await this.cleanup(ws, helmRepo);
-    }
 
-    ws.sendMessage(status("finished"));
+      ws.sendMessage(status("finished"));
+    } else {
+      ws.sendMessage(text("Unauthorised pull of helm repo"));
+      ws.sendMessage(status("error"));
+    }
 
     return true;
   }
@@ -60,12 +69,14 @@ export class DeployService {
     return latestTag;
   }
 
-  async pullHelmRepo(ws: WebSocketHandler, project: IProject) {
+  async pullHelmRepo(ws: WebSocketHandler, config: IConfig, project: IProject) {
     ws.sendMessage(phase("pulling-helm-repo"))
 
     let lastPhase = '';
     const projName = await this.gitService.clone(
       project.helmRepoUrl,
+      config.githubUsername,
+      config.githubToken,
       (phase, percent) => {
         if (percent !== undefined) {
           ws.sendMessage(progress(phase, percent, phase === lastPhase));

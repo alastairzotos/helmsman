@@ -5,10 +5,11 @@ export interface IDeployDto {
 
 export type IDeployMessageType = "status" | "phase" | "text" | "progress";
 
-export type IDeployMessageStatus = "started" | "finished";
+export type IDeployMessageStatus = "started" | "finished" | "error";
 
 export const deployStatusText: Record<IDeployMessageStatus, string> = {
   "started": "Started",
+  "error": "Error",
   "finished": "Finished",
 }
 

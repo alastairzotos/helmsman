@@ -1,8 +1,9 @@
 import { Module } from '@nestjs/common';
-import { ConfigModule } from '@nestjs/config';
+import { ConfigModule as NestConfigModule } from '@nestjs/config';
 import { MongooseModule } from '@nestjs/mongoose';
 import { EnvironmentModule } from 'environment/environment.module';
 import { EnvironmentService } from 'environment/environment.service';
+import { ConfigModule } from 'features/config/config.module';
 import { CryptoModule } from 'features/crypto/crypto.module';
 import { DeployModule } from 'features/deploy/deploy.module';
 
@@ -15,7 +16,7 @@ import { AuthModule } from 'plugins/user/guards/auth.module';
 
 @Module({
   imports: [
-    ConfigModule.forRoot(),
+    NestConfigModule.forRoot(),
     HealthModule,
     EnvironmentModule,
     ProjectsModule,
@@ -25,6 +26,7 @@ import { AuthModule } from 'plugins/user/guards/auth.module';
     DeployModule,
     GitModule,
     HelmModule,
+    ConfigModule,
     MongooseModule.forRootAsync({
       imports: [EnvironmentModule],
       inject: [EnvironmentService],

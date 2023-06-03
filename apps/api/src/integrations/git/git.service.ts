@@ -14,23 +14,28 @@ export class GitService {
       http
     })
   }
-  
-  async clone(repoUrl: string, onProgress: (phrase: string, progress: number) => void) {
+
+  async clone(repoUrl: string, username: string, token: string, onProgress: (phrase: string, progress: number) => void): Promise<string | null> {
     const url = new URL(repoUrl);
-    url.password = "testing";
+    url.username = username;
+    url.password = token;
 
     const projectName = uuid();
 
-    await git.clone({
-      fs,
-      http,
-      url: url.toString(),
-      dir: path.resolve(this.getRootPath(), projectName),
-      onProgress: (e) => {
-        const percent = (e.loaded / e.total) * 100;
-        onProgress(e.phase, isNaN(percent) ? undefined : percent);
-      }
-    })
+    try {
+      await git.clone({
+        fs,
+        http,
+        url: url.toString(),
+        dir: path.resolve(this.getRootPath(), projectName),
+        onProgress: (e) => {
+          const percent = (e.loaded / e.total) * 100;
+          onProgress(e.phase, isNaN(percent) ? undefined : percent);
+        }
+      })
+    } catch (e) {
+      return null;
+    }
 
     return projectName;
   }

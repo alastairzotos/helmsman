@@ -1,5 +1,6 @@
 import { Module } from "@nestjs/common";
 import { EnvironmentModule } from "environment/environment.module";
+import { ConfigModule } from "features/config/config.module";
 import { DeployController } from "features/deploy/deploy.controller";
 import { DeployService } from "features/deploy/deploy.service";
 import { ProjectsModule } from "features/projects/projects.module";
@@ -14,6 +15,7 @@ import { UsersModule } from "plugins/user/features/users/users.module";
     UsersModule,
     GitModule,
     HelmModule,
+    ConfigModule,
   ],
   controllers: [DeployController],
   exports: [DeployService],

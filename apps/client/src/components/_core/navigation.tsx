@@ -25,10 +25,12 @@ function getItem(
 }
 
 const items: MenuProps['items'] = [
+  getItem("Config", "config", <SettingOutlined />),
   getItem("Projects", "projects", <AppstoreOutlined />),
 ]
 
 const urlMappings: Record<string, string> = {
+  config: urls.config.home(),
   projects: urls.projects.home(),
 }
 
