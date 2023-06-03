@@ -10,6 +10,8 @@ import { WebSocketHandler, WebSocketManager } from "utils/ws";
 
 const { status, phase, text, array, progress } = deployMessage;
 
+type IDeployResponse = "not-found" | "error" | null;
+
 @Injectable()
 export class DeployService {
   private wsManager = new WebSocketManager(3004);
@@ -22,17 +24,17 @@ export class DeployService {
     private readonly cryptoService: CryptoService,
   ) { }
 
-  async deployProject(ownerId: string, projectName: string) {
+  async deployProject(ownerId: string, projectName: string): Promise<IDeployResponse> {
     const config = await this.configService.getInternal(ownerId);
     if (!config) {
-      return false;
+      return "not-found";
     }
 
     const ws = this.wsManager.getHandler(projectName);
     const project = await this.projectsService.getByOwnerIdAndNameWithSecrets(ownerId, projectName);
 
     if (!project) {
-      return false;
+      return "not-found";
     }
 
     ws.sendMessage(status("started"));
@@ -45,19 +47,23 @@ export class DeployService {
     if (helmRepo) {
       try {
         await this.deploy(ws, project, helmRepo, tag);
+        await this.cleanup(ws, helmRepo);
+
         ws.sendMessage(status("finished"));
       } catch (e) {
         ws.sendMessage(text(e?.message || e));
         ws.sendMessage(status("error"));
+        
+        await this.cleanup(ws, helmRepo);
+        return "error";
       }
-
-      await this.cleanup(ws, helmRepo);
     } else {
       ws.sendMessage(text("Unauthorised pull of helm repo"));
       ws.sendMessage(status("error"));
+      return "error";
     }
 
-    return true;
+    return null;
   }
 
   async deploy(ws: WebSocketHandler, project: IProject, helmRepo: string, tag: string) {
