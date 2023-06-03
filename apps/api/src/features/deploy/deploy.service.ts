@@ -19,14 +19,14 @@ export class DeployService {
     private readonly configService: ConfigService,
   ) { }
 
-  async deployProject(ownerId: string, projectId: string) {
+  async deployProject(ownerId: string, projectName: string) {
     const config = await this.configService.getInternal(ownerId);
     if (!config) {
       return false;
     }
 
-    const ws = this.wsManager.getHandler(projectId);
-    const project = await this.projectsService.getByIdWithSecrets(projectId);
+    const ws = this.wsManager.getHandler(projectName);
+    const project = await this.projectsService.getByOwnerIdAndNameWithSecrets(ownerId, projectName);
 
     if (!project) {
       return false;

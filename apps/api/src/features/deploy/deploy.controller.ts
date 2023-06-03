@@ -1,7 +1,6 @@
-import { Body, Controller, NotFoundException, Post, UseGuards } from "@nestjs/common";
+import { Controller, NotFoundException, Param, Post, UseGuards } from "@nestjs/common";
 import { CustomAuthGuard } from "features/auth/custom-auth.guard";
 import { DeployService } from "features/deploy/deploy.service";
-import { IDeployDto } from "models";
 import { Principal } from "plugins/user/decorators/principal.decorator";
 import { User } from "plugins/user/schemas/user.schema";
 
@@ -12,12 +11,12 @@ export class DeployController {
     private readonly deployService: DeployService,
   ) {}
 
-  @Post()
+  @Post(':projectName')
   async deploy(
     @Principal() user: User,
-    @Body() { projectId }: IDeployDto
+    @Param('projectName') projectName: string,
   ) {
-    const result = await this.deployService.deployProject(user._id, projectId);
+    const result = await this.deployService.deployProject(user._id, projectName);
 
     if (!result) {
       throw new NotFoundException();

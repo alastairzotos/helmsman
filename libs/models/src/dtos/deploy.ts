@@ -1,8 +1,3 @@
-
-export interface IDeployDto {
-  projectId: string;
-}
-
 export type IDeployMessageType = "status" | "phase" | "text" | "progress";
 
 export type IDeployMessageStatus = "started" | "finished" | "error";

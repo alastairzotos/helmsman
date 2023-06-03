@@ -53,7 +53,7 @@ export const Deploy: React.FC<Props> = ({ project }) => {
     }
   }, []);
 
-  const [connStatus, reconnect] = useWebSockets(project._id, getEnv().apiUrl, 3004, handleReceiveMessage);
+  const [connStatus, reconnect] = useWebSockets(project.name, getEnv().apiUrl, 3004, handleReceiveMessage);
 
   useEffect(() => {
     setSections([]);
@@ -62,7 +62,7 @@ export const Deploy: React.FC<Props> = ({ project }) => {
   const handleDeployClick = () => {
     if (connStatus === 'connected') {
       setSections([]);
-      deploy(project._id);
+      deploy(project.name);
     }
   }
 

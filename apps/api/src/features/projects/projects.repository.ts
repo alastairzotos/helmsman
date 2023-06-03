@@ -26,6 +26,10 @@ export class ProjectsRepository {
     return await this.projectsModel.findById(id).select("+secrets");
   }
 
+  async getByOwnerIdAndNameWithSecrets(ownerId: string, name: string) {
+    return await this.projectsModel.findOne({ ownerId, name }).select("+secrets");
+  }
+
   async getByName(name: string) {
     return await this.projectsModel.findOne({ name });
   }
