@@ -1,8 +1,7 @@
-import { Progress, Space, Typography } from "antd";
+import { DeployLogsProgress } from "@/components/deploy/deploy-logs-progress";
+import { DeployLogsText } from "@/components/deploy/deploy-logs-text";
 import { IDeployMessageDto } from "models";
 import React from "react";
-
-const { Text } = Typography;
 
 interface Props {
   log: IDeployMessageDto;
@@ -11,26 +10,10 @@ interface Props {
 export const DeployLogsItem: React.FC<Props> = ({ log }) => {
   switch (log.type) {
     case "text":
-      return <Text>{log.textMessage}</Text>;
-    
-    case "array":
-      return (
-        <>
-          {log.arrayMessage?.map((line, index) => (
-            <div key={index}>
-              <Text>{line}</Text>
-            </div>
-          ))}
-        </>
-      );
+      return <DeployLogsText text={log.textMessage!} />;
 
     case "progress":
-      return (
-        <Space>
-          <Text>{log.progressMessage?.phase}</Text>
-          <Progress size={14} type="circle" strokeWidth={10} percent={log.progressMessage?.progress} />
-        </Space>
-      )
+      return <DeployLogsProgress progressMessage={log.progressMessage!} />;
   }
 
   return null;

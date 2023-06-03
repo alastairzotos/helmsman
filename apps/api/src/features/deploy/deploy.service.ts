@@ -8,7 +8,7 @@ import { IConfig, IProject, deployMessage } from "models";
 import { modifyRecord } from "utils";
 import { WebSocketHandler, WebSocketManager } from "utils/ws";
 
-const { status, phase, text, array, progress } = deployMessage;
+const { status, phase, text, progress } = deployMessage;
 
 type IDeployResponse = "not-found" | "error" | null;
 
@@ -53,7 +53,7 @@ export class DeployService {
       } catch (e) {
         ws.sendMessage(text(e?.message || e));
         ws.sendMessage(status("error"));
-        
+
         await this.cleanup(ws, helmRepo);
         return "error";
       }
@@ -81,7 +81,7 @@ export class DeployService {
       hiddenSecrets
     );
 
-    ws.sendMessage(array(['helm', ...args.map(arg => arg.join(' '))]));
+    ws.sendMessage(text(['helm', ...args.map(arg => arg.join(' '))].join('\n')));
     await this.helmService.deploy(project, secrets, helmRepo, tag, message => ws.sendMessage(text(message)));
   }
 
