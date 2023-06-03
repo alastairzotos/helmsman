@@ -29,6 +29,10 @@ export class ProjectsService {
     return await this.projectsRepo.getById(id);
   }
 
+  async getByIdWithSecrets(id: string): Promise<IProject> {
+    return await this.projectsRepo.getByIdWithSecrets(id);
+  }
+
   async getByName(name: string): Promise<IProjectDto> {
     return await this.projectsRepo.getByName(name);
   }

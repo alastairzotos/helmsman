@@ -1,6 +1,6 @@
-import { Body, Controller, Get, Patch, UseGuards } from "@nestjs/common";
+import { Body, Controller, ForbiddenException, Get, Patch, Post, UseGuards } from "@nestjs/common";
 import { ConfigService } from "features/config/config.service";
-import { IConfig } from "models";
+import { IConfig, IGetConfigDto } from "models";
 import { Principal } from "plugins/user/decorators/principal.decorator";
 import { AuthGuard } from "plugins/user/guards/auth.guard";
 import { User } from "plugins/user/schemas/user.schema";
@@ -12,11 +12,18 @@ export class ConfigController {
     private readonly configService: ConfigService,
   ) {}
 
-  @Get()
+  @Post()
   async get(
     @Principal() user: User,
+    @Body() { password }: IGetConfigDto
   ) {
-    return await this.configService.get(user._id);
+    const config = await this.configService.get(user, password);
+
+    if (!config) {
+      throw new ForbiddenException();
+    }
+
+    return config;
   }
 
   @Patch()

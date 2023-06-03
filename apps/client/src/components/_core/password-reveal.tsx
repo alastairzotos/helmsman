@@ -1,6 +1,5 @@
 import { QueryState } from "@bitmetro/create-query";
 import { Button, Input, Space, Typography } from "antd";
-import { ISecretsDto } from "models";
 import React, { useState } from "react";
 
 const { Text } = Typography;
@@ -8,23 +7,19 @@ const { Text } = Typography;
 interface Props<R extends Promise<any>, T extends any[]> {
   resourceName: string;
   state: QueryState<R, T>;
-  getArgs: (password: string) => T;
+  handleRequest: (password: string) => Promise<void>;
 }
 
 export function PasswordReveal<R extends Promise<any>, T extends any[]>({
   resourceName,
-  state: {
-    status,
-    request,
-    error,
-  },
-  getArgs,
+  state: { status, error },
+  handleRequest,
 }: Props<R, T>) {
   const [password, setPassword] = useState('');
 
   const handleSubmitPassword = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-    request(...getArgs(password));
+    handleRequest(password);
   }
 
   return (

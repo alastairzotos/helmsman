@@ -20,13 +20,13 @@ export class DeployService {
   ) { }
 
   async deployProject(ownerId: string, projectId: string) {
-    const config = await this.configService.get(ownerId);
+    const config = await this.configService.getInternal(ownerId);
     if (!config) {
       return false;
     }
 
     const ws = this.wsManager.getHandler(projectId);
-    const project = await this.projectsService.getById(projectId);
+    const project = await this.projectsService.getByIdWithSecrets(projectId);
 
     if (!project) {
       return false;
@@ -40,10 +40,15 @@ export class DeployService {
     helmRepo = await this.pullHelmRepo(ws, config, project);
 
     if (helmRepo) {
-      await this.deploy(ws, project, helmRepo, tag);
-      await this.cleanup(ws, helmRepo);
+      try {
+        await this.deploy(ws, project, helmRepo, tag);
+        ws.sendMessage(status("finished"));
+      } catch (e) {
+        ws.sendMessage(text(e.message));
+        ws.sendMessage(status("error"));
+      }
 
-      ws.sendMessage(status("finished"));
+      await this.cleanup(ws, helmRepo);
     } else {
       ws.sendMessage(text("Unauthorised pull of helm repo"));
       ws.sendMessage(status("error"));

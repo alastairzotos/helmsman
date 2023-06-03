@@ -15,6 +15,7 @@ export const SecretsManage: React.FC<Props> = ({ project }) => {
   const getSecretsState = useGetSecrets();
   const {
     status: getSecretsStatus,
+    request: getSecrets,
     value: secrets
   } = getSecretsState;
 
@@ -27,7 +28,7 @@ export const SecretsManage: React.FC<Props> = ({ project }) => {
       <PasswordReveal
         resourceName="secrets"
         state={getSecretsState}
-        getArgs={(password) => [project._id!, password] as [string, string]}
+        handleRequest={(password) => getSecrets(project._id, password)}
       />
     )
   }

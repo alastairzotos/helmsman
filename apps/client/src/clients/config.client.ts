@@ -1,8 +1,8 @@
 import { httpClient } from "@/clients/http.client"
-import { IConfig } from "models"
+import { IConfig, IGetConfigDto } from "models"
 
-export const getConfig = async () => {
-  const { data } = await httpClient.get<IConfig>('/config');
+export const getConfig = async (password: string) => {
+  const { data } = await httpClient.post<IGetConfigDto, { data: IConfig }>('/config', { password });
 
   return data;
 }
