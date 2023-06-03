@@ -1,5 +1,5 @@
 import { IConnStatus } from "@/hooks/ws";
-import { Button, Space, Typography } from "antd";
+import { Button, Space, Typography, theme } from "antd";
 import React from "react";
 import styled from 'styled-components';
 
@@ -19,6 +19,14 @@ const Dot = styled.div<{ colour: string }>(({ colour }) => (`
 `))
 
 export const ConnStatus: React.FC<Props> = ({ status, onReconnect }) => {
+  const {
+    token: {
+      colorSuccess,
+      colorError,
+      colorInfo,
+    },
+  } = theme.useToken();
+  
   switch (status) {
     case null:
       return null;
@@ -26,7 +34,7 @@ export const ConnStatus: React.FC<Props> = ({ status, onReconnect }) => {
     case 'connecting':
       return (
         <Space>
-          <Dot colour="#bbb" />
+          <Dot colour={colorInfo} />
           <Text>Connecting...</Text>
         </Space>
       )
@@ -34,7 +42,7 @@ export const ConnStatus: React.FC<Props> = ({ status, onReconnect }) => {
     case 'connected':
       return (
         <Space>
-          <Dot colour="#00ff00" />
+          <Dot colour={colorSuccess} />
           <Text>Connected</Text>
         </Space>
       )
@@ -42,7 +50,7 @@ export const ConnStatus: React.FC<Props> = ({ status, onReconnect }) => {
     case 'disconnected':
       return (
         <Space>
-          <Dot colour="#bbb" />
+          <Dot colour={colorInfo} />
           <Text>Disconnected</Text>
           <Button onClick={onReconnect}>Reconnect</Button>
         </Space>
@@ -51,7 +59,7 @@ export const ConnStatus: React.FC<Props> = ({ status, onReconnect }) => {
     case 'error':
       return (
         <Space>
-          <Dot colour="#0000ff" />
+          <Dot colour={colorError} />
           <Text>Error</Text>
         </Space>
       )

@@ -1,5 +1,5 @@
 import { DeployLogsItem } from "@/components/deploy/deploy-logs-item";
-import { Collapse, Space } from "antd";
+import { Collapse, Space, theme } from "antd";
 import { LoadingOutlined, CheckOutlined, WarningOutlined } from '@ant-design/icons';
 import { Spin } from 'antd';
 import { IDeployMessageDto, IDeployMessagePhase, deployPhaseTitles } from "models";
@@ -18,9 +18,15 @@ interface Props {
   isActive: boolean;
 }
 
-const activeIcon = <LoadingOutlined style={{ fontSize: 20 }} spin />;
-
 export const DeployLogsSection: React.FC<Props> = ({ section, isActive }) => {
+  const {
+    token: {
+      colorSuccess,
+      colorError,
+      colorInfo,
+    },
+  } = theme.useToken();
+
   const [isOpen, setIsOpen] = useState(false);
 
   return (
@@ -31,10 +37,10 @@ export const DeployLogsSection: React.FC<Props> = ({ section, isActive }) => {
       <Panel
         header={deployPhaseTitles[section.phase]}
         extra={
-          section.error ? <WarningOutlined style={{ fontSize: 20 }} />
+          section.error ? <WarningOutlined style={{ fontSize: 20, color: colorError }} />
             : isActive
-              ? <Spin indicator={activeIcon} />
-              : <CheckOutlined style={{ fontSize: 20 }} />
+              ? <Spin indicator={<LoadingOutlined style={{ fontSize: 20, color: colorInfo }} spin />} />
+              : <CheckOutlined style={{ fontSize: 20, color: colorSuccess }} />
         }
         key="1"
       >

@@ -14,7 +14,9 @@ export const Wrapper: React.FC<React.PropsWithChildren> = ({ children }) => {
     <ConfigProvider theme={{
       algorithm: darkAlgorithm,
       token: {
-        colorPrimary: "#a55eff"
+        colorPrimary: "#149c26",
+        colorBgBase: "#000507",
+        borderRadius: 1000,
       }
     }}>
       <Head>
