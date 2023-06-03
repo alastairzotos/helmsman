@@ -82,7 +82,6 @@ export const DeployLogs: React.FC<Props> = ({ project }) => {
           width: 1000,
           overflowY: 'scroll',
           maxHeight: 500,
-          // backgroundColor: '#101010'
           backgroundColor: bgColour,
         }}
       >

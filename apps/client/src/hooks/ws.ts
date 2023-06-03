@@ -1,3 +1,4 @@
+import { useRefreshToken } from "@/hooks/refresh";
 import { useEffect, useState } from "react";
 
 export type IConnStatus = 'connecting' | 'connected' | 'disconnected' | 'error' | null;
@@ -19,7 +20,7 @@ export const useWebSockets = <T extends Object>(
   port: number,
   onReceiveMessage: (data: T) => void
 ): [IConnStatus, IReconnectFn] => {
-  const [counter, setCounter] = useState(0);
+  const [token, refreshToken] = useRefreshToken();
   const [connStatus, setConnStatus] = useState<IConnStatus>(null);
 
   useEffect(() => {
@@ -30,9 +31,7 @@ export const useWebSockets = <T extends Object>(
     ws.onerror = () => setConnStatus('error');
     ws.onclose = () => setConnStatus('disconnected');
     ws.onmessage = (e) => onReceiveMessage(JSON.parse(e.data));
-  }, [counter]);
+  }, [token]);
 
-  const reconnect = () => setCounter(cur => cur + 1);
-
-  return [connStatus, reconnect];
+  return [connStatus, refreshToken];
 }
