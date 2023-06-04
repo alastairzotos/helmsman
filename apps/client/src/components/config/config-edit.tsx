@@ -1,10 +1,10 @@
-import { Form, Input } from "antd";
+import { Input } from "antd";
 import { ConfigSchema, IConfig } from "models";
 import React from "react";
-import { Controller } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { ResourceForm } from "@/components/_core/resource-form";
 import { useUpdateConfig } from "@/state/config.state";
+import { FormItem } from "@/components/_core/form-item";
 
 interface Props {
   config: IConfig;
@@ -15,7 +15,6 @@ export const ConfigEdit: React.FC<Props> = ({ config }) => {
 
   return (
     <ResourceForm
-      title="Manage Config"
       resolver={zodResolver(ConfigSchema)}
       resource={config}
       saveStatus={updateConfigStatus}
@@ -23,29 +22,21 @@ export const ConfigEdit: React.FC<Props> = ({ config }) => {
     >
       {({ errors, control }) => (
         <>
-          <Form.Item
+          <FormItem
             label="Github Username"
-            validateStatus={errors.githubUsername && "error"}
-            help={errors.githubUsername && errors.githubUsername.message}
-          >
-            <Controller
-              name="githubUsername"
-              control={control}
-              render={({ field }) => <Input {...field} />}
-            />
-          </Form.Item>
+            field="githubUsername"
+            control={control}
+            errors={errors}
+            render={(field) => <Input {...field} />}
+          />
 
-          <Form.Item
+          <FormItem
             label="Github Token"
-            validateStatus={errors.githubToken && "error"}
-            help={errors.githubToken && errors.githubToken.message}
-          >
-            <Controller
-              name="githubToken"
-              control={control}
-              render={({ field }) => <Input {...field} />}
-            />
-          </Form.Item>
+            field="githubToken"
+            control={control}
+            errors={errors}
+            render={(field) => <Input {...field} />}
+          />
         </>
       )}
     </ResourceForm>
