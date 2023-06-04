@@ -78,7 +78,7 @@ export const ProjectManage: React.FC<Props> = ({ project, saveStatus, onSave }) 
             <Controller
               name="path"
               control={control}
-              render={({ field }) => <Input {...field} />}
+              render={({ field }) => <Input {...field} addonBefore="<REPO_PATH>" />}
             />
           </Form.Item>
 
@@ -90,7 +90,7 @@ export const ProjectManage: React.FC<Props> = ({ project, saveStatus, onSave }) 
             <Controller
               name="valuesPath"
               control={control}
-              render={({ field }) => <Input {...field} />}
+              render={({ field }) => <Input {...field} addonBefore="<REPO_PATH>" />}
             />
           </Form.Item>
 

@@ -6,8 +6,8 @@ export const ProjectSchema = z.object({
   namespace: z.string().min(3),
   helmRepoUrl: z.string().url(),
   helmRelease: z.string().min(6),
-  path: z.string().min(4),
-  valuesPath: z.string().min(4),
+  path: z.string().min(4).refine(val => val.startsWith('/'), "Path must starts with '/'"),
+  valuesPath: z.string().min(4).refine(val => val.startsWith('/'), "Path must starts with '/'"),
   repoUrl: z.string().url(),
   secrets: z.record(z.string()).optional(),
 })

@@ -31,8 +31,8 @@ export function ResourceForm<T extends FieldValues>(props: ResourceFormProps<T>)
     handleSubmit,
     getValues,
     setValue,
-    formState: { errors, isValid }
-  } = useForm<T>({ defaultValues: resource, resolver });
+    formState: { errors, isValid },
+  } = useForm<T>({ defaultValues: resource, resolver, mode: 'onChange' });
 
   return (
     <FormBase
