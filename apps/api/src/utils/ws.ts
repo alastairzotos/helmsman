@@ -23,13 +23,12 @@ export class WebSocketChannel {
 }
 
 export class WebSocketManager {
-  private wss: WebSocketServer;
   private channels: Record<string, WebSocketChannel> = {};
 
   constructor(port: number) {
-    this.wss = new WebSocketServer({ port });
+    const wss = new WebSocketServer({ port });
 
-    this.wss.on('connection', (conn, req) => {
+    wss.on('connection', (conn, req) => {
       const handle = new URLSearchParams(req.url.substring(2)).get('handle')
 
       const channel = this.getChannel(handle);
