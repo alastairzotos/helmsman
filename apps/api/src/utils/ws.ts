@@ -1,17 +1,17 @@
 import { WebSocketServer, WebSocket } from 'ws';
 import { v4 as uuidv4 } from 'uuid';
 
-export class WebSocketHandler {
+export class WebSocketChannel {
   private connections: Record<string, WebSocket> = {};
 
-  connect(conn: WebSocket) {
+  addConnection(conn: WebSocket) {
     const connId = uuidv4();
     this.connections[connId] = conn;
 
     return connId;
   }
 
-  disconnect(connId: string) {
+  removeConnection(connId: string) {
     delete this.connections[connId];
 
     return Object.keys(this.connections).length === 0;
@@ -24,7 +24,7 @@ export class WebSocketHandler {
 
 export class WebSocketManager {
   private wss: WebSocketServer;
-  private wsConnections: Record<string, WebSocketHandler> = {};
+  private channels: Record<string, WebSocketChannel> = {};
 
   constructor(port: number) {
     this.wss = new WebSocketServer({ port });
@@ -32,19 +32,19 @@ export class WebSocketManager {
     this.wss.on('connection', (conn, req) => {
       const handle = new URLSearchParams(req.url.substring(2)).get('handle')
 
-      const handler = this.getHandler(handle);
+      const channel = this.getChannel(handle);
 
-      const connId = handler.connect(conn);
+      const connId = channel.addConnection(conn);
 
       conn.on('close', () => {
-        if (handler.disconnect(connId)) {
-          delete this.wsConnections[handle];
+        if (channel.removeConnection(connId)) {
+          delete this.channels[handle];
         }
       })
     });
   }
 
-  getHandler(handle: string) {
-    return this.wsConnections[handle] = this.wsConnections[handle] || new WebSocketHandler();
+  getChannel(handle: string) {
+    return this.channels[handle] = this.channels[handle] || new WebSocketChannel();
   }
 }

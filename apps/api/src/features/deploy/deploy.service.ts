@@ -6,7 +6,7 @@ import { GitService } from "integrations/git/git.service";
 import { HelmService } from "integrations/helm/helm.service";
 import { IConfig, IProject, deployMessage } from "models";
 import { modifyRecord } from "utils";
-import { WebSocketHandler, WebSocketManager } from "utils/ws";
+import { WebSocketChannel, WebSocketManager } from "utils/ws";
 
 const { status, phase, text, progress } = deployMessage;
 
@@ -30,7 +30,7 @@ export class DeployService {
       return "not-found";
     }
 
-    const ws = this.wsManager.getHandler(projectName);
+    const ws = this.wsManager.getChannel(projectName);
     const project = await this.projectsService.getByOwnerIdAndNameWithSecrets(ownerId, projectName);
 
     if (!project) {
@@ -66,7 +66,7 @@ export class DeployService {
     return null;
   }
 
-  async deploy(ws: WebSocketHandler, project: IProject, helmRepo: string, tag: string) {
+  async deploy(ws: WebSocketChannel, project: IProject, helmRepo: string, tag: string) {
     ws.sendMessage(phase("deploying"))
 
     const secrets = modifyRecord(project.secrets, secret => this.cryptoService.decrypt(secret));
@@ -85,7 +85,7 @@ export class DeployService {
     await this.helmService.deploy(project, secrets, helmRepo, tag, message => ws.sendMessage(text(message)));
   }
 
-  async getTag(ws: WebSocketHandler, project: IProject) {
+  async getTag(ws: WebSocketChannel, project: IProject) {
     ws.sendMessage(phase("getting-tag"));
 
     const gitInfo = await this.gitService.getRemoteInfo(project.repoUrl);
@@ -97,7 +97,7 @@ export class DeployService {
     return latestTag;
   }
 
-  async pullHelmRepo(ws: WebSocketHandler, config: IConfig, project: IProject) {
+  async pullHelmRepo(ws: WebSocketChannel, config: IConfig, project: IProject) {
     ws.sendMessage(phase("pulling-helm-repo"))
 
     let lastPhase = '';
@@ -119,7 +119,7 @@ export class DeployService {
     return projName;
   }
 
-  async cleanup(ws: WebSocketHandler, helmRepo: string) {
+  async cleanup(ws: WebSocketChannel, helmRepo: string) {
     ws.sendMessage(phase("cleaning-up"));
 
     ws.sendMessage(text("Removing helm repository"));
