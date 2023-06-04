@@ -79,7 +79,7 @@ export const DeployLogs: React.FC<Props> = ({ project }) => {
     <Space direction="vertical">
       <Card
         style={{
-          width: 1000,
+          width: 800,
           overflowY: 'scroll',
           maxHeight: 500,
           backgroundColor: bgColour,
