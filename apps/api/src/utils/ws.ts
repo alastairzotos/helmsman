@@ -11,10 +11,10 @@ export class WebSocketChannel {
     return connId;
   }
 
-  removeConnection(connId: string) {
+  removeConnection(connId: string, cb: (channelEmpty: boolean) => void) {
     delete this.connections[connId];
 
-    return Object.keys(this.connections).length === 0;
+    cb(Object.keys(this.connections).length === 0);
   }
 
   sendMessage(message: Object) {
@@ -36,9 +36,7 @@ export class WebSocketManager {
       const connId = channel.addConnection(conn);
 
       conn.on('close', () => {
-        if (channel.removeConnection(connId)) {
-          delete this.channels[handle];
-        }
+        channel.removeConnection(connId, (empty) => empty && delete this.channels[handle])
       })
     });
   }
