@@ -2,9 +2,9 @@ import { Input } from "antd";
 import { ConfigSchema, IConfig } from "models";
 import React from "react";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { ResourceForm } from "@/components/_core/resource-form";
+import { ResourceForm } from "@/components/_core/form/resource-form";
 import { useUpdateConfig } from "@/state/config.state";
-import { FormItem } from "@/components/_core/form-item";
+import { FormItem } from "@/components/_core/form/form-item";
 
 interface Props {
   config: IConfig;

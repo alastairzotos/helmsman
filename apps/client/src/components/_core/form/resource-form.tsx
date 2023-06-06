@@ -1,7 +1,7 @@
 import { Button } from "antd";
 import React from "react";
 import { useForm, FieldValues, Resolver, DeepPartial, FieldErrors, Control, UseFormGetValues, UseFormSetValue } from "react-hook-form";
-import { FormBase, FormBaseProps } from "@/components/_core/form-base";
+import { FormBase, FormBaseProps } from "@/components/_core/form/form-base";
 
 interface ChildrenProps<T extends FieldValues> {
   errors: FieldErrors<T>;

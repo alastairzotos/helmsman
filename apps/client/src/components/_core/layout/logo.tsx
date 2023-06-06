@@ -1,4 +1,4 @@
-import { HEADER_HEIGHT } from "@/components/_core/sizes";
+import { HEADER_HEIGHT } from "@/components/_core/layout/sizes";
 import { urls } from "@/urls";
 import { Space, Typography } from "antd";
 import Image from "next/image";

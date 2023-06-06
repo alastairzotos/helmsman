@@ -1,5 +1,5 @@
 import { PasswordReveal } from "@/components/_core/password-reveal";
-import { StatusSwitch } from "@/components/_core/status-switch";
+import { StatusSwitch } from "@/components/_core/layout/status-switch";
 import { ConfigEdit } from "@/components/config/config-edit";
 import { useGetConfig } from "@/state/config.state";
 import React from "react";

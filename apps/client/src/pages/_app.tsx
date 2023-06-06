@@ -1,7 +1,7 @@
 import "@/styles/globals.css";
 
 import type { AppProps } from "next/app";
-import { Wrapper } from "@/components/_core/wrapper"
+import { Wrapper } from "@/components/_core/layout/wrapper"
 import { getEnv } from "@/utils/env";
 import { useRouter } from "next/router";
 import { AuthProvider, useCheckAuthState } from "@bitmetro/auth-react";

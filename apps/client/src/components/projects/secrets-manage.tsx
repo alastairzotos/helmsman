@@ -1,5 +1,5 @@
 import { PasswordReveal } from "@/components/_core/password-reveal";
-import { StatusSwitch } from "@/components/_core/status-switch";
+import { StatusSwitch } from "@/components/_core/layout/status-switch";
 import { SecretsEdit } from "@/components/projects/secrets-edit";
 import { useGetSecrets, useUpdateSecrets } from "@/state/projects.state";
 import { IProject, IUpdateSecretsDto, WithId } from "models";

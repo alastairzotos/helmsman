@@ -1,4 +1,4 @@
-import { StatusSwitch } from "@/components/_core/status-switch";
+import { StatusSwitch } from "@/components/_core/layout/status-switch";
 import { Deploy } from "@/components/deploy/deploy";
 import { ProjectManage } from "@/components/projects/project-manage";
 import { SecretsManage } from "@/components/projects/secrets-manage";

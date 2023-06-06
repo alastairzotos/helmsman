@@ -1,11 +1,11 @@
 import React from 'react';
-import { AppstoreOutlined, SettingOutlined, KeyOutlined } from '@ant-design/icons';
+import { AppstoreOutlined, SettingOutlined, ApiOutlined } from '@ant-design/icons';
 import { Divider, MenuProps, theme, Layout } from 'antd';
 import { Menu } from 'antd';
-import { HEADER_HEIGHT, NAVIGATION_WIDTH } from '@/components/_core/sizes';
+import { HEADER_HEIGHT, NAVIGATION_WIDTH } from '@/components/_core/layout/sizes';
 import { urls } from '@/urls';
 import { useRouter } from 'next/router';
-import { Logo } from '@/components/_core/logo';
+import { Logo } from '@/components/_core/layout/logo';
 
 const { Sider } = Layout;
 
@@ -30,7 +30,7 @@ function getItem(
 const items: MenuProps['items'] = [
   getItem("Config", urls.config.home(), <SettingOutlined />),
   getItem("Projects", urls.projects.home(), <AppstoreOutlined />),
-  getItem("API Keys", urls.apiKeys.home(), <KeyOutlined />),
+  getItem("API Keys", urls.apiKeys.home(), <ApiOutlined />),
 ]
 
 export const Navigation: React.FC = () => {

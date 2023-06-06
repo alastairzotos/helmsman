@@ -1,4 +1,4 @@
-import { FormBase } from "@/components/_core/form-base";
+import { FormBase } from "@/components/_core/form/form-base";
 import { MinusCircleOutlined, PlusOutlined } from '@ant-design/icons';
 import { FetchStatus } from "@bitmetro/create-query";
 import { Button, Form, Input, Space } from "antd";
