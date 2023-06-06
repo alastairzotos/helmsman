@@ -9,6 +9,7 @@
     "lint": "next lint"
   },
   "dependencies": {
+    "@bitmetro/auth-react": "1.0.1",
     "@bitmetro/create-query": "^0.0.7",
     "@bitmetro/http-client": "^0.0.4",
     "@types/node": "20.2.5",

@@ -1,11 +1,11 @@
 import { Controller, InternalServerErrorException, NotFoundException, Param, Post, UseGuards } from "@nestjs/common";
-import { CustomAuthGuard } from "features/auth/custom-auth.guard";
 import { DeployService } from "features/deploy/deploy.service";
-import { Principal } from "plugins/user/decorators/principal.decorator";
-import { User } from "plugins/user/schemas/user.schema";
+import { Principal } from "features/auth/principal.decorator";
+import { AuthGuard } from "features/auth/auth.guard";
+import { IIdentity, WithId } from "@bitmetro/auth-node";
 
 @Controller('deploy')
-@UseGuards(CustomAuthGuard)
+@UseGuards(AuthGuard)
 export class DeployController {
   constructor(
     private readonly deployService: DeployService,
@@ -13,7 +13,7 @@ export class DeployController {
 
   @Post(':projectName')
   async deploy(
-    @Principal() user: User,
+    @Principal() user: WithId<IIdentity>,
     @Param('projectName') projectName: string,
   ) {
     const result = await this.deployService.deployProject(user._id, projectName);

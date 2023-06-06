@@ -1,5 +1,5 @@
+import { useLoggedInUser, useLogout } from "@bitmetro/auth-react";
 import { HEADER_HEIGHT } from "@/components/_core/sizes";
-import { useLoggedInUser, useLogout } from "@/plugins/user";
 import { Button, Layout, Space, Typography, theme } from "antd";
 import React from "react";
 

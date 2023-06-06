@@ -1,12 +1,12 @@
 import { Body, Controller, Delete, Get, Param, Post, UseGuards } from "@nestjs/common";
 import { ApiKeysService } from "features/api-keys/api-keys.service";
-import { CustomAuthGuard } from "features/auth/custom-auth.guard";
 import { ICreateApiKeyDto } from "models";
-import { Principal } from "plugins/user/decorators/principal.decorator";
-import { User } from "plugins/user/schemas/user.schema";
+import { Principal } from "features/auth/principal.decorator";
+import { AuthGuard } from "features/auth/auth.guard";
+import { IIdentity, WithId } from "@bitmetro/auth-node";
 
 @Controller('api-keys')
-@UseGuards(CustomAuthGuard)
+@UseGuards(AuthGuard)
 export class ApiKeysController {
   constructor(
     private readonly apiKeysService: ApiKeysService,
@@ -14,14 +14,14 @@ export class ApiKeysController {
 
   @Get()
   async getForOwner(
-    @Principal() user: User
+    @Principal() user: WithId<IIdentity>
   ) {
     return await this.apiKeysService.getForOwner(user._id);
   }
 
   @Post()
   async create(
-    @Principal() user: User,
+    @Principal() user: WithId<IIdentity>,
     @Body() { name }: ICreateApiKeyDto,
   ) {
     return await this.apiKeysService.create(user._id, name);

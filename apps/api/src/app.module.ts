@@ -4,7 +4,6 @@ import { MongooseModule } from '@nestjs/mongoose';
 import { EnvironmentModule } from 'environment/environment.module';
 import { EnvironmentService } from 'environment/environment.service';
 import { ApiKeysModule } from 'features/api-keys/api-keys.module';
-import { CustomAuthModule } from 'features/auth/custom-auth.module';
 import { ConfigModule } from 'features/config/config.module';
 import { CryptoModule } from 'features/crypto/crypto.module';
 import { DeployModule } from 'features/deploy/deploy.module';
@@ -13,8 +12,8 @@ import { HealthModule } from 'features/health/health.module';
 import { ProjectsModule } from 'features/projects/projects.module';
 import { GitModule } from 'integrations/git/git.module';
 import { HelmModule } from 'integrations/helm/helm.module';
-import { UsersModule } from 'plugins/user/features/users/users.module';
-import { AuthModule } from 'plugins/user/guards/auth.module';
+import { IdentityModule } from 'integrations/identity/identity.module';
+import { AuthModule } from 'features/auth/auth.module';
 
 @Module({
   imports: [
@@ -23,14 +22,13 @@ import { AuthModule } from 'plugins/user/guards/auth.module';
     EnvironmentModule,
     ProjectsModule,
     CryptoModule,
-    UsersModule,
     AuthModule,
     DeployModule,
     GitModule,
     HelmModule,
     ConfigModule,
     ApiKeysModule,
-    CustomAuthModule,
+    IdentityModule,
     MongooseModule.forRootAsync({
       imports: [EnvironmentModule],
       inject: [EnvironmentService],

@@ -2,17 +2,17 @@ import "@/styles/globals.css";
 
 import type { AppProps } from "next/app";
 import { Wrapper } from "@/components/_core/wrapper"
-import { AuthProvider, useCheckAuthState } from "@/plugins/user";
 import { getEnv } from "@/utils/env";
 import { useRouter } from "next/router";
+import { AuthProvider, useCheckAuthState } from "@bitmetro/auth-react";
 import { urls } from "@/urls";
 
 const Inner = ({ Component, pageProps }: AppProps) => {
   const router = useRouter();
 
   useCheckAuthState(({ accessToken }) => {
-    if (!accessToken) {
-      router.push(urls.login());
+    if (!accessToken && !router.pathname.startsWith('/login')) {
+      router.push(urls.login(router.asPath.split('?')[0]));
     }
   }, [router.pathname])
 

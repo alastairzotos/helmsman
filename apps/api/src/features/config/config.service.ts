@@ -1,26 +1,25 @@
 import { Injectable } from "@nestjs/common";
 import { ConfigRepository } from "features/config/config.repository";
 import { CryptoService } from "features/crypto/crypto.service";
+import { IdentityService } from "integrations/identity/identity.service";
 import { IConfig } from "models";
-import { UsersService } from "plugins/user/features/users/users.service";
-import { User } from "plugins/user/schemas/user.schema";
 
 @Injectable()
 export class ConfigService {
   constructor(
     private readonly configRepo: ConfigRepository,
     private readonly cryptoService: CryptoService,
-    private readonly usersService: UsersService,
+    private readonly identityService: IdentityService,
   ) {}
 
-  async get(owner: User, password: string): Promise<IConfig | false> {
+  async get(owner: any, password: string): Promise<IConfig | false> {
     const config = await this.configRepo.get(owner._id);
 
     if (!config || config.ownerId.toString() !== owner._id.toString()) {
       return false;
     }
 
-    const pwdCheck = await this.usersService.isValidUserPassowrd(owner._id, password);
+    const pwdCheck = await this.identityService.verifyPassword(owner._id, password);
 
     if (!pwdCheck) {
       return false;

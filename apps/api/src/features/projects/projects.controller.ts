@@ -1,13 +1,12 @@
 import { Controller, Post, Get, Patch, Delete, Param, Body, UseGuards, ForbiddenException } from "@nestjs/common";
-import { CustomAuthGuard } from "features/auth/custom-auth.guard";
 import { ProjectsService } from "features/projects/projects.service";
-import { IGetSecretsDto, IProject, IUpdateSecretsDto, UpdateProps, WithId } from "models";
-import { Principal } from "plugins/user/decorators/principal.decorator";
-import { User } from "plugins/user/schemas/user.schema";
-import { IUser } from "user-shared";
+import { IGetSecretsDto, IProject, IUpdateSecretsDto, UpdateProps } from "models";
+import { Principal } from "features/auth/principal.decorator";
+import { AuthGuard } from "features/auth/auth.guard";
+import { IIdentity, WithId } from "@bitmetro/auth-node";
 
 @Controller('projects')
-@UseGuards(CustomAuthGuard)
+@UseGuards(AuthGuard)
 export class ProjectsController {
   constructor(
     private readonly projectsService: ProjectsService,
@@ -15,7 +14,7 @@ export class ProjectsController {
 
   @Post()
   async create(
-    @Principal() user: WithId<IUser>,
+    @Principal() user: WithId<IIdentity>,
     @Body() project: IProject
   ) {
     return await this.projectsService.create(user, project);
@@ -23,7 +22,7 @@ export class ProjectsController {
 
   @Get()
   async getAll(
-    @Principal() user: WithId<IUser>,
+    @Principal() user: WithId<IIdentity>,
   ) {
     return await this.projectsService.getAll(user);
   }
@@ -58,7 +57,7 @@ export class ProjectsController {
 
   @Post('get-secrets')
   async getSecrets(
-    @Principal() user: User,
+    @Principal() user: WithId<IIdentity>,
     @Body() { id, password }: IGetSecretsDto
   ) {
     const secrets = await this.projectsService.getSecrets(user, id, password);

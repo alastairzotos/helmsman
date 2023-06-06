@@ -426,6 +426,23 @@
   resolved "https://registry.npmjs.org/@bcoe/v8-coverage/-/v8-coverage-0.2.3.tgz"
   integrity sha512-0hYQ8SB4Db5zvZB4axdMHGwEaQjkZzFjQiN9LVYvIFB2nSUHW9tYpxWriPrWDASIxiaXax83REcLxuSdnGPZtw==
 
+"@bitmetro/auth-node@1.0.3":
+  version "1.0.3"
+  resolved "https://registry.yarnpkg.com/@bitmetro/auth-node/-/auth-node-1.0.3.tgz#fbe6992e11167673fb189c902a48fb5bbdf8b8e2"
+  integrity sha512-wdwoPYcUCQvSZCaqcDbDySjP7FxMM/w9lBd20/uz/wf/oN7anEd/+cROeKZmWo56ZnpEj+p0pouSCjSR6eDuSQ==
+  dependencies:
+    "@bitmetro/identity" "^1.0.0"
+    axios "^1.4.0"
+
+"@bitmetro/auth-react@1.0.1":
+  version "1.0.1"
+  resolved "https://registry.yarnpkg.com/@bitmetro/auth-react/-/auth-react-1.0.1.tgz#4f8df6f74f0129dbd2151a9b4618eee198550516"
+  integrity sha512-2bgzAnFCbeSGLFYLxIQFsEytaUVzDMta+qg69VmQmIst6sHIBYme8XwS0zCYw+kZIaBT1vCCXaf+9H+MTWCNpA==
+  dependencies:
+    "@bitmetro/identity" "^1.0.0"
+    jsonwebtoken "^9.0.0"
+    zustand "^4.3.8"
+
 "@bitmetro/create-query@^0.0.7":
   version "0.0.7"
   resolved "https://registry.yarnpkg.com/@bitmetro/create-query/-/create-query-0.0.7.tgz#496e7c1961e21107d16b7846760641888837a338"
@@ -439,6 +456,13 @@
   integrity sha512-2Y7RYEOB4S6gKQSebiWnAXW+0uEnWOjjRvjpkluCODTexWg3qz/hIU83VWCHeQToSXPGj2+dWcByGTr0OBrIaA==
   dependencies:
     axios "1.2"
+
+"@bitmetro/identity@^1.0.0":
+  version "1.0.0"
+  resolved "https://registry.yarnpkg.com/@bitmetro/identity/-/identity-1.0.0.tgz#ea30980c399f9687482517a4300f0b078671d48a"
+  integrity sha512-BcvIDoVCCmeV8Q1wmKnc7gGADxgr2m/LFu1UpMrvO8ZEXGxNomVMjnRSfhTq4HwR7SGroO7j2UcQDttYkhmttg==
+  dependencies:
+    zod "^3.21.4"
 
 "@colors/colors@1.5.0":
   version "1.5.0"
@@ -2168,6 +2192,15 @@ axios@1.2:
   version "1.2.6"
   resolved "https://registry.yarnpkg.com/axios/-/axios-1.2.6.tgz#eacb6d065baa11bad5959e7ffa0cb6745c65f392"
   integrity sha512-rC/7F08XxZwjMV4iuWv+JpD3E0Ksqg9nac4IIg6RwNuF0JTeWoCo/mBNG54+tNhhI11G3/VDRbdDQTs9hGp4pQ==
+  dependencies:
+    follow-redirects "^1.15.0"
+    form-data "^4.0.0"
+    proxy-from-env "^1.1.0"
+
+axios@^1.4.0:
+  version "1.4.0"
+  resolved "https://registry.yarnpkg.com/axios/-/axios-1.4.0.tgz#38a7bf1224cd308de271146038b551d725f0be1f"
+  integrity sha512-S4XCWMEmzvo64T9GfvQDOXgYRDJ/wsSZc7Jvdgx5u1sd0JwsuPLqb3SYmusag+edF6ziyMensPVqLTSc1PiSEA==
   dependencies:
     follow-redirects "^1.15.0"
     form-data "^4.0.0"
@@ -5868,7 +5901,7 @@ node-emoji@1.11.0:
   dependencies:
     lodash "^4.17.21"
 
-node-fetch@^2.6.1, node-fetch@^2.6.7:
+node-fetch@^2.6.1, node-fetch@^2.6.6, node-fetch@^2.6.7:
   version "2.6.11"
   resolved "https://registry.npmjs.org/node-fetch/-/node-fetch-2.6.11.tgz"
   integrity sha512-4I6pdBY1EthSqDmJkiNk3JIT8cswwR9nfeW/cPdUagJYEQG7R95WRH74wpz7ma8Gh/9dI9FP+OU+0E4FvtA55w==

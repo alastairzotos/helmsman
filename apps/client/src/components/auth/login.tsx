@@ -1,72 +1,18 @@
-import { ResourceForm } from '@/components/_core/resource-form';
-import { Form, Input } from 'antd';
+import { Button } from 'antd';
 import React from 'react';
-import { Controller } from 'react-hook-form';
-import { zodResolver } from "@hookform/resolvers/zod";
-import { z } from 'zod';
 import { useRouter } from 'next/router';
-import { urls } from '@/urls';
-import { useLogin } from '@/plugins/user';
-
-const LoginSchema =
-  z.object({
-    email: z.string(),
-    password: z.string().min(8),
-  })
-
-type ILoginProps = z.infer<typeof LoginSchema>;
+import { getEnv } from '@/utils/env';
 
 export const LoginForm: React.FC = () => {
   const router = useRouter();
-  const [loginStatus, loginUser] = useLogin();
 
-  const handleLoginClick = async ({ email, password }: ILoginProps) => {
-    await loginUser(email, password);
-    router.push(urls.projects.home());
+  const handleLoginClick = async () => {
+    router.push(`${getEnv().idServerUrl}/login?propertyId=bitmetro.mission-control&fwd=${encodeURIComponent(router.query.fwd as string)}`);
   }
 
   return (
-    <ResourceForm
-      title='Login'
-
-      resource={{
-        email: '',
-        password: '',
-      } as ILoginProps}
-
-      resolver={zodResolver(LoginSchema)}
-
-      saveStatus={loginStatus}
-      onSave={handleLoginClick}
-      savePrompt="Login"
-    >
-      {({ errors, control }) => (
-        <>
-          <Form.Item
-            label="Email"
-            validateStatus={errors.email && "error"}
-            help={errors.email && errors.email.message}
-          >
-            <Controller
-              name="email"
-              control={control}
-              render={({ field }) => <Input {...field} />}
-            />
-          </Form.Item>
-
-          <Form.Item
-            label="Password"
-            validateStatus={errors.password && "error"}
-            help={errors.password && errors.password.message}
-          >
-            <Controller
-              name="password"
-              control={control}
-              render={({ field }) => <Input type="password" {...field} />}
-            />
-          </Form.Item>
-        </>
-      )}
-    </ResourceForm>
+    <Button onClick={handleLoginClick}>
+      Login
+    </Button>
   )
 }

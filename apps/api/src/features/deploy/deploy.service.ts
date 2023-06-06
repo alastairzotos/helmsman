@@ -69,9 +69,9 @@ export class DeployService {
   async deploy(ws: WebSocketChannel, project: IProject, helmRepo: string, tag: string) {
     ws.sendMessage(phase("deploying"))
 
-    const secrets = modifyRecord(project.secrets, secret => this.cryptoService.decrypt(secret));
+    const secrets = modifyRecord(project.secrets || {}, secret => this.cryptoService.decrypt(secret));
 
-    const hiddenSecrets = Object.keys(project.secrets)
+    const hiddenSecrets = Object.keys(secrets)
       .reduce((acc, cur) => ({ ...acc, [cur]: '****' }), {} as Record<string, string>);
 
     const args = this.helmService.generateHelmArgs(
