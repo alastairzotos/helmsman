@@ -21,9 +21,7 @@ const Inner = ({ Component, pageProps }: AppProps) => {
 
 const AppPage = (props: AppProps) => {
   return (
-    <AuthProvider
-      localStorageKey="@mission-control:access-token"
-    >
+    <AuthProvider localStorageKey="@mission-control:access-token">
       <Wrapper>
         <Inner {...props} />
       </Wrapper>
