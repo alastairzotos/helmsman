@@ -23,7 +23,6 @@ const AppPage = (props: AppProps) => {
   return (
     <AuthProvider
       localStorageKey="@mission-control:access-token"
-      apiUrl={getEnv().apiUrl + '/api/v1'}
     >
       <Wrapper>
         <Inner {...props} />
