@@ -426,20 +426,20 @@
   resolved "https://registry.npmjs.org/@bcoe/v8-coverage/-/v8-coverage-0.2.3.tgz"
   integrity sha512-0hYQ8SB4Db5zvZB4axdMHGwEaQjkZzFjQiN9LVYvIFB2nSUHW9tYpxWriPrWDASIxiaXax83REcLxuSdnGPZtw==
 
-"@bitmetro/auth-node@1.0.5":
-  version "1.0.5"
-  resolved "https://registry.yarnpkg.com/@bitmetro/auth-node/-/auth-node-1.0.5.tgz#2ff2110f298c308206d458e1721ab11d87de6c3a"
-  integrity sha512-pahupUtYsf+SafTgWlDd+r2dPS5mY7fe6DoNplYhQt+/QV5LsvvSP+3veZ2BygXM7icsqSqxROEl3M0/utXtZw==
+"@bitmetro/auth-node@1.0.10":
+  version "1.0.10"
+  resolved "https://registry.yarnpkg.com/@bitmetro/auth-node/-/auth-node-1.0.10.tgz#a512503ba7bd99eecc0cd1cc02d6373542cee694"
+  integrity sha512-WN4+NY5lCKNTrFxE764ybIWC+PcD/jW2VYwYZ63TJ8aXYmTMNdsZCM3Um78q1OXsguGHuUPl4D8lnMLg8YwqCg==
   dependencies:
     "@bitmetro/identity" "1.0.1"
     axios "^1.4.0"
 
-"@bitmetro/auth-react@1.0.2":
-  version "1.0.2"
-  resolved "https://registry.yarnpkg.com/@bitmetro/auth-react/-/auth-react-1.0.2.tgz#503c2760030fd16d770c37aa1f66b6b42604f04f"
-  integrity sha512-eqVpA388TKxjr+VPavoBZP0fIDTx5qGGlFv7tu1f8JbwUBoq87iAaZW+9V3PUO1E5RhVHKuOdbMPR3cwgHT8qA==
+"@bitmetro/auth-react@1.0.10":
+  version "1.0.10"
+  resolved "https://registry.yarnpkg.com/@bitmetro/auth-react/-/auth-react-1.0.10.tgz#493fab6d576565b0006ec97e307ae55984832e0a"
+  integrity sha512-3h12OA90Z1S0AHbmB+/FN6hkwrz6R55oFow8Lh9sscD5F2kFTcebveoaMpUWmJZ7OpN3IhgEOs1xD5xXRKJ8vQ==
   dependencies:
-    "@bitmetro/identity" "^1.0.0"
+    "@bitmetro/identity" "1.0.1"
     jsonwebtoken "^9.0.0"
     zustand "^4.3.8"
 
@@ -461,13 +461,6 @@
   version "1.0.1"
   resolved "https://registry.yarnpkg.com/@bitmetro/identity/-/identity-1.0.1.tgz#08cf8620054b08b297fea9d2a060609ecc3c2644"
   integrity sha512-2ho3EbLs3/VfbKqECZci1XY4HtjIa0KAhmmkK/S/QoYvrbHdy5TNf00srBkZx+YTW2ncQ6uoo1mKzE0dMsBtWA==
-  dependencies:
-    zod "^3.21.4"
-
-"@bitmetro/identity@^1.0.0":
-  version "1.0.0"
-  resolved "https://registry.yarnpkg.com/@bitmetro/identity/-/identity-1.0.0.tgz#ea30980c399f9687482517a4300f0b078671d48a"
-  integrity sha512-BcvIDoVCCmeV8Q1wmKnc7gGADxgr2m/LFu1UpMrvO8ZEXGxNomVMjnRSfhTq4HwR7SGroO7j2UcQDttYkhmttg==
   dependencies:
     zod "^3.21.4"
 
