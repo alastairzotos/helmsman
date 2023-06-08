@@ -1,4 +1,6 @@
 import { WebSocketServer, WebSocket } from 'ws';
+import * as express from 'express';
+import * as cors from 'cors';
 import { v4 as uuidv4 } from 'uuid';
 
 export class WebSocketChannel {
@@ -26,7 +28,10 @@ export class WebSocketManager {
   private channels: Record<string, WebSocketChannel> = {};
 
   constructor(port: number) {
-    const wss = new WebSocketServer({ port });
+    const server = express();
+    server.use(cors());
+
+    const wss = new WebSocketServer({ server: server.listen(port) });
 
     wss.on('connection', (conn, req) => {
       const handle = new URLSearchParams(req.url.substring(2)).get('handle')
