@@ -1,4 +1,4 @@
-import { Controller, InternalServerErrorException, NotFoundException, Param, Post, UseGuards } from "@nestjs/common";
+import { Controller, Delete, InternalServerErrorException, NotFoundException, Param, Post, UseGuards } from "@nestjs/common";
 import { DeployService } from "features/deploy/deploy.service";
 import { Principal } from "features/auth/principal.decorator";
 import { AuthGuard } from "features/auth/auth.guard";
@@ -22,6 +22,18 @@ export class DeployController {
       throw new NotFoundException();
     } else if (result === "error") {
       throw new InternalServerErrorException();
+    }
+  }
+
+  @Delete(':id')
+  async uninstall(
+    @Principal() user: WithId<IIdentity>,
+    @Param('id') projectId: string,
+  ) {
+    const result = await this.deployService.uninstallProject(user._id, projectId);
+
+    if (result === "not-found") {
+      throw new NotFoundException();
     }
   }
 }

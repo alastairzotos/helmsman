@@ -29,6 +29,10 @@ export class ProjectsService {
     return await this.projectsRepo.getById(id);
   }
 
+  async getByIdAndOwner(id: string, ownerId: string) {
+    return await this.projectsRepo.getByIdAndOwner(id, ownerId);
+  }
+
   async getByOwnerIdAndNameWithSecrets(ownerId: string, name: string): Promise<IProject> {
     return await this.projectsRepo.getByOwnerIdAndNameWithSecrets(ownerId, name);
   }

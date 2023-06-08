@@ -1,6 +1,7 @@
 import { StatusSwitch } from "@/components/_core/layout/status-switch";
 import { Deploy } from "@/components/deploy/deploy";
 import { ProjectManage } from "@/components/projects/project-manage";
+import { ProjectUninstall } from "@/components/projects/project-uninstall";
 import { SecretsManage } from "@/components/projects/secrets-manage";
 import { useGetProjectById, useUpdateProject } from "@/state/projects.state";
 import { Tabs } from "antd";
@@ -53,6 +54,11 @@ export const ProjectView: React.FC<Props> = ({ id }) => {
               key: "secrets",
               label: "Secrets",
               children: <SecretsManage project={project} />
+            },
+            {
+              key: "uninstall",
+              label: "Uninstall",
+              children: <ProjectUninstall project={project} />
             }
           ]}
         />

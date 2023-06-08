@@ -29,6 +29,20 @@ export class HelmService {
     })
   }
 
+  async uninstall(project: IProject) {
+    return new Promise<void>((resolve, reject) => {
+      const proc = cp.spawn("helm", ["uninstall", project.helmRelease, "-n", project.namespace]);
+
+      proc.stderr.on('data', data => {
+        reject(data.toString());
+      });
+
+      proc.on('close', () => {
+        resolve();
+      });
+    })
+  }
+
   generateHelmCommand(
     project: IProject,
     helmRepo: string,

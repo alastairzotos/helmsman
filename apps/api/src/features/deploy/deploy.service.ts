@@ -24,6 +24,22 @@ export class DeployService {
     private readonly cryptoService: CryptoService,
   ) { }
 
+  async uninstallProject(ownerId: string, projectId: string): Promise<true | "not-found"> {
+    const config = await this.configService.getInternal(ownerId);
+    if (!config) {
+      return "not-found";
+    }
+
+    const project = await this.projectsService.getByIdAndOwner(projectId, ownerId);
+
+    if (!project) {
+      return "not-found";
+    }
+
+    await this.helmService.uninstall(project);
+    return true;
+  }
+
   async deployProject(ownerId: string, projectName: string): Promise<IDeployResponse> {
     const config = await this.configService.getInternal(ownerId);
     if (!config) {
