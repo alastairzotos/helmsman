@@ -29,7 +29,7 @@ jobs:
           tags: bitmetro/mission-control-api:${{ github.ref_name }}
           build-args: |
             SCOPE=api
-            PORT=3001
+            PORT=4001
 
   client:
     runs-on: ubuntu-latest
@@ -45,7 +45,7 @@ jobs:
       - name: Docker login
         run: docker login -u bitmetro -p ${{ secrets.DOCKER_PASSWORD }} docker.io
 
-      - name: Build and push web app
+      - name: Build and push client
         uses: docker/build-push-action@v2
         with:
           push: true
@@ -54,4 +54,4 @@ jobs:
           tags: bitmetro/mission-control-client:${{ github.ref_name }}
           build-args: |
             SCOPE=client
-            PORT=3000
+            PORT=4000
