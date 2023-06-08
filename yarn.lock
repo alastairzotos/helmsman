@@ -434,10 +434,10 @@
     "@bitmetro/identity" "1.0.1"
     axios "^1.4.0"
 
-"@bitmetro/auth-react@1.0.10":
-  version "1.0.10"
-  resolved "https://registry.yarnpkg.com/@bitmetro/auth-react/-/auth-react-1.0.10.tgz#493fab6d576565b0006ec97e307ae55984832e0a"
-  integrity sha512-3h12OA90Z1S0AHbmB+/FN6hkwrz6R55oFow8Lh9sscD5F2kFTcebveoaMpUWmJZ7OpN3IhgEOs1xD5xXRKJ8vQ==
+"@bitmetro/auth-react@1.0.12":
+  version "1.0.12"
+  resolved "https://registry.yarnpkg.com/@bitmetro/auth-react/-/auth-react-1.0.12.tgz#882a09531cd2c9bd4f01d3af036314ba254ba9d2"
+  integrity sha512-H+Gn85U/Kc/ySdY+Ve9ShitlyObJv0RaQT2sFaO7Hmzydvi7ccFZrCJ4cTQIGa+4QZ0E+oH95G1VY4UStT4AQg==
   dependencies:
     "@bitmetro/identity" "1.0.1"
     jsonwebtoken "^9.0.0"
