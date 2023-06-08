@@ -426,12 +426,12 @@
   resolved "https://registry.npmjs.org/@bcoe/v8-coverage/-/v8-coverage-0.2.3.tgz"
   integrity sha512-0hYQ8SB4Db5zvZB4axdMHGwEaQjkZzFjQiN9LVYvIFB2nSUHW9tYpxWriPrWDASIxiaXax83REcLxuSdnGPZtw==
 
-"@bitmetro/auth-node@1.0.3":
-  version "1.0.3"
-  resolved "https://registry.yarnpkg.com/@bitmetro/auth-node/-/auth-node-1.0.3.tgz#fbe6992e11167673fb189c902a48fb5bbdf8b8e2"
-  integrity sha512-wdwoPYcUCQvSZCaqcDbDySjP7FxMM/w9lBd20/uz/wf/oN7anEd/+cROeKZmWo56ZnpEj+p0pouSCjSR6eDuSQ==
+"@bitmetro/auth-node@1.0.5":
+  version "1.0.5"
+  resolved "https://registry.yarnpkg.com/@bitmetro/auth-node/-/auth-node-1.0.5.tgz#2ff2110f298c308206d458e1721ab11d87de6c3a"
+  integrity sha512-pahupUtYsf+SafTgWlDd+r2dPS5mY7fe6DoNplYhQt+/QV5LsvvSP+3veZ2BygXM7icsqSqxROEl3M0/utXtZw==
   dependencies:
-    "@bitmetro/identity" "^1.0.0"
+    "@bitmetro/identity" "1.0.1"
     axios "^1.4.0"
 
 "@bitmetro/auth-react@1.0.2":
@@ -456,6 +456,13 @@
   integrity sha512-2Y7RYEOB4S6gKQSebiWnAXW+0uEnWOjjRvjpkluCODTexWg3qz/hIU83VWCHeQToSXPGj2+dWcByGTr0OBrIaA==
   dependencies:
     axios "1.2"
+
+"@bitmetro/identity@1.0.1":
+  version "1.0.1"
+  resolved "https://registry.yarnpkg.com/@bitmetro/identity/-/identity-1.0.1.tgz#08cf8620054b08b297fea9d2a060609ecc3c2644"
+  integrity sha512-2ho3EbLs3/VfbKqECZci1XY4HtjIa0KAhmmkK/S/QoYvrbHdy5TNf00srBkZx+YTW2ncQ6uoo1mKzE0dMsBtWA==
+  dependencies:
+    zod "^3.21.4"
 
 "@bitmetro/identity@^1.0.0":
   version "1.0.0"
