@@ -426,20 +426,20 @@
   resolved "https://registry.npmjs.org/@bcoe/v8-coverage/-/v8-coverage-0.2.3.tgz"
   integrity sha512-0hYQ8SB4Db5zvZB4axdMHGwEaQjkZzFjQiN9LVYvIFB2nSUHW9tYpxWriPrWDASIxiaXax83REcLxuSdnGPZtw==
 
-"@bitmetro/auth-node@1.0.10":
-  version "1.0.10"
-  resolved "https://registry.yarnpkg.com/@bitmetro/auth-node/-/auth-node-1.0.10.tgz#a512503ba7bd99eecc0cd1cc02d6373542cee694"
-  integrity sha512-WN4+NY5lCKNTrFxE764ybIWC+PcD/jW2VYwYZ63TJ8aXYmTMNdsZCM3Um78q1OXsguGHuUPl4D8lnMLg8YwqCg==
+"@bitmetro/auth-node@1.0.11":
+  version "1.0.11"
+  resolved "https://registry.yarnpkg.com/@bitmetro/auth-node/-/auth-node-1.0.11.tgz#ff98e5dff744baa83033ef887d71e90d6857b937"
+  integrity sha512-0lmZ/3R58I14C+cQNBBCH1Be9qMw1P/9HgIfiiVrzUCG+rh1o7sjwEuj/KGmxX2BN/X2sh2ypPzYzETOw3Av1w==
   dependencies:
-    "@bitmetro/identity" "1.0.1"
+    "@bitmetro/identity" "1.0.2"
     axios "^1.4.0"
 
-"@bitmetro/auth-react@1.0.12":
-  version "1.0.12"
-  resolved "https://registry.yarnpkg.com/@bitmetro/auth-react/-/auth-react-1.0.12.tgz#882a09531cd2c9bd4f01d3af036314ba254ba9d2"
-  integrity sha512-H+Gn85U/Kc/ySdY+Ve9ShitlyObJv0RaQT2sFaO7Hmzydvi7ccFZrCJ4cTQIGa+4QZ0E+oH95G1VY4UStT4AQg==
+"@bitmetro/auth-react@1.0.13":
+  version "1.0.13"
+  resolved "https://registry.yarnpkg.com/@bitmetro/auth-react/-/auth-react-1.0.13.tgz#2be6a562deb66ada7f764b13b8bd920ec18bbe4d"
+  integrity sha512-MbCbcl4t39JOCK2UDpZ9gNBQQNSwjBIWIPuNkfF+rv42SXglBTcauMk/2L7rFE4KwVq3+vGmFz0AMgQlw0FGpw==
   dependencies:
-    "@bitmetro/identity" "1.0.1"
+    "@bitmetro/identity" "1.0.2"
     jsonwebtoken "^9.0.0"
     zustand "^4.3.8"
 
@@ -457,10 +457,10 @@
   dependencies:
     axios "1.2"
 
-"@bitmetro/identity@1.0.1":
-  version "1.0.1"
-  resolved "https://registry.yarnpkg.com/@bitmetro/identity/-/identity-1.0.1.tgz#08cf8620054b08b297fea9d2a060609ecc3c2644"
-  integrity sha512-2ho3EbLs3/VfbKqECZci1XY4HtjIa0KAhmmkK/S/QoYvrbHdy5TNf00srBkZx+YTW2ncQ6uoo1mKzE0dMsBtWA==
+"@bitmetro/identity@1.0.2":
+  version "1.0.2"
+  resolved "https://registry.yarnpkg.com/@bitmetro/identity/-/identity-1.0.2.tgz#291a819329edc81748c5b74b54e905c1e0ae034a"
+  integrity sha512-qP73o66vaSPA0UNvHDktng0fEzbEBjruyX0iqi3WbiDzw4HSSml45c/MVpTcLVskXmGyxsdw8rHfib9U36J30g==
   dependencies:
     zod "^3.21.4"
 
