@@ -30,6 +30,7 @@ export const ProjectUninstall: React.FC<Props> = ({ project }) => {
         cancelText="Cancel"
         placement="right"
         disabled={uninstalStatus === "fetching"}
+        cancelButtonProps={{ disabled: uninstalStatus === "fetching" }}
       >
         <Button
           type="primary"
