@@ -5,6 +5,7 @@ import { Wrapper } from "@/components/_core/layout/wrapper"
 import { useRouter } from "next/router";
 import { AuthProvider, useCheckAuthState } from "@bitmetro/auth-react";
 import { urls } from "@/urls";
+import { getEnv } from "@/utils/env";
 
 const Inner = ({ Component, pageProps }: AppProps) => {
   const router = useRouter();
@@ -20,7 +21,11 @@ const Inner = ({ Component, pageProps }: AppProps) => {
 
 const AppPage = (props: AppProps) => {
   return (
-    <AuthProvider localStorageKey="@mission-control:access-token">
+    <AuthProvider
+      localStorageKey="@mission-control:access-token"
+      propertyId="bitmetro.mission-control"
+      idServiceUrl={getEnv().idServerUrl}
+    >
       <Wrapper>
         <Inner {...props} />
       </Wrapper>
