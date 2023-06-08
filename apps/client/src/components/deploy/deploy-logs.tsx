@@ -2,7 +2,6 @@ import { ScrollToBottom } from "@/components/_core/scroll-to-bottom";
 import { ConnStatus } from "@/components/deploy/conn-status";
 import { DeployLogsSection, IDeployLogsSection } from "@/components/deploy/deploy-logs-section";
 import { useWebSockets } from "@/hooks/ws";
-import { getEnv } from "@/utils/env";
 import { replaceIndex } from "@/utils/misc";
 import { Card, Space, Typography, theme } from "antd";
 import { IDeployMessageDto, IDeployMessageStatus, IProject, WithId } from "models";
@@ -69,7 +68,7 @@ export const DeployLogs: React.FC<Props> = ({ project }) => {
     }
   }, []);
 
-  const [connStatus, reconnect] = useWebSockets(project.name, getEnv().apiUrl, 3004, handleReceiveMessage);
+  const [connStatus, reconnect] = useWebSockets(project.name, handleReceiveMessage);
 
   useEffect(() => {
     setSections([]);

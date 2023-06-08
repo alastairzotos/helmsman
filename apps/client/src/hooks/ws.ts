@@ -1,23 +1,12 @@
 import { useRefreshToken } from "@/hooks/refresh";
+import { getEnv } from "@/utils/env";
 import { useEffect, useState } from "react";
 
 export type IConnStatus = 'connecting' | 'connected' | 'disconnected' | 'error' | null;
 type IReconnectFn = () => void;
 
-const getWsUrl = (apiUrl: string, port: number) => {
-  const url = new URL(apiUrl);
-  let host = url.host;
-  if (host.includes(':')) {
-    host = host.split(':')[0];
-  }
-
-  return `ws://${host}:${port}`;
-}
-
 export const useWebSockets = <T extends Object>(
   handle: string,
-  url: string,
-  port: number,
   onReceiveMessage: (data: T) => void
 ): [IConnStatus, IReconnectFn] => {
   const [token, refreshToken] = useRefreshToken();
@@ -25,7 +14,7 @@ export const useWebSockets = <T extends Object>(
 
   useEffect(() => {
     setConnStatus('connecting');
-    const ws = new WebSocket(getWsUrl(url, port) + `?handle=${handle}`);
+    const ws = new WebSocket(getEnv().wsUrl + `?handle=${handle}`);
 
     ws.onopen = () => setConnStatus('connected');
     ws.onerror = () => setConnStatus('error');
