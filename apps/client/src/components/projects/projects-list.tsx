@@ -1,4 +1,4 @@
-import { StatusSwitch } from "@/components/_core/layout/status-switch";
+import { StatusSwitch } from "@/components/_core/status-switch";
 import { useGetAllProjects } from "@/state/projects.state";
 import { urls } from "@/urls";
 import { Button, List, Space } from "antd";

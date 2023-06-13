@@ -1,4 +1,4 @@
-import { StatusSwitch } from "@/components/_core/layout/status-switch";
+import { StatusSwitch } from "@/components/_core/status-switch";
 import { ApiKeysCreate } from "@/components/api-keys/api-keys-create";
 import { useCreateApiKey, useDeleteApiKey, useGetApiKeys } from "@/state/api-keys.state";
 import { Alert, Button, Card, List, Popconfirm, Space, Typography } from "antd";

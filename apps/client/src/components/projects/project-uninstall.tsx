@@ -1,4 +1,4 @@
-import { StatusSwitch } from "@/components/_core/layout/status-switch";
+import { StatusSwitch } from "@/components/_core/status-switch";
 import { useUninstall } from "@/state/deploy.state";
 import { WithId } from "@bitmetro/auth-react";
 import { Alert, Button, Popconfirm, Space } from "antd";
