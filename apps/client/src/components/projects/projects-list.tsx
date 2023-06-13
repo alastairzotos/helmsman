@@ -39,7 +39,7 @@ export const ProjectsList: React.FC = () => {
           <Col span={12}>
             <Menu
               items={
-                Object.keys(namespacesWithProjects).map((ns) => (
+                Object.keys(namespacesWithProjects).sort((a, b) => a.localeCompare(b)).map((ns) => (
                   createNavMenuItem(ns, ns)
                 ))
               }
