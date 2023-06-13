@@ -12,7 +12,7 @@ export const Logo: React.FC = () => {
     <Link href={urls.projects.home()}>
       <Space style={{ display: 'flex', justifyContent: 'center', height: HEADER_HEIGHT - 1 }}>
         <Image
-          src="/bm-logo.png"
+          src="/bm-logo-new-white.png"
           width={50}
           height={50}
           alt="BitMetro Logo"
