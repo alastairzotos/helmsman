@@ -8,9 +8,13 @@ import { rimraf } from 'rimraf';
 
 @Injectable()
 export class GitService {
-  async getRemoteInfo(url: string) {
+  async getRemoteInfo(repoUrl: string, username: string, token: string) {
+    const url = new URL(repoUrl);
+    url.username = username;
+    url.password = token;
+
     return await git.getRemoteInfo({
-      url,
+      url: url.toString(),
       http
     })
   }

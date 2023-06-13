@@ -57,7 +57,7 @@ export class DeployService {
 
     let helmRepo: string;
 
-    const tag = await this.getTag(ws, project);
+    const tag = await this.getTag(ws, config, project);
     helmRepo = await this.pullHelmRepo(ws, config, project);
 
     if (helmRepo) {
@@ -101,10 +101,10 @@ export class DeployService {
     await this.helmService.deploy(project, secrets, helmRepo, tag, message => ws.sendMessage(text(message)));
   }
 
-  async getTag(ws: WebSocketChannel, project: IProject) {
+  async getTag(ws: WebSocketChannel, config: IConfig, project: IProject) {
     ws.sendMessage(phase("getting-tag"));
 
-    const gitInfo = await this.gitService.getRemoteInfo(project.repoUrl);
+    const gitInfo = await this.gitService.getRemoteInfo(project.repoUrl, config.githubUsername, config.githubToken);
     const tags = Object.keys(gitInfo.refs.tags);
     const latestTag = tags[tags.length - 1];
 
