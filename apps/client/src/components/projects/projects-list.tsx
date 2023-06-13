@@ -24,7 +24,7 @@ export const ProjectsList: React.FC = () => {
   const namespacesWithProjects: NamespacesWithProjects = (projects || []).reduce(
     (acc, cur) => ({
       ...acc,
-      [cur.namespace]: [
+      [(cur.namespace.trim() === '') ? "none" : cur.namespace]: [
         ...(acc[cur.namespace] || []),
         cur
       ]
