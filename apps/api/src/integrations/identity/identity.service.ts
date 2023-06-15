@@ -12,8 +12,8 @@ export class IdentityService {
     })
   }
 
-  async verifyIdentity(accessToken: string) {
-    return await this.identityProvider.verifyIdentity(accessToken);
+  async verifyIdentity(headers: any) {
+    return await this.identityProvider.verifyIdentityFromHeaders(headers);
   }
 
   async verifyPassword(identityId: string, password: string) {

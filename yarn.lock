@@ -433,20 +433,20 @@
   dependencies:
     antd "^5.6.1"
 
-"@bitmetro/auth-node@1.0.11":
-  version "1.0.11"
-  resolved "https://registry.yarnpkg.com/@bitmetro/auth-node/-/auth-node-1.0.11.tgz#ff98e5dff744baa83033ef887d71e90d6857b937"
-  integrity sha512-0lmZ/3R58I14C+cQNBBCH1Be9qMw1P/9HgIfiiVrzUCG+rh1o7sjwEuj/KGmxX2BN/X2sh2ypPzYzETOw3Av1w==
+"@bitmetro/auth-node@1.0.13":
+  version "1.0.13"
+  resolved "https://registry.yarnpkg.com/@bitmetro/auth-node/-/auth-node-1.0.13.tgz#80f47c72ae6bf1390e01c1d08ec9119010eec25e"
+  integrity sha512-Tiimx8zCSUfRN+V+eIovqeQRNaIUIQYdjFUSCNN+02SIkawMltKWQC27B7nI/bznh2MbmRn/OCiImfuwbVWGzw==
   dependencies:
-    "@bitmetro/identity" "1.0.2"
+    "@bitmetro/identity" "*"
     axios "^1.4.0"
 
-"@bitmetro/auth-react@1.0.13":
-  version "1.0.13"
-  resolved "https://registry.yarnpkg.com/@bitmetro/auth-react/-/auth-react-1.0.13.tgz#2be6a562deb66ada7f764b13b8bd920ec18bbe4d"
-  integrity sha512-MbCbcl4t39JOCK2UDpZ9gNBQQNSwjBIWIPuNkfF+rv42SXglBTcauMk/2L7rFE4KwVq3+vGmFz0AMgQlw0FGpw==
+"@bitmetro/auth-react@1.0.16":
+  version "1.0.16"
+  resolved "https://registry.yarnpkg.com/@bitmetro/auth-react/-/auth-react-1.0.16.tgz#42e71d5ad7f63bcd5668e1b0679048f773f823aa"
+  integrity sha512-t/ssvDQwQO/zFUxFvfjJZ5XgAPwc9hOIAnqf0R5Qxx+nf3+P/QpgbD4Dspza3JjlcG7NLV/CX9Hy6vof4peIyg==
   dependencies:
-    "@bitmetro/identity" "1.0.2"
+    "@bitmetro/identity" "*"
     jsonwebtoken "^9.0.0"
     zustand "^4.3.8"
 
@@ -464,10 +464,10 @@
   dependencies:
     axios "1.2"
 
-"@bitmetro/identity@1.0.2":
-  version "1.0.2"
-  resolved "https://registry.yarnpkg.com/@bitmetro/identity/-/identity-1.0.2.tgz#291a819329edc81748c5b74b54e905c1e0ae034a"
-  integrity sha512-qP73o66vaSPA0UNvHDktng0fEzbEBjruyX0iqi3WbiDzw4HSSml45c/MVpTcLVskXmGyxsdw8rHfib9U36J30g==
+"@bitmetro/identity@*":
+  version "1.0.3"
+  resolved "https://registry.yarnpkg.com/@bitmetro/identity/-/identity-1.0.3.tgz#85a28f23b0854b8c48e7471d8616bcc408867a14"
+  integrity sha512-97n+97X9vEZIvrJ81EFAfEQv0zoG27dt2VUufV1bPC0i68/JoKnzVTAzhYcng5iWTUywTra8utSG3rZ8Frspiw==
   dependencies:
     zod "^3.21.4"
 
