@@ -40,7 +40,7 @@ export const ProjectManage: React.FC<Props> = ({ project, saveStatus, onSave }) 
           />
 
           <FormItem
-            label="Help repo URL"
+            label="Helm repo URL"
             field="helmRepoUrl"
             control={control}
             errors={errors}
@@ -48,7 +48,7 @@ export const ProjectManage: React.FC<Props> = ({ project, saveStatus, onSave }) 
           />
 
           <FormItem
-            label="Help release"
+            label="Helm release"
             field="helmRelease"
             control={control}
             errors={errors}
