@@ -26,7 +26,7 @@ export class WebSocketManager {
   private channels: Record<string, WebSocketChannel> = {};
 
   constructor(port: number) {
-    const wss = new WebSocketServer({ port });
+    const wss = new WebSocketServer({ port, path: '/ws' });
 
     wss.on('connection', (conn, req) => {
       const handle = new URLSearchParams(req.url.substring(2)).get('handle')

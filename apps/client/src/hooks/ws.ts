@@ -14,7 +14,7 @@ export const useWebSockets = <T extends Object>(
 
   useEffect(() => {
     setConnStatus('connecting');
-    const ws = new WebSocket(getEnv().wsUrl + `?handle=${handle}`);
+    const ws = new WebSocket(getEnv().wsUrl + `/ws?handle=${handle}`);
 
     ws.onopen = () => setConnStatus('connected');
     ws.onerror = () => setConnStatus('error');
