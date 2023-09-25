@@ -25,5 +25,5 @@ COPY --chown=node:node --from=builder /app/out .
 
 WORKDIR /app/apps/${SCOPE}
 
-EXPOSE ${PORT}
+EXPOSE ${PORT} 3004
 CMD yarn start

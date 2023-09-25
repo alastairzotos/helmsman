@@ -41,7 +41,7 @@ export function PasswordReveal<R extends Promise<any>, T extends any[]>({
           Reveal {resourceName}
         </Button>
 
-        {error?.response?.status === 403 && (
+        {(error?.response?.status === 401 || error?.response?.status === 403) && (
           <Text type="warning">Wrong password</Text>
         )}
       </Space>
