@@ -29,7 +29,7 @@ export class WebSocketManager {
     const wss = new WebSocketServer({ port, path: '/ws' });
 
     wss.on('connection', (conn, req) => {
-      const handle = new URLSearchParams(req.url.substring(2)).get('handle')
+      const handle = (new URL("https://www.bitmetro.io" + req.url)).searchParams.get('handle');
 
       const channel = this.getChannel(handle);
 
