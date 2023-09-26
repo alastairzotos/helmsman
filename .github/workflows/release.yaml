@@ -29,7 +29,7 @@ jobs:
           tags: bitmetro/mission-control-api:${{ github.ref_name }}
           build-args: |
             SCOPE=api
-            PORT=4001
+            PORT=4001 3004
 
   client:
     runs-on: ubuntu-latest
