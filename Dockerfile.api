@@ -1,0 +1,32 @@
+FROM node:16-alpine as builder
+
+WORKDIR /app
+
+COPY . .
+RUN yarn global add turbo@1.5.5 && \
+    turbo prune --scope=api && \
+    cd out && \
+    yarn install && \
+    turbo run build --scope=api --include-dependencies && \
+    rm -rf node_modules/.cache .yarn/cache
+
+FROM node:16-alpine as app
+
+
+ENV NODE_ENV=production
+
+RUN apk add curl
+
+# Install helm
+RUN curl -LO https://get.helm.sh/helm-v3.7.0-linux-amd64.tar.gz && \
+    tar -zxvf helm-v3.7.0-linux-amd64.tar.gz && \
+    mv linux-amd64/helm /usr/local/bin/helm && \
+    rm -rf helm-v3.7.0-linux-amd64.tar.gz linux-amd64
+
+WORKDIR /app
+COPY --chown=node:node --from=builder /app/out .
+
+WORKDIR /app/apps/api
+
+EXPOSE 4001 3004
+CMD yarn start

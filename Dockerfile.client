@@ -2,28 +2,22 @@ FROM node:16-alpine as builder
 
 WORKDIR /app
 
-ARG SCOPE
-ARG PORT
-
 COPY . .
 RUN yarn global add turbo@1.5.5 && \
-    turbo prune --scope=${SCOPE} && \
+    turbo prune --scope=client && \
     cd out && \
     yarn install && \
-    turbo run build --scope=${SCOPE} --include-dependencies && \
+    turbo run build --scope=client --include-dependencies && \
     rm -rf node_modules/.cache .yarn/cache
 
 FROM node:16-alpine as app
-
-ARG SCOPE
-ARG PORT
 
 ENV NODE_ENV=production
 
 WORKDIR /app
 COPY --chown=node:node --from=builder /app/out .
 
-WORKDIR /app/apps/${SCOPE}
+WORKDIR /app/apps/client
 
-EXPOSE ${PORT}
+EXPOSE 4000
 CMD yarn start
