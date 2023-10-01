@@ -1,4 +1,4 @@
-import { writeFile, mkdir } from 'fs/promises';
+import { writeFile, mkdir, chmod } from 'fs/promises';
 import * as path from 'path';
 import { Injectable } from "@nestjs/common";
 import { ConfigService } from "features/config/config.service";
@@ -120,6 +120,8 @@ export class DeployService {
 
         const kubeConfigFile = path.resolve(kubectlPath, 'config');
         await writeFile(kubeConfigFile, config.k8sConfig, 'utf-8');
+
+        await chmod(kubeConfigFile, 0o600);
       }
     } catch { }
   }
