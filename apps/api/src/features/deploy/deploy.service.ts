@@ -71,6 +71,7 @@ export class DeployService {
 
         ws.sendMessage(status("finished"));
       } catch (e) {
+        console.log(e);
         ws.sendMessage(text(e?.message || e));
         ws.sendMessage(status("error"));
 
