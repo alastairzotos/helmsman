@@ -10,6 +10,10 @@ export class CryptoService {
   ) {}
 
   encrypt(value: string) {
+    if (value === undefined) {
+      return '';
+    }
+
     const key = this.getEncryptionKey();
 
     const bytes = aes.utils.utf8.toBytes(value);
@@ -23,6 +27,10 @@ export class CryptoService {
   }
 
   decrypt(cipher: string) {
+    if (cipher === undefined) {
+      return '';
+    }
+    
     const key = this.getEncryptionKey();
 
     const encryptedBytes = aes.utils.hex.toBytes(cipher);

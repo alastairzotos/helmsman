@@ -11,6 +11,9 @@ export class Config implements IConfig {
 
   @Prop()
   githubToken: string;
+
+  @Prop()
+  k8sConfig: string;
 }
 
 export const ConfigSchema = SchemaFactory.createForClass(Config);

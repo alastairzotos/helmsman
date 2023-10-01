@@ -10,6 +10,8 @@ interface Props {
   config: IConfig;
 }
 
+const { TextArea } = Input;
+
 export const ConfigEdit: React.FC<Props> = ({ config }) => {
   const [updateConfigStatus, updateConfig] = useUpdateConfig(s => [s.status, s.request]);
 
@@ -36,6 +38,14 @@ export const ConfigEdit: React.FC<Props> = ({ config }) => {
             control={control}
             errors={errors}
             render={(field) => <Input {...field} />}
+          />
+
+          <FormItem
+            label="Kubernetes Config"
+            field="k8sConfig"
+            control={control}
+            errors={errors}
+            render={(field) => <TextArea rows={12} {...field} />}
           />
         </>
       )}

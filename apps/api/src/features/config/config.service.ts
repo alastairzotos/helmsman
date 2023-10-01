@@ -38,13 +38,15 @@ export class ConfigService {
     await this.configRepo.update(ownerId, {
       ...config,
       githubToken: this.cryptoService.encrypt(config.githubToken),
+      k8sConfig: this.cryptoService.encrypt(config.k8sConfig),
     });
   }
 
-  private decryptConfig(config: IConfig) {
+  private decryptConfig(config: IConfig): IConfig {
     return {
       ...config,
       githubToken: this.cryptoService.decrypt(config.githubToken),
+      k8sConfig: this.cryptoService.decrypt(config.k8sConfig),
     }
   }
 }

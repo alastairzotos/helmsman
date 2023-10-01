@@ -1,3 +1,4 @@
+import { writeFile } from 'fs/promises';
 import { Injectable } from "@nestjs/common";
 import { ConfigService } from "features/config/config.service";
 import { CryptoService } from "features/crypto/crypto.service";
@@ -7,6 +8,7 @@ import { HelmService } from "integrations/helm/helm.service";
 import { IConfig, IProject, deployMessage } from "models";
 import { modifyRecord } from "utils";
 import { WebSocketChannel, WebSocketManager } from "utils/ws";
+import { EnvironmentService } from 'environment/environment.service';
 
 const { status, phase, text, progress } = deployMessage;
 
@@ -17,6 +19,7 @@ export class DeployService {
   private wsManager = new WebSocketManager(3004);
 
   constructor(
+    private readonly envService: EnvironmentService,
     private readonly projectsService: ProjectsService,
     private readonly gitService: GitService,
     private readonly helmService: HelmService,
@@ -62,6 +65,8 @@ export class DeployService {
 
     if (helmRepo) {
       try {
+        await this.createKubeConfig(ws, config);
+
         await this.deploy(ws, project, helmRepo, tag);
         await this.cleanup(ws, helmRepo);
 
@@ -99,6 +104,11 @@ export class DeployService {
 
     ws.sendMessage(text(['helm', ...args.map(arg => arg.join(' '))].join('\n')));
     await this.helmService.deploy(project, secrets, helmRepo, tag, message => ws.sendMessage(text(message)));
+  }
+
+  async createKubeConfig(ws: WebSocketChannel, config: IConfig) {
+    ws.sendMessage(text("Creating kubeconfig"));
+    await writeFile(this.envService.get().kubeConfigDir, config.k8sConfig, 'utf-8');
   }
 
   async getTag(ws: WebSocketChannel, config: IConfig, project: IProject) {
