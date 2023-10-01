@@ -65,9 +65,7 @@ export class DeployService {
 
     if (helmRepo) {
       try {
-        await this.createKubeConfig(ws, config);
-
-        await this.deploy(ws, project, helmRepo, tag);
+        await this.deploy(ws, config, project, helmRepo, tag);
         await this.cleanup(ws, helmRepo);
 
         ws.sendMessage(status("finished"));
@@ -87,8 +85,10 @@ export class DeployService {
     return null;
   }
 
-  async deploy(ws: WebSocketChannel, project: IProject, helmRepo: string, tag: string) {
+  async deploy(ws: WebSocketChannel, config: IConfig, project: IProject, helmRepo: string, tag: string) {
     ws.sendMessage(phase("deploying"))
+
+    await this.createKubeConfig(ws, config);
 
     const secrets = modifyRecord(project.secrets || {}, secret => this.cryptoService.decrypt(secret));
 
@@ -107,8 +107,12 @@ export class DeployService {
   }
 
   async createKubeConfig(ws: WebSocketChannel, config: IConfig) {
-    ws.sendMessage(text("Creating kubeconfig"));
-    await writeFile(this.envService.get().kubeConfigDir, config.k8sConfig, 'utf-8');
+    try {
+      if (!!config.k8sConfig && !!this.envService.get().kubeConfigDir) {
+        ws.sendMessage(text("Creating kubeconfig"));
+        await writeFile(this.envService.get().kubeConfigDir, config.k8sConfig, 'utf-8');
+      }
+    } catch { }
   }
 
   async getTag(ws: WebSocketChannel, config: IConfig, project: IProject) {
