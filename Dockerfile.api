@@ -14,7 +14,6 @@ FROM node:16-alpine as app
 
 
 ENV NODE_ENV=production
-ENV KUBECONFIG=./kubeconfig
 
 # Install dependencies
 RUN apk add --no-cache curl tar ca-certificates
