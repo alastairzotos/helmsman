@@ -1,4 +1,5 @@
-import { writeFile } from 'fs/promises';
+import { writeFile, mkdir } from 'fs/promises';
+import * as path from 'path';
 import { Injectable } from "@nestjs/common";
 import { ConfigService } from "features/config/config.service";
 import { CryptoService } from "features/crypto/crypto.service";
@@ -88,7 +89,9 @@ export class DeployService {
   async deploy(ws: WebSocketChannel, config: IConfig, project: IProject, helmRepo: string, tag: string) {
     ws.sendMessage(phase("deploying"))
 
-    await this.createKubeConfig(ws, config);
+    if (this.envService.get().nodeEnv === 'production') {
+      await this.createKubeConfig(ws, config);
+    }
 
     const secrets = modifyRecord(project.secrets || {}, secret => this.cryptoService.decrypt(secret));
 
@@ -108,9 +111,14 @@ export class DeployService {
 
   async createKubeConfig(ws: WebSocketChannel, config: IConfig) {
     try {
-      if (!!config.k8sConfig && !!this.envService.get().kubeConfigDir) {
+      if (!!config.k8sConfig) {
         ws.sendMessage(text("Creating kubeconfig"));
-        await writeFile(this.envService.get().kubeConfigDir, config.k8sConfig, 'utf-8');
+
+        const kubectlPath = path.resolve(this.envService.get().home, '.kube');
+        await mkdir(kubectlPath);
+
+        const kubeConfigFile = path.resolve(kubectlPath, 'config');
+        await writeFile(kubeConfigFile, config.k8sConfig, 'utf-8');
       }
     } catch { }
   }
