@@ -29,6 +29,12 @@ RUN curl -LO https://get.helm.sh/helm-v3.7.0-linux-amd64.tar.gz && \
     mv linux-amd64/helm /usr/local/bin/helm && \
     rm -rf helm-v3.7.0-linux-amd64.tar.gz linux-amd64
 
+# Install doctl
+RUN wget https://github.com/digitalocean/doctl/releases/download/v1.100.0/doctl-1.100.0-linux-amd64.tar.gz && \
+    tar xf doctl-1.100.0-linux-amd64.tar.gz && \
+    mv doctl /usr/local/bin && \
+    rm -rf doctl-1.100.0-linux-amd64.tar.gz
+
 WORKDIR /app
 COPY --chown=node:node --from=builder /app/out .
 
