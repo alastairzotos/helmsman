@@ -1,12 +1,11 @@
 import { StatusSwitch } from "@/components/_core/status-switch";
 import { useUninstall } from "@/state/deploy.state";
-import { WithId } from "@bitmetro/auth-react";
 import { Alert, Button, Popconfirm, Space } from "antd";
 import { IProject } from "models";
 import React from "react";
 
 interface Props {
-  project: WithId<IProject>;
+  project: IProject & { _id: string };
 }
 
 export const ProjectUninstall: React.FC<Props> = ({ project }) => {
