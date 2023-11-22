@@ -21,13 +21,13 @@ const Inner = ({ Component, pageProps }: AppProps) => {
     token: { colorBgContainer },
   } = theme.useToken();
 
-  const { loggedInUser, logout } = usePersona<{ email: string }>();
+  const { initialised, loggedInUser, logout } = usePersona<{ email: string }>();
 
   useEffect(() => {
-    if (!loggedInUser) {
+    if (initialised && !loggedInUser) {
       router.push(urls.login(router.asPath.split('?')[0] || ''));
     }
-  }, [loggedInUser]);
+  }, [initialised, loggedInUser]);
 
   return (
     <AppLayoutProvider

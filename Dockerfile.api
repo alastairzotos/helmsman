@@ -2,6 +2,9 @@ FROM node:16-alpine as builder
 
 WORKDIR /app
 
+ARG DIGITALOCEAN_ACCESS_TOKEN
+ENV DIGITALOCEAN_ACCESS_TOKEN=$DIGITALOCEAN_ACCESS_TOKEN
+
 COPY . .
 RUN yarn global add turbo@1.5.5 && \
     turbo prune --scope=api && \
@@ -34,6 +37,11 @@ RUN wget https://github.com/digitalocean/doctl/releases/download/v1.100.0/doctl-
     tar xf doctl-1.100.0-linux-amd64.tar.gz && \
     mv doctl /usr/local/bin && \
     rm -rf doctl-1.100.0-linux-amd64.tar.gz
+
+# Authorize
+ARG DIGITALOCEAN_ACCESS_TOKEN
+ENV DIGITALOCEAN_ACCESS_TOKEN=$DIGITALOCEAN_ACCESS_TOKEN
+RUN doctl auth init
 
 WORKDIR /app
 COPY --chown=node:node --from=builder /app/out .
