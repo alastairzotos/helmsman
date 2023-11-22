@@ -27,6 +27,8 @@ jobs:
           context: .
           file: Dockerfile.api
           tags: bitmetro/mission-control-api:${{ github.ref_name }}
+          build_args: |
+            DIGITALOCEAN_ACCESS_TOKEN=${{ secrets.DIGITALOCEAN_ACCESS_TOKEN }}
 
   client:
     runs-on: ubuntu-latest
