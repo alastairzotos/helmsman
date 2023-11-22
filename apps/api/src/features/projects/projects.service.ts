@@ -1,4 +1,5 @@
 import { Injectable } from "@nestjs/common";
+import { PersonaAdapterService } from "features/auth/auth.adapter";
 import { AuthService } from "features/auth/auth.service";
 import { CryptoService } from "features/crypto/crypto.service";
 import { ProjectsRepository } from "features/projects/projects.repository";
@@ -11,6 +12,7 @@ export class ProjectsService {
   constructor(
     private readonly cryptoService: CryptoService,
     private readonly authService: AuthService,
+    private readonly authAdapter: PersonaAdapterService,
     private readonly projectsRepo: ProjectsRepository,
   ) {}
 
@@ -56,7 +58,9 @@ export class ProjectsService {
       return false;
     }
 
-    const pwdCheck = await this.authService.persona.verifyPassword(password, owner.hashedPassword);
+    const passwordHash = await this.authAdapter.getUserPasswordHash(owner);
+
+    const pwdCheck = await this.authService.persona.verifyPassword(password, passwordHash);
     if (!pwdCheck) {
       return false;
     }
