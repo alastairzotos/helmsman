@@ -2,7 +2,7 @@ import { Controller, Delete, InternalServerErrorException, NotFoundException, Pa
 import { DeployService } from "features/deploy/deploy.service";
 import { Principal } from "features/auth/principal.decorator";
 import { AuthGuard } from "features/auth/auth.guard";
-import { IIdentity, WithId } from "@bitmetro/auth-node";
+import { User } from "schemas/user.schema";
 
 @Controller('deploy')
 @UseGuards(AuthGuard)
@@ -13,7 +13,7 @@ export class DeployController {
 
   @Post(':projectName')
   async deploy(
-    @Principal() user: WithId<IIdentity>,
+    @Principal() user: User,
     @Param('projectName') projectName: string,
   ) {
     const result = await this.deployService.deployProject(user._id, projectName);
@@ -27,7 +27,7 @@ export class DeployController {
 
   @Delete(':id')
   async uninstall(
-    @Principal() user: WithId<IIdentity>,
+    @Principal() user: User,
     @Param('id') projectId: string,
   ) {
     const result = await this.deployService.uninstallProject(user._id, projectId);

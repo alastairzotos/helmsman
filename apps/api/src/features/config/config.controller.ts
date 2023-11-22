@@ -3,7 +3,7 @@ import { ConfigService } from "features/config/config.service";
 import { IConfig, IGetConfigDto } from "models";
 import { Principal } from "features/auth/principal.decorator";
 import { AuthGuard } from "features/auth/auth.guard";
-import { IIdentity, WithId } from "@bitmetro/auth-node";
+import { User } from "schemas/user.schema";
 
 @Controller('config')
 @UseGuards(AuthGuard)
@@ -14,7 +14,7 @@ export class ConfigController {
 
   @Post()
   async get(
-    @Principal() user: WithId<IIdentity>,
+    @Principal() user: User,
     @Body() { password }: IGetConfigDto
   ) {
     const config = await this.configService.get(user, password);
@@ -28,7 +28,7 @@ export class ConfigController {
 
   @Patch()
   async update(
-    @Principal() user: WithId<IIdentity>,
+    @Principal() user: User,
     @Body() config: IConfig,
   ) {
     await this.configService.update(user._id, config);

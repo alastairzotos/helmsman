@@ -12,8 +12,8 @@ import { HealthModule } from 'features/health/health.module';
 import { ProjectsModule } from 'features/projects/projects.module';
 import { GitModule } from 'integrations/git/git.module';
 import { HelmModule } from 'integrations/helm/helm.module';
-import { IdentityModule } from 'integrations/identity/identity.module';
 import { AuthModule } from 'features/auth/auth.module';
+import { MigrationsModule } from 'features/migrations/migrations.module';
 
 @Module({
   imports: [
@@ -28,7 +28,7 @@ import { AuthModule } from 'features/auth/auth.module';
     HelmModule,
     ConfigModule,
     ApiKeysModule,
-    IdentityModule,
+    MigrationsModule,
     MongooseModule.forRootAsync({
       imports: [EnvironmentModule],
       inject: [EnvironmentService],

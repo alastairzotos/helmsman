@@ -7,7 +7,6 @@ import { ConfigController } from "features/config/config.controller";
 import { ConfigRepository } from "features/config/config.repository";
 import { ConfigService } from "features/config/config.service";
 import { CryptoModule } from "features/crypto/crypto.module";
-import { IdentityModule } from "integrations/identity/identity.module";
 import { Config, ConfigSchema } from "schemas/config.schema";
 
 @Module({

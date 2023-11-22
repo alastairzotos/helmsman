@@ -2,13 +2,14 @@ import "@/styles/globals.css";
 
 import type { AppProps } from "next/app";
 import { useRouter } from "next/router";
-import { AuthProvider, useCheckAuthState, useLoggedInUser, useLogout } from "@bitmetro/auth-react";
 import { urls } from "@/urls";
 import { getEnv } from "@/utils/env";
 import { AppLayoutProvider, createNavMenuItem } from "@bitmetro/app-layout-antd";
 import { Button, ConfigProvider, Space, Typography, theme } from "antd";
 import { AppstoreOutlined, SettingOutlined, ApiOutlined } from '@ant-design/icons';
 import { getProjectById } from "@/clients/projects.client";
+import { PersonaProvider, extendPersonaTheme, usePersona } from "@bitmetro/persona-react";
+import { useEffect } from "react";
 
 const { Text } = Typography;
 const { darkAlgorithm } = theme;
@@ -20,14 +21,13 @@ const Inner = ({ Component, pageProps }: AppProps) => {
     token: { colorBgContainer },
   } = theme.useToken();
 
-  useCheckAuthState(({ accessToken }) => {
-    if (!accessToken && !router.pathname.startsWith('/login')) {
-      router.push(urls.login(router.asPath.split('?')[0]));
-    }
-  }, [router.pathname])
+  const { loggedInUser, logout } = usePersona<{ email: string }>();
 
-  const handleLogout = useLogout();
-  const loggedInUser = useLoggedInUser();
+  useEffect(() => {
+    if (!loggedInUser) {
+      router.push(urls.login(router.asPath.split('?')[0] || ''));
+    }
+  }, [loggedInUser]);
 
   return (
     <AppLayoutProvider
@@ -47,7 +47,7 @@ const Inner = ({ Component, pageProps }: AppProps) => {
         loggedInUser && (
           <Space>
             <Text>Logged in as {loggedInUser.email}</Text>
-            <Button onClick={handleLogout}>Logout</Button>
+            <Button onClick={logout}>Logout</Button>
           </Space>
         )
       )}
@@ -59,11 +59,18 @@ const Inner = ({ Component, pageProps }: AppProps) => {
 }
 
 const AppPage = (props: AppProps) => {
+  const router = useRouter();
+
   return (
-    <AuthProvider
-      localStorageKey="@mission-control:access-token"
-      propertyId="bitmetro.mission-control"
-      idServiceUrl={getEnv().idServerUrl}
+    <PersonaProvider
+      apiUrl={getEnv().apiUrl}
+      onLogin={() => router.push(urls.home())}
+      onRegister={() => router.push(urls.login(''))}
+      theme={extendPersonaTheme({
+        backgroundColor: 'transparent',
+        showOutline: false,
+        brandColor: '#000507',
+      })}
     >
       <ConfigProvider theme={{
         algorithm: darkAlgorithm,
@@ -75,7 +82,7 @@ const AppPage = (props: AppProps) => {
       }}>
         <Inner {...props} />
       </ConfigProvider>
-    </AuthProvider>
+    </PersonaProvider>
   )
 }
 

@@ -3,7 +3,7 @@ import { ApiKeysService } from "features/api-keys/api-keys.service";
 import { ICreateApiKeyDto } from "models";
 import { Principal } from "features/auth/principal.decorator";
 import { AuthGuard } from "features/auth/auth.guard";
-import { IIdentity, WithId } from "@bitmetro/auth-node";
+import { User } from "schemas/user.schema";
 
 @Controller('api-keys')
 @UseGuards(AuthGuard)
@@ -14,14 +14,14 @@ export class ApiKeysController {
 
   @Get()
   async getForOwner(
-    @Principal() user: WithId<IIdentity>
+    @Principal() user: User
   ) {
     return await this.apiKeysService.getForOwner(user._id);
   }
 
   @Post()
   async create(
-    @Principal() user: WithId<IIdentity>,
+    @Principal() user: User,
     @Body() { name }: ICreateApiKeyDto,
   ) {
     return await this.apiKeysService.create(user._id, name);

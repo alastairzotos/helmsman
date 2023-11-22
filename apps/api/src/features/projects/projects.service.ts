@@ -1,27 +1,27 @@
 import { Injectable } from "@nestjs/common";
+import { AuthService } from "features/auth/auth.service";
 import { CryptoService } from "features/crypto/crypto.service";
 import { ProjectsRepository } from "features/projects/projects.repository";
-import { IdentityService } from "integrations/identity/identity.service";
 import { IProjectDto, IProject, WithId, ISecretsDto } from "models";
-import { IUser } from "user-shared";
+import { User } from "schemas/user.schema";
 import { modifyRecord } from "utils";
 
 @Injectable()
 export class ProjectsService {
   constructor(
     private readonly cryptoService: CryptoService,
-    private readonly identityService: IdentityService,
+    private readonly authService: AuthService,
     private readonly projectsRepo: ProjectsRepository,
   ) {}
 
-  async create(user: WithId<IUser>, project: IProject) {
+  async create(user: User, project: IProject) {
     return await this.projectsRepo.create({
       ...project,
       ownerId: user._id ,
     });
   }
 
-  async getAll(user: WithId<IUser>) {
+  async getAll(user: User) {
     return await this.projectsRepo.getAll(user._id);
   }
 
@@ -49,14 +49,14 @@ export class ProjectsService {
     await this.projectsRepo.delete(id);
   }
 
-  async getSecrets(owner: any, id: string, password: string): Promise<ISecretsDto | false> {
+  async getSecrets(owner: User, id: string, password: string): Promise<ISecretsDto | false> {
     const project = await this.projectsRepo.getByIdWithSecrets(id);
 
     if (!project || project.ownerId.toString() !== owner._id.toString()) {
       return false;
     }
 
-    const pwdCheck = await this.identityService.verifyPassword(owner._id, password);
+    const pwdCheck = await this.authService.persona.verifyPassword(password, owner.hashedPassword);
     if (!pwdCheck) {
       return false;
     }

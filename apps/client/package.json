@@ -10,9 +10,9 @@
   },
   "dependencies": {
     "@bitmetro/app-layout-antd": "1.0.4",
-    "@bitmetro/auth-react": "1.0.16",
     "@bitmetro/create-query": "^0.0.7",
     "@bitmetro/http-client": "^0.0.4",
+    "@bitmetro/persona-react": "1.4.4",
     "@types/node": "20.2.5",
     "@types/react": "18.2.7",
     "@types/react-dom": "18.2.4",

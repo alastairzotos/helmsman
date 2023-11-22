@@ -8,6 +8,7 @@ export class EnvironmentService {
     dbConnectionString: process.env.DB_CONNECTION_STRING as string,
     aesKey: process.env.AES_KEY as string,
     idServerApiKey: process.env.ID_SERVER_API_KEY as string,
+    jwtSecret: process.env.JWT_SIGNING_KEY as string,
   };
 
   get() {

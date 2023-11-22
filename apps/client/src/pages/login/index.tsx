@@ -1,20 +1,24 @@
-import { useAuthUrls } from "@bitmetro/auth-react";
-import { Button } from "antd";
+import { LoginForm } from "@bitmetro/persona-react";
 import { NextPage } from "next";
-import { useRouter } from "next/router";
+import styled from "styled-components";
+
+const Wrapper = styled('div')(() => ({
+  display: 'flex',
+  justifyContent: 'center',
+  width: '100%',
+}))
+
+const Container = styled('div')(() => ({
+  minWidth: '35%'
+}))
 
 const LoginPage: NextPage = () => {
-  const router = useRouter();
-  const { loginUrl } = useAuthUrls(router.query.fwd as string);
-
-  const handleLoginClick = async () => {
-    router.push(loginUrl);
-  }
-
   return (
-    <Button onClick={handleLoginClick}>
-      Login
-    </Button>
+    <Wrapper>
+      <Container>
+        <LoginForm />
+      </Container>
+    </Wrapper>
   )
 }
 

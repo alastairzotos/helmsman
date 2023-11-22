@@ -3,7 +3,7 @@ import { ProjectsService } from "features/projects/projects.service";
 import { IGetSecretsDto, IProject, IUpdateSecretsDto, UpdateProps } from "models";
 import { Principal } from "features/auth/principal.decorator";
 import { AuthGuard } from "features/auth/auth.guard";
-import { IIdentity, WithId } from "@bitmetro/auth-node";
+import { User } from "schemas/user.schema";
 
 @Controller('projects')
 @UseGuards(AuthGuard)
@@ -14,7 +14,7 @@ export class ProjectsController {
 
   @Post()
   async create(
-    @Principal() user: WithId<IIdentity>,
+    @Principal() user: User,
     @Body() project: IProject
   ) {
     return await this.projectsService.create(user, project);
@@ -22,7 +22,7 @@ export class ProjectsController {
 
   @Get()
   async getAll(
-    @Principal() user: WithId<IIdentity>,
+    @Principal() user: User,
   ) {
     return await this.projectsService.getAll(user);
   }
@@ -57,7 +57,7 @@ export class ProjectsController {
 
   @Post('get-secrets')
   async getSecrets(
-    @Principal() user: WithId<IIdentity>,
+    @Principal() user: User,
     @Body() { id, password }: IGetSecretsDto
   ) {
     const secrets = await this.projectsService.getSecrets(user, id, password);

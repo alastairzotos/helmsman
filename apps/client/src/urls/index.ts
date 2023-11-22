@@ -7,6 +7,7 @@ interface Urls {
 export const urls = {
   home: () => '/',
   login: (fwd: string) => `/login?fwd=${encodeURIComponent(fwd)}`,
+  register: () => '/register',
   config: {
     home: () => '/config',
   },
