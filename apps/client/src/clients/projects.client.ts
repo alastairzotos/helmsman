@@ -11,18 +11,6 @@ export const getAllProjects = async () => {
   return data;
 };
 
-export const getProjectById = async (id: string) => {
-  const { data } = await httpClient.get<WithId<IProjectDto>>(`/projects/${id}`);
-
-  return data;
-};
-
-export const getProjectByName = async (name: string) => {
-  const { data } = await httpClient.get<WithId<IProjectDto>>(`/projects/by-name/${name}`);
-
-  return data;
-};
-
 export const updateProject = async (id: string, values: Partial<IProject>) => {
   await httpClient.patch<UpdateProps<IProject>>('/projects', { id, values });
 };
