@@ -1,5 +1,6 @@
 import { writeFile, mkdir, chmod } from 'fs/promises';
 import * as path from 'path';
+import * as cp from 'child_process';
 import { Injectable } from "@nestjs/common";
 import { ConfigService } from "features/config/config.service";
 import { CryptoService } from "features/crypto/crypto.service";
@@ -61,6 +62,7 @@ export class DeployService {
 
     let helmRepo: string;
 
+    await this.runPredeploymentScripts(ws, config);
     const tag = await this.getTag(ws, config, project);
     helmRepo = await this.pullHelmRepo(ws, config, project);
 
@@ -124,6 +126,34 @@ export class DeployService {
         await chmod(kubeConfigFile, 0o600);
       }
     } catch { }
+  }
+
+  async runPredeploymentScripts(ws: WebSocketChannel, config: IConfig) {
+    return new Promise<void>((resolve, reject) => {
+      ws.sendMessage(phase("predeploy"));
+
+      if (!!config.predeployScript) {
+        ws.sendMessage(text(`> ${config.predeployScript}`));
+
+        const [cmd, ...args] = config.predeployScript.split(' ');
+
+        const proc = cp.spawn(cmd, args);
+
+        proc.stdout.on('data', data => ws.sendMessage(text(data.toString())));
+
+        proc.stderr.on('data', data => {
+          reject(data.toString());
+        });
+
+        proc.on('close', () => {
+          ws.sendMessage(text("Finished"));
+          resolve();
+        });
+      } else {
+        ws.sendMessage(text("No scripts found"));
+        resolve();
+      }
+    })
   }
 
   async getTag(ws: WebSocketChannel, config: IConfig, project: IProject) {

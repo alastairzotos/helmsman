@@ -9,7 +9,6 @@ export class EnvironmentService {
     aesKey: process.env.AES_KEY as string,
     idServerApiKey: process.env.ID_SERVER_API_KEY as string,
     jwtSecret: process.env.JWT_SIGNING_KEY as string,
-    digitalOceanAccessToken: process.env.DIGITALOCEAN_ACCESS_TOKEN as string,
   };
 
   get() {

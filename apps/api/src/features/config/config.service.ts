@@ -44,6 +44,7 @@ export class ConfigService {
       ...config,
       githubToken: this.cryptoService.encrypt(config.githubToken),
       k8sConfig: this.cryptoService.encrypt(config.k8sConfig),
+      predeployScript: this.cryptoService.encrypt(config.predeployScript || ''),
     });
   }
 
@@ -52,6 +53,7 @@ export class ConfigService {
       ...config,
       githubToken: this.cryptoService.decrypt(config.githubToken),
       k8sConfig: this.cryptoService.decrypt(config.k8sConfig),
+      predeployScript: this.cryptoService.decrypt(config.predeployScript || ''),
     }
   }
 }

@@ -14,6 +14,9 @@ export class Config implements IConfig {
 
   @Prop()
   k8sConfig: string;
+
+  @Prop()
+  predeployScript: string;
 }
 
 export const ConfigSchema = SchemaFactory.createForClass(Config);

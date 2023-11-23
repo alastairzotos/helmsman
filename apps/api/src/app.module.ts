@@ -14,12 +14,10 @@ import { GitModule } from 'integrations/git/git.module';
 import { HelmModule } from 'integrations/helm/helm.module';
 import { AuthModule } from 'features/auth/auth.module';
 import { MigrationsModule } from 'features/migrations/migrations.module';
-import { StartupModule } from 'features/startup/startup.module';
 
 @Module({
   imports: [
     NestConfigModule.forRoot(),
-    StartupModule,
     HealthModule,
     EnvironmentModule,
     ProjectsModule,
