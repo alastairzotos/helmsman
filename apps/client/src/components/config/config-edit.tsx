@@ -5,12 +5,11 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { ResourceForm } from "@/components/_core/form/resource-form";
 import { useUpdateConfig } from "@/state/config.state";
 import { FormItem } from "@/components/_core/form/form-item";
+import { CodeEditor } from "@/components/_core/form/code-editor";
 
 interface Props {
   config: IConfig;
 }
-
-const { TextArea } = Input;
 
 export const ConfigEdit: React.FC<Props> = ({ config }) => {
   const [updateConfigStatus, updateConfig] = useUpdateConfig(s => [s.status, s.request]);
@@ -45,7 +44,29 @@ export const ConfigEdit: React.FC<Props> = ({ config }) => {
             field="k8sConfig"
             control={control}
             errors={errors}
-            render={(field) => <TextArea rows={12} {...field} />}
+            render={(field) => (
+              <CodeEditor
+                height="400px"
+                language="yaml"
+                value={field.value}
+                onChange={field.onChange}
+              />
+            )}
+          />
+
+          <FormItem
+            label="Predeploy Script"
+            field="predeployScript"
+            control={control}
+            errors={errors}
+            render={(field) => (
+              <CodeEditor
+                height="200px"
+                language="shell"
+                value={field.value}
+                onChange={field.onChange}
+              />
+            )}
           />
         </>
       )}
