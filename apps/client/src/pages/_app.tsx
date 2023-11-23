@@ -7,7 +7,6 @@ import { getEnv } from "@/utils/env";
 import { AppLayoutProvider, createNavMenuItem } from "@bitmetro/app-layout-antd";
 import { Button, ConfigProvider, Space, Typography, theme } from "antd";
 import { AppstoreOutlined, SettingOutlined, ApiOutlined } from '@ant-design/icons';
-import { getProjectById } from "@/clients/projects.client";
 import { PersonaProvider, extendPersonaTheme, usePersona } from "@bitmetro/persona-react";
 import { useEffect } from "react";
 
@@ -40,9 +39,7 @@ const Inner = ({ Component, pageProps }: AppProps) => {
         createNavMenuItem("Projects", urls.projects.home(), <AppstoreOutlined />),
         createNavMenuItem("API Keys", urls.apiKeys.home(), <ApiOutlined />),
       ]}
-      breadcrumbResolvers={{
-        "[projectId]": async (id) => (await getProjectById(id)).name,
-      }}
+      breadcrumbResolvers={{}}
       appBar={(
         loggedInUser && (
           <Space>
