@@ -31,7 +31,7 @@ const Inner = ({ Component, pageProps }: AppProps) => {
 
   return (
     <AppLayoutProvider
-      title="Mission Control"
+      title="Helmsman"
       logo="/bm-logo-new-white.png"
       logoAlt="BitMetro logo"
       homeUrl={urls.home()}
