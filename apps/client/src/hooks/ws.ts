@@ -12,25 +12,14 @@ export const useWebSockets = <T extends Object>(
   const [token, refreshToken] = useRefreshToken();
   const [connStatus, setConnStatus] = useState<IConnStatus>(null);
 
-  const connect = () => {
-    setConnStatus('connecting');
-
-    setTimeout(() => {
-      const ws = new WebSocket(getEnv().wsUrl + `/ws?handle=${handle}`);
-
-      ws.onmessage = (e) => onReceiveMessage(JSON.parse(e.data));
-      ws.onopen = () => setConnStatus('connected');
-      ws.onerror = () => setConnStatus('error');
-      ws.onclose = () => {
-        setConnStatus('disconnected');
-
-        connect();
-      }
-    }, 500);
-  }
-
   useEffect(() => {
-    connect();
+    setConnStatus('connecting');
+    const ws = new WebSocket(getEnv().wsUrl + `/ws?handle=${handle}`);
+
+    ws.onopen = () => setConnStatus('connected');
+    ws.onerror = () => setConnStatus('error');
+    ws.onclose = () => setConnStatus('disconnected');
+    ws.onmessage = (e) => onReceiveMessage(JSON.parse(e.data));
   }, [token]);
 
   return [connStatus, refreshToken];
