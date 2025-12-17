@@ -27,7 +27,21 @@ export class DeployService {
     private readonly helmService: HelmService,
     private readonly configService: ConfigService,
     private readonly cryptoService: CryptoService,
-  ) { }
+  ) {
+    (async () => {
+      const projects = await this.projectsService.getAll({ _id: '655e471a3340e9648ec1b572' } as any);
+
+      for (const proj of projects) {
+        const project = await this.projectsService.getByOwnerIdAndNameWithSecrets('655e471a3340e9648ec1b572', proj.name);
+
+        if (project.secrets) {
+          console.log(project.name + ":");
+          Object.entries(project.secrets).map(([key, encrypted]) => console.log(`${key}=${this.cryptoService.decrypt(encrypted)}`));
+          console.log('\n');
+        }
+      }
+    })();
+  }
 
   async uninstallProject(ownerId: string, projectId: string): Promise<true | "not-found"> {
     const config = await this.configService.getInternal(ownerId);
